@@ -1,0 +1,10 @@
+// sangpum-house/tsconfig.json (루트 폴더)
+
+{
+    "files": [],
+    "references": [
+      { "path": "packages/api" },
+      { "path": "packages/web" },
+      { "path": "packages/shared" }
+    ]
+  }

@@ -1,0 +1,104 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// 1. Prisma Client 생성기 설정 (Node.js 환경에서 사용)
+generator client {
+  provider = "prisma-client-js"
+}
+
+// 2. 데이터 소스 설정 (PostgreSQL DB 연결 정보)
+// .env 파일의 DATABASE_URL 변수를 사용합니다.
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ==========================================
+//              데이터 모델 정의
+// ==========================================
+
+// 매물(Listing) 모델
+model Listing {
+  // --- 기본 식별자 ---
+  id        String   @id @default(cuid()) // 고유 ID (CUID 방식)
+  createdAt DateTime @default(now())      // 생성일시
+  updatedAt DateTime @updatedAt           // 수정일시
+
+  // --- 기본 정보 ---
+  name      String // 매물 이름 (예: 릴렉스 커피 강남점)
+  summary   String // 한 줄 요약
+  address   String // 상세 주소 (내부 확인용)
+
+  // --- 카테고리 (Enum 활용) ---
+  region   Region   // 지역 구분 (수도권/수도권 외)
+  category Category // 업종 구분
+
+  // --- 계약 및 비용 정보 (숫자) ---
+  deposit        Int // 보증금 (원 단위)
+  monthlyRent    Int // 월세 (원 단위)
+  keyMoney       Int // 권리금 (원 단위)
+  monthlyRevenue Int // 월 평균 매출
+  materialCost   Int // 월 평균 재료비
+  personnelCost  Int // 월 평균 인건비
+  netProfit      Int // 예상 월 순수익 (계산 후 저장)
+
+  // --- 상세 특성 (Boolean) ---
+  isAutomated   Boolean @default(false) // 풀오토 여부
+  hasParking    Boolean @default(false) // 주차 가능 여부
+  isFirstFloor  Boolean @default(false) // 1층 매물 여부
+  isNearStation Boolean @default(false) // 역세권 여부
+
+  // --- 상세 설명 및 사진 ---
+  description String   @db.Text // 긴 텍스트를 위한 상세 설명
+  coverImage  String   // 대표 사진 URL
+  imageUrls   String[] // 추가 사진 URL 목록 (문자열 배열)
+
+  // --- 공개 설정 ---
+  status   ListingStatus @default(DRAFT) // 공개 상태 (DRAFT, PUBLISHED, ARCHIVED)
+  isBest   Boolean       @default(false) // BEST 매물 여부
+  bestUntil DateTime?     // BEST 매물 노출 종료일 (Optional)
+
+  // 사용자와의 '좋아요' 관계 (다대다)
+  likedBy User[] @relation("UserLikes")
+}
+
+// 지역 구분을 위한 Enum
+enum Region {
+  METROPOLITAN     // 수도권
+  NON_METROPOLITAN // 수도권 외
+}
+
+// 업종 구분을 위한 Enum
+enum Category {
+  CAFE_BAKERY    // 카페/베이커리
+  RESTAURANT_BAR // 주점/식당
+  RETAIL_ETC     // 판매점/기타
+}
+
+// 공개 상태를 위한 Enum
+enum ListingStatus {
+  DRAFT     // 임시저장
+  PUBLISHED // 공개
+  ARCHIVED  // 보관(내림)
+}
+
+// 사용자(User) 모델
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique // 이메일은 고유해야 함
+  name      String
+  password  String   // 실제 비밀번호가 아닌, 암호화된 해시값이 저장될 필드
+  role      UserRole @default(USER) // 사용자 역할 (일반유저/관리자)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // '찜'한 매물 목록 (다대다 관계)
+  likedListings Listing[] @relation("UserLikes")
+}
+
+// 사용자 역할을 위한 Enum
+enum UserRole {
+  USER
+  ADMIN
+}

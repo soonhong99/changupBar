@@ -1,0 +1,39 @@
+# 의존성 폴더 (Dependencies)
+# ---------------------------------
+# 이 폴더들은 pnpm install, npm install 등으로 자동 생성되므로 절대 Git에 포함하지 않습니다.
+/node_modules
+/.pnpm
+
+# 로그 파일 (Logs)
+# ---------------------------------
+# 프로그램 실행 중 생성되는 로그 파일들입니다.
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# 빌드 결과물 및 임시 파일 (Build & Temporary files)
+# ---------------------------------
+# build, dist, out 등 컴파일/번들링 결과물이 저장되는 폴더입니다.
+/dist
+/out
+/build
+/.next/
+/.nuxt/
+/coverage
+
+# 개발 환경 파일 (Development environment)
+# ---------------------------------
+# 민감한 정보(DB 접속 정보, API 키 등)를 담고 있으므로 절대 Git에 포함하면 안 됩니다.
+.env
+.env.local
+.env.*.local
+! .env.example
+
+# 기타 시스템 파일
+# ---------------------------------
+.DS_Store
+Thumbs.db

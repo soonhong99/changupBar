@@ -1,0 +1,6 @@
+pnpm --filter web dev
+pnpm --filter api dev
+docker-compose up -d
+testuser@example.com
+password123
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbWNsdjEzazIwMDAwaTl0ZWV1ODl1ZWh1Iiwicm9sZSI6IlVTRVIiLCJpYXQiOjE3NTE0NTkxMzAsImV4cCI6MTc1MTU0NTUzMH0.UVVsSPJ8Po5j6US6dgx86-LmzbLMGpbRWJ8jSDtp-yA

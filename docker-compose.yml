@@ -1,0 +1,21 @@
+# docker-compose.yml
+
+version: '3.8' # docker-compose 버전
+services:
+  # 우리가 사용할 서비스의 이름 (자유롭게 지정 가능)
+  postgres_db:
+    image: postgres:15 # PostgreSQL 15 버전 이미지를 사용
+    container_name: premiere_listings_db # 컨테이너 이름 지정
+    restart: always # Docker가 켜지면 항상 컨테이너를 다시 시작
+    environment:
+      # 여기서 DB 유저, 비밀번호, 이름을 설정합니다.
+      # 이 정보가 Prisma가 접속할 정보가 됩니다.
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: mydb
+    ports:
+    # 5432를 쓰고있음.
+      - "5433:5432"
+    volumes:
+      # 컨테이너가 삭제되어도 데이터는 보존되도록 설정합니다.
+      - ./pgdata:/var/lib/postgresql/data
