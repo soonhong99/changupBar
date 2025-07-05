@@ -159,7 +159,7 @@ export default async function ListingDetailPage({ params }: Props) {
             </h2>
             
             <div className="prose prose-lg dark:prose-invert max-w-none">
-              <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+              <p className="text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap">
                 {listing.description}
               </p>
             </div>
