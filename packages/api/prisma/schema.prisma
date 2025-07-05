@@ -58,6 +58,11 @@ model Listing {
   isBest   Boolean       @default(false) // BEST 매물 여부
   bestUntil DateTime?     // BEST 매물 노출 종료일 (Optional)
 
+  // ⬇️ 아래 3줄을 isBest, bestUntil 필드 근처에 추가합니다.
+  isWeeklyBest   Boolean   @default(false) // 주간 대표 매물 여부
+  featuredStart DateTime? // 대표 매물 노출 시작일
+  featuredEnd   DateTime? // 대표 매물 노출 종료일
+
   // 사용자와의 '좋아요' 관계 (다대다)
   likedBy User[] @relation("UserLikes")
 }

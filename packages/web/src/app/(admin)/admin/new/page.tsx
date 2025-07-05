@@ -24,7 +24,7 @@ export default function NewListingPage() {
   const [error, setError] = useState<string | null>(null);
   
   const router = useRouter();
-  const { token } = useAuth(); // token을 가져옵니다.
+  const { token, isLoading: isAuthLoading } = useAuth(); // token을 가져옵니다.
 
   // --- 파일 변경을 감지하는 핸들러 추가 ---
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -81,9 +81,11 @@ export default function NewListingPage() {
       // 3. 모든 정보 취합하여 최종 매물 생성 API 호출
       await createListing({ 
         ...formData, 
-        coverImage: publicUrl, // S3에 업로드된 최종 URL 사용
+        coverImage: publicUrl, // S3에 업로드된 최종 URL 사용f
         imageUrls: [], // 상세 이미지는 나중에 추가
-      });
+      },
+      token
+    );
       
       router.push('/admin');
       router.refresh();
@@ -152,8 +154,8 @@ export default function NewListingPage() {
         
         <div className="flex justify-end">
           {/* --- 전송 버튼 수정 --- */}
-          <button type="submit" disabled={isUploading} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded disabled:bg-gray-400">
-            {isUploading ? '저장 중...' : '매물 저장'}
+          <button type="submit" disabled={isUploading || isAuthLoading} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded disabled:bg-gray-400">
+            {isAuthLoading ? '인증 확인 중...' : isUploading ? '저장 중...' : '매물 저장'}
           </button>
           {/* -------------------- */}
         </div>

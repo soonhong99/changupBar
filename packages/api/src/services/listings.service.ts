@@ -50,33 +50,32 @@ async function getById(id: string) {
  * @returns 필터링된 매물 객체의 배열
  */
 async function getAll(query: GetAllListingsQuery) {
-  console.log('✅ Service: 모든 매물 조회를 시작합니다.', query);
+  console.log('✅ Service: 매물 조회를 시작합니다.', query);
 
-  const { region, category, keyMoneyLte } = query;
+  const { region, category, keyMoneyLte, sortBy = 'createdAt', order = 'desc' } = query;
   const where: Prisma.ListingWhereInput = {};
 
-  if (region) {
-    where.region = region;
-  }
-  if (category) {
-    where.category = category;
-  }
-  if (keyMoneyLte) {
-    where.keyMoney = {
-      lte: parseInt(keyMoneyLte, 10), // lte: 작거나 같음
-    };
-  }
+  if (region) where.region = region;
+  if (category) where.category = category;
+  if (keyMoneyLte) where.keyMoney = { lte: parseInt(keyMoneyLte, 10) };
 
   const listings = await prisma.listing.findMany({
-    where, // 동적으로 생성된 where 절을 적용
-    orderBy: {
-      createdAt: 'desc',
-    },
+    where,
+    // ⬇️ 정렬 로직 수정: 대표 매물을 항상 위로, 그 다음 사용자가 선택한 기준으로 정렬
+    orderBy: [
+      {
+        isWeeklyBest: 'desc', // true가 위로 오도록
+      },
+      {
+        [sortBy]: order,
+      },
+    ],
   });
 
   console.log(`✅ Service: 총 ${listings.length}개의 매물 조회 완료!`);
   return listings;
 }
+
 
 /**
  * 특정 사용자가 특정 매물을 '찜'합니다.
@@ -84,19 +83,41 @@ async function getAll(query: GetAllListingsQuery) {
  * @param listingId '찜'할 매물의 ID
  */
 async function like(userId: string, listingId: string) {
-  console.log(`✅ Service: 사용자(${userId})가 매물(${listingId})을 찜합니다.`);
-
-  // Prisma의 connect를 사용하여 User와 Listing의 다대다 관계를 연결합니다.
-  await prisma.user.update({
-    where: { id: userId },
-    data: {
+  // 1. 이미 찜했는지 확인
+  const existingLike = await prisma.user.findFirst({
+    where: {
+      id: userId,
       likedListings: {
-        connect: { id: listingId },
+        some: { id: listingId },
       },
     },
   });
 
-  return { message: '매물을 찜했습니다.' };
+  if (existingLike) {
+    // 이미 찜했다면 '찜 취소' 로직 실행 (토글 기능)
+    console.log(`✅ Service: 사용자(${userId})가 매물(${listingId}) 찜을 취소합니다.`);
+    await prisma.user.update({
+      where: { id: userId },
+      data: {
+        likedListings: {
+          disconnect: { id: listingId },
+        },
+      },
+    });
+    return { message: '매물 찜을 취소했습니다.' };
+  } else {
+    // 찜하지 않았다면 '찜하기' 로직 실행
+    console.log(`✅ Service: 사용자(${userId})가 매물(${listingId})을 찜합니다.`);
+    await prisma.user.update({
+      where: { id: userId },
+      data: {
+        likedListings: {
+          connect: { id: listingId },
+        },
+      },
+    });
+    return { message: '매물을 찜했습니다.' };
+  }
 }
 
 async function update(id: string, data: UpdateListingInput) {
@@ -108,10 +129,37 @@ async function update(id: string, data: UpdateListingInput) {
   return updatedListing;
 }
 
+/**
+ * 현재 노출 기간에 해당하는 '주간 대표 매물'들을 조회합니다.
+ * @returns 대표 매물 객체의 배열
+ */
+async function getFeatured() {
+  console.log('✅ Service: 대표 매물 조회를 시작합니다.');
+  const now = new Date();
+
+  const featuredListings = await prisma.listing.findMany({
+    where: {
+      isWeeklyBest: true,
+      featuredStart: {
+        lte: now, // 노출 시작일이 현재보다 이전이고
+      },
+      featuredEnd: {
+        gte: now, // 노출 종료일이 현재보다 이후인 매물
+      },
+    },
+    take: 3, // 최대 3개만 가져옴
+  });
+
+  console.log(`✅ Service: 총 ${featuredListings.length}개의 대표 매물 조회 완료!`);
+  return featuredListings;
+}
+
 interface GetAllListingsQuery {
   region?: 'METROPOLITAN' | 'NON_METROPOLITAN';
   category?: 'CAFE_BAKERY' | 'RESTAURANT_BAR' | 'RETAIL_ETC';
-  keyMoneyLte?: string; // lte = Less Than or Equal
+  keyMoneyLte?: string;
+  sortBy?: 'createdAt' | 'keyMoney'; // 정렬 기준
+  order?: 'asc' | 'desc'; // 정렬 순서
 }
 
 async function remove(id: string) {
@@ -130,4 +178,5 @@ export default {
   like,
   remove,
   update,
+  getFeatured,
 };

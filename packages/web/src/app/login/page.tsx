@@ -6,6 +6,7 @@ import { useState, FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { loginUser } from '@/lib/api';
+import Link from 'next/link';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -72,6 +73,14 @@ export default function LoginPage() {
             </button>
           </div>
         </form>
+        <div className="text-center mt-4">
+          <p className="text-sm text-gray-600">
+            아직 회원이 아니신가요?{' '}
+            <Link href="/register" className="font-medium text-indigo-600 hover:text-indigo-500">
+              회원가입
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );

@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext"; // ⬅️ AuthProvider import
+import Header from "@/components/layout/Header";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,10 +19,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="ko">
       <body className={inter.className}>
-        <AuthProvider> {/* ⬅️ AuthProvider로 children 감싸기 */}
-          {children}
+        <AuthProvider>
+          <Header /> {/* ⬅️ Header를 여기에 추가 */}
+          <main>{children}</main> {/* ⬅️ children을 main 태그로 감싸주면 좋습니다. */}
         </AuthProvider>
       </body>
     </html>

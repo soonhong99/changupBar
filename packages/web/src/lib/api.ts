@@ -1,11 +1,19 @@
 // packages/web/src/lib/api.ts
 
-import { Listing } from '@prisma/client'; // Prisma 타입을 재사용!
-import { LoginUserInput } from '../../../shared/src/schemas/auth.schema'; // ⬅️ 추가
-import { CreateListingInput } from '../../../shared/src/schemas/listing.schema'; // ⬅️ 추가
-import { UpdateListingInput } from '../../../shared/src/schemas/listing.schema'; // ⬅️ 추가
+import { Listing, User } from '@prisma/client'; // Prisma 타입을 재사용!
+import { LoginUserInput, RegisterUserInput } from '../../../shared/src/schemas/auth.schema'; // ⬅️ 추가
+import { CreateListingInput, UpdateListingInput } from '../../../shared/src/schemas/listing.schema'; // ⬅️ 추가
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
+// 필터 타입을 정의합니다.
+export interface ListingFilter {
+  region?: string;
+  category?: string;
+  keyMoneyLte?: number;
+  sortBy?: string; // 추가
+  order?: string;  // 추가
+}
 
 export async function getListingById(id: string): Promise<Listing | null> {
   try {
@@ -25,12 +33,7 @@ export async function getListingById(id: string): Promise<Listing | null> {
   }
 }
 
-// 필터 타입을 정의합니다.
-export interface ListingFilter {
-    region?: string;
-    category?: string;
-    keyMoneyLte?: number;
-}
+
 
 export async function getAllListings(filter: ListingFilter = {}): Promise<Listing[]> {
     // 쿼리 스트링을 생성합니다.
@@ -38,6 +41,8 @@ export async function getAllListings(filter: ListingFilter = {}): Promise<Listin
     if (filter.region) query.append('region', filter.region);
     if (filter.category) query.append('category', filter.category);
     if (filter.keyMoneyLte) query.append('keyMoneyLte', filter.keyMoneyLte.toString());
+    if (filter.sortBy) query.append('sortBy', filter.sortBy); // 추가
+    if (filter.order) query.append('order', filter.order); // 추가
   
     const queryString = query.toString();
     const url = queryString ? `${API_URL}/listings?${queryString}` : `${API_URL}/listings`;
@@ -87,12 +92,12 @@ export async function likeListing(listingId: string, token: string): Promise<{ m
   return res.json();
 }
 
-export async function createListing(data: CreateListingInput): Promise<Listing> {
-  // 나중에 관리자 인증이 추가되면 여기에 token을 헤더에 담아 보내야 합니다.
+export async function createListing(data: CreateListingInput, token: String): Promise<Listing> {
   const res = await fetch(`${API_URL}/listings`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
     },
     body: JSON.stringify(data),
   });
@@ -158,4 +163,51 @@ export async function updateListing(
   }
 
   return res.json();
+}
+
+export async function registerUser(data: RegisterUserInput): Promise<User> {
+  const res = await fetch(`${API_URL}/auth/register`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+
+  if (!res.ok) {
+    const errorData = await res.json();
+    throw new Error(errorData.message || '회원가입에 실패했습니다.');
+  }
+  return res.json();
+}
+
+export async function getMyLikedListings(token: string): Promise<Listing[]> {
+  const res = await fetch(`${API_URL}/users/me/likes`, {
+    headers: { 'Authorization': `Bearer ${token}` }
+  });
+  if (!res.ok) throw new Error('찜한 목록을 불러오는데 실패했습니다.');
+  return res.json();
+}
+
+export async function getMe(token: string): Promise<User | null> {
+  try {
+    const res = await fetch(`${API_URL}/auth/me`, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    if (!res.ok) return null;
+    return res.json();
+  } catch (error) {
+    return null;
+  }
+}
+
+export async function getFeaturedListings(): Promise<Listing[]> {
+  try {
+    const res = await fetch(`${API_URL}/listings/featured`);
+    if (!res.ok) {
+      throw new Error('대표 매물을 불러오는데 실패했습니다.');
+    }
+    return res.json();
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
 }

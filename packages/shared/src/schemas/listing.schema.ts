@@ -30,6 +30,9 @@ export const createListingSchema = z.object({
   status: z.enum(['DRAFT', 'PUBLISHED', 'ARCHIVED']).default('DRAFT'),
   isBest: z.boolean().default(false),
   bestUntil: z.string().datetime().optional(), // ISO 8601 날짜 문자열
+  isWeeklyBest: z.boolean().default(false).optional(),
+  featuredStart: z.string().datetime().optional().nullable(),
+  featuredEnd: z.string().datetime().optional().nullable()
 });
 
 // Zod 스키마로부터 TypeScript 타입 추론

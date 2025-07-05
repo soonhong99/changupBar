@@ -18,9 +18,9 @@ export const authMiddleware = (
   next: NextFunction
 ) => {
   const authHeader = req.headers.authorization;
-
+  console.log(`Method: ${req.method}, authHeader: ${authHeader}`);
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    res.status(401).json({ message: '인증 토큰이 필요합니다.' });
+    res.status(401).json({ message: '인증 토큰이 필요합니다!' });
     return;
   }
 

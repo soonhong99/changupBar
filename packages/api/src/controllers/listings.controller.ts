@@ -82,6 +82,14 @@ async function updateListing(req: Request, res: Response) {
   res.status(200).json(updatedListing);
 }
 
+/**
+ * '주간 대표 매물'을 조회하는 컨트롤러
+ */
+async function getFeaturedListings(req: Request, res: Response) {
+  const listings = await listingService.getFeatured();
+  res.status(200).json(listings);
+}
+
 export default {
   createListing,
   getListingById,
@@ -89,4 +97,5 @@ export default {
   likeListing,
   deleteListing,
   updateListing,
+  getFeaturedListings,
 };
