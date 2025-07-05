@@ -16,6 +16,9 @@ export const createListingSchema = z.object({
   monthlyRevenue: z.number().int().min(0),
   materialCost: z.number().int().min(0),
   personnelCost: z.number().int().min(0),
+  utilityCost: z.number().int().min(0).optional(),    // ⬅️ 추가
+  otherCost: z.number().int().min(0).optional(),      // ⬅️ 추가
+  deliveryPercent: z.number().int().min(0).max(100).optional(), // ⬅️ 추가
   netProfit: z.number().int().min(0),
 
   isAutomated: z.boolean().default(false),

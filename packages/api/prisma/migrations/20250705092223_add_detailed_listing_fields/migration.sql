@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE "Listing" ADD COLUMN     "deliveryPercent" INTEGER NOT NULL DEFAULT 0,
+ADD COLUMN     "otherCost" INTEGER NOT NULL DEFAULT 0,
+ADD COLUMN     "utilityCost" INTEGER NOT NULL DEFAULT 0;

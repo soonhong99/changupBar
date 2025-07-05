@@ -34,13 +34,16 @@ model Listing {
   category Category // 업종 구분
 
   // --- 계약 및 비용 정보 (숫자) ---
-  deposit        Int // 보증금 (원 단위)
-  monthlyRent    Int // 월세 (원 단위)
-  keyMoney       Int // 권리금 (원 단위)
+  deposit        Int // 보증금 (만 원 단위)
+  monthlyRent    Int // 월세 (만 원 단위)
+  keyMoney       Int // 권리금 (만 원 단위)
   monthlyRevenue Int // 월 평균 매출
   materialCost   Int // 월 평균 재료비
   personnelCost  Int // 월 평균 인건비
-  netProfit      Int // 예상 월 순수익 (계산 후 저장)
+  utilityCost     Int @default(0) // ⬇️ 추가: 월 평균 공과금
+  otherCost       Int @default(0) // ⬇️ 추가: 월 평균 기타비용
+  deliveryPercent Int @default(0) // ⬇️ 추가: 배달 비중 (%)
+  netProfit       Int // 예상 월 순수익 (계산 후 저장)
 
   // --- 상세 특성 (Boolean) ---
   isAutomated   Boolean @default(false) // 풀오토 여부

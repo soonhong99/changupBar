@@ -100,63 +100,51 @@ export default async function ListingDetailPage({ params }: Props) {
       {/* 핵심 지표 섹션 */}
       <div className="max-w-6xl mx-auto px-4 mt-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-12">
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl p-6 border border-gray-100 dark:border-gray-700">
-            <div className="flex items-center justify-between mb-2">
+          <div className="relative bg-white dark:bg-gray-800 shadow-xl p-6 border border-gray-100 dark:border-gray-700 rounded-xl">
+            <span className="absolute -top-3 left-4 text-xxs font-medium text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30 px-2 py-1 rounded">
+              월 순수익
+            </span>
+            {/* <div className="flex items-center justify-between mb-2 mt-4">
               <TrendingUp className="w-8 h-8 text-blue-600 dark:text-blue-400" />
-              <span className="text-xs font-medium text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30 px-2 py-1 rounded-full">
-                월 순수익
-              </span>
-            </div>
+            </div> */}
             <p className="text-3xl font-bold text-gray-900 dark:text-white">
-              {formatCurrency(listing.netProfit / 10000)}만
-            </p>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-              안정적인 수익 구조
+              {formatCurrency(listing.netProfit)}만
             </p>
           </div>
 
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl p-6 border border-gray-100 dark:border-gray-700">
-            <div className="flex items-center justify-between mb-2">
+          <div className="relative bg-white dark:bg-gray-800 shadow-xl p-6 border border-gray-100 dark:border-gray-700 rounded-xl">
+            <span className="absolute -top-3 left-4 text-xxs font-medium text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/30 px-2 py-1 rounded">
+              권리금
+            </span>
+            {/* <div className="flex items-center justify-between mb-2 mt-4">
               <DollarSign className="w-8 h-8 text-green-600 dark:text-green-400" />
-              <span className="text-xs font-medium text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/30 px-2 py-1 rounded-full">
-                권리금
-              </span>
-            </div>
+            </div> */}
             <p className="text-3xl font-bold text-gray-900 dark:text-white">
-              {formatCurrency(listing.keyMoney / 10000)}만
-            </p>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-              합리적인 인수 비용
+              {formatCurrency(listing.keyMoney)}만
             </p>
           </div>
 
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl p-6 border border-gray-100 dark:border-gray-700">
-            <div className="flex items-center justify-between mb-2">
+          <div className="relative bg-white dark:bg-gray-800 shadow-xl p-6 border border-gray-100 dark:border-gray-700 rounded-xl">
+            <span className="absolute -top-3 left-4 text-xxs font-medium text-purple-600 dark:text-purple-400 bg-purple-50 dark:bg-purple-900/30 px-2 py-1 rounded">
+              임대료
+            </span>
+            {/* <div className="flex items-center justify-between mb-2 mt-4">
               <Building className="w-8 h-8 text-purple-600 dark:text-purple-400" />
-              <span className="text-xs font-medium text-purple-600 dark:text-purple-400 bg-purple-50 dark:bg-purple-900/30 px-2 py-1 rounded-full">
-                임대료
-              </span>
-            </div>
+            </div> */}
             <p className="text-3xl font-bold text-gray-900 dark:text-white">
-              {formatCurrency(listing.monthlyRent / 10000)}만
-            </p>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-              보증금 {formatCurrency(listing.deposit / 10000)}만
+              {formatCurrency(listing.monthlyRent)}만
             </p>
           </div>
 
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl p-6 border border-gray-100 dark:border-gray-700">
-            <div className="flex items-center justify-between mb-2">
+          <div className="relative bg-white dark:bg-gray-800 shadow-xl p-6 border border-gray-100 dark:border-gray-700 rounded-xl">
+            <span className="absolute -top-3 left-4 text-xxs font-medium text-orange-600 dark:text-orange-400 bg-orange-50 dark:bg-orange-900/30 px-2 py-1 rounded">
+              입지
+            </span>
+            {/* <div className="flex items-center justify-between mb-2 mt-4">
               <MapPin className="w-8 h-8 text-orange-600 dark:text-orange-400" />
-              <span className="text-xs font-medium text-orange-600 dark:text-orange-400 bg-orange-50 dark:bg-orange-900/30 px-2 py-1 rounded-full">
-                입지
-              </span>
-            </div>
+            </div> */}
             <p className="text-3xl font-bold text-gray-900 dark:text-white">
               {getDistrict(listing.address)}
-            </p>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-              우수한 상권 위치
             </p>
           </div>
         </div>
