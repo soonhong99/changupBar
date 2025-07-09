@@ -13,6 +13,7 @@ export interface ListingFilter {
   keyMoneyLte?: number;
   sortBy?: string; // 추가
   order?: string;  // 추가
+  status?: string; // ⬅️ 이 줄을 추가합니다.
 }
 
 export async function getListingById(id: string): Promise<Listing | null> {
@@ -35,7 +36,7 @@ export async function getListingById(id: string): Promise<Listing | null> {
 
 
 
-export async function getAllListings(filter: ListingFilter = {}): Promise<Listing[]> {
+export async function getAllListings(filter: ListingFilter = {}, token?: string | null): Promise<Listing[]> {
     // 쿼리 스트링을 생성합니다.
     const query = new URLSearchParams();
     if (filter.region) query.append('region', filter.region);
@@ -48,7 +49,10 @@ export async function getAllListings(filter: ListingFilter = {}): Promise<Listin
     const url = queryString ? `${API_URL}/listings?${queryString}` : `${API_URL}/listings`;
   
     try {
-      const res = await fetch(url);
+      const res = await fetch(url, {
+        // ⬇️ 헤더 부분을 추가/수정합니다.
+        headers: token ? { 'Authorization': `Bearer ${token}` } : {},
+      });
       if (!res.ok) {
         throw new Error('Failed to fetch listings');
       }
@@ -209,5 +213,16 @@ export async function getFeaturedListings(): Promise<Listing[]> {
   } catch (error) {
     console.error(error);
     return [];
+  }
+}
+
+export async function getListingStats(): Promise<{ totalCount: number; newThisWeekCount: number }> {
+  try {
+    const res = await fetch(`${API_URL}/listings/stats`);
+    if (!res.ok) throw new Error('Failed to fetch stats');
+    return res.json();
+  } catch (error) {
+    console.error(error);
+    return { totalCount: 0, newThisWeekCount: 0 };
   }
 }

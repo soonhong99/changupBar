@@ -1,9 +1,9 @@
-// packages/web/src/app/page.tsx
+// packages/web/src/app/search/page.tsx
 
 "use client";
 
-import { useEffect, useState } from "react";
-import { getAllListings, ListingFilter } from "@/lib/api";
+import { useEffect, useState, useMemo } from "react";
+import { getAllListings, ListingFilter, getListingStats } from "@/lib/api";
 import ListingCard from "@/components/ui/ListingCard";
 import { Listing } from "@prisma/client";
 
@@ -11,6 +11,7 @@ export default function SearchPage() {
   const [listings, setListings] = useState<Listing[]>([]);
   const [filters, setFilters] = useState<ListingFilter>({});
   const [isLoading, setIsLoading] = useState(true);
+  const [stats, setStats] = useState({ totalCount: 0, newThisWeekCount: 0 }); // ⬅️ 통계 상태 추가
 
   useEffect(() => {
     async function loadListings() {
@@ -27,6 +28,8 @@ export default function SearchPage() {
       setListings(data);
       setIsLoading(false);
     }
+
+    getListingStats().then(setStats);
     
     // 300ms 디바운스를 적용하여 필터 변경 시 API 호출을 최적화합니다.
     const timer = setTimeout(() => {
@@ -38,6 +41,12 @@ export default function SearchPage() {
 
   const handleFilterChange = (key: keyof ListingFilter, value: string | number | undefined) => {
     setFilters(prev => ({ ...prev, [key]: value }));
+  };
+
+  // ⬇️ 정렬 select를 위한 핸들러 추가
+  const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const [sortBy, order] = e.target.value.split('-');
+    setFilters(prev => ({ ...prev, sortBy, order }));
   };
 
   // --- 공통 스타일 클래스 ---
@@ -73,17 +82,21 @@ export default function SearchPage() {
 
         {/* --- 검색 통계 --- */}
         <div className="mb-8 grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md text-center">
-            <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">10,247</div>
+        <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md text-center">
+            <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+              {stats.totalCount.toLocaleString()}
+            </div>
             <div className="text-sm text-gray-600 dark:text-gray-400">전체 매물</div>
           </div>
           <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md text-center">
-            <div className="text-2xl font-bold text-green-600 dark:text-green-400">1,432</div>
+            <div className="text-2xl font-bold text-green-600 dark:text-green-400">
+              {stats.newThisWeekCount.toLocaleString()}
+            </div>
             <div className="text-sm text-gray-600 dark:text-gray-400">이번 주 신규</div>
           </div>
           <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md text-center">
-            <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">892</div>
-            <div className="text-sm text-gray-600 dark:text-gray-400">급매물</div>
+            <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">서울 강남 카페</div>
+            <div className="text-sm text-gray-600 dark:text-gray-400">가장 많은 하트를 받은 매물</div>
           </div>
           <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md text-center">
             <div className="text-2xl font-bold text-orange-600 dark:text-orange-400">97%</div>
@@ -142,10 +155,10 @@ export default function SearchPage() {
                   className={selectClasses}
                 >
                   <option value="">금액 제한 없음</option>
-                  <option value="50000000">💸 5천만원 이하</option>
-                  <option value="100000000">💳 1억원 이하</option>
-                  <option value="200000000">💎 2억원 이하</option>
-                  <option value="500000000">🏆 5억원 이하</option>
+                  <option value="5000">💸 5천만원 이하</option>
+                  <option value="10000">💳 1억원 이하</option>
+                  <option value="20000">💎 2억원 이하</option>
+                  <option value="50000">🏆 5억원 이하</option>
                 </select>
               </div>
               
@@ -206,11 +219,16 @@ export default function SearchPage() {
               <div className="text-sm text-gray-600 dark:text-gray-400">
                 정렬:
               </div>
-              <select className="text-sm bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-1">
-                <option>최신순</option>
-                <option>권리금 낮은순</option>
-                <option>권리금 높은순</option>
-                <option>인기순</option>
+              <select
+                id="sort"
+                onChange={handleSortChange}
+                value={`${filters.sortBy}-${filters.order}`} // 현재 정렬 상태를 value로 설정
+                className={selectClasses}
+              >
+                <option value="createdAt-desc">최신순</option>
+                <option value="keyMoney-asc">권리금 낮은순</option>
+                <option value="keyMoney-desc">권리금 높은순</option>
+                {/* 인기순은 별도 로직(예: 찜하기 횟수)이 필요하므로 추후 구현 */}
               </select>
             </div>
           </div>
@@ -254,11 +272,11 @@ export default function SearchPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {listings.map((listing, index) => (
                   <div key={listing.id} className="relative group">
-                    {index < 3 && (
+                    {/* {index < 3 && (
                       <div className="absolute -top-2 -right-2 z-10 bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-2 py-1 rounded-full text-xs font-semibold shadow-lg">
                         {index === 0 ? '🥇 Top' : index === 1 ? '🥈 Best' : '🥉 Hot'}
                       </div>
-                    )}
+                    )} */}
                     <div className="relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 group-hover:scale-105">
                       <ListingCard listing={listing} />
                     </div>

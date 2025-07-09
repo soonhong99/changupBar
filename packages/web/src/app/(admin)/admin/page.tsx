@@ -1,8 +1,6 @@
-// packages/web/src/app/(admin)/admin/page.tsx
-
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
 import { getAllListings, deleteListingById, ListingFilter} from "@/lib/api";
 import { Listing } from "@prisma/client";
@@ -15,32 +13,33 @@ export default function AdminDashboardPage() {
     sortBy: 'createdAt',
     order: 'desc',
     category: '',
+    status: '', // 'DRAFT', 'PUBLISHED', 'ARCHIVED'
   });
   const [searchTerm, setSearchTerm] = useState('');
   const { token } = useAuth();
-
-  useEffect(() => {
-    const fetchListings = async () => {
-      setIsLoading(true);
-      const activeFilters = Object.fromEntries(Object.entries(filters).filter(([_, v]) => v));
-      const data = await getAllListings(activeFilters);
-      setListings(data);
-      setIsLoading(false);
-    };
-
-    const timer = setTimeout(fetchListings, 300);
-    return () => clearTimeout(timer);
-  }, [filters]);
 
   const handleFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFilters(prev => ({ ...prev, [name]: value }));
   };
 
-  const fetchListings = async () => {
-    const data = await getAllListings();
+  const fetchListings = useCallback(async () => {
+    if (!token) return; // ⬅️ 토큰이 없으면 실행하지 않습니다.
+
+    setIsLoading(true);
+    const activeFilters = Object.fromEntries(Object.entries(filters).filter(([_, v]) => v));
+    
+    // ⬇️ API 호출 시 토큰을 전달합니다.
+    const data = await getAllListings(activeFilters, token);
+    
     setListings(data);
-  };
+    setIsLoading(false);
+  }, [filters, token]); // ⬅️ token도 의존성 배열에 추가
+
+  useEffect(() => {
+    const timer = setTimeout(fetchListings, 300);
+    return () => clearTimeout(timer);
+  }, [fetchListings]); // ⬅️ 이제 fetchListings 함수 자체를 의존성으로 가집니다.
 
   const handleDelete = async (id: string) => {
     if (confirm('정말로 이 매물을 삭제하시겠습니까?')) {
@@ -69,8 +68,13 @@ export default function AdminDashboardPage() {
     total: listings.length,
     published: listings.filter(l => l.status === 'PUBLISHED').length,
     draft: listings.filter(l => l.status === 'DRAFT').length,
+    archived: listings.filter(l => l.status === 'ARCHIVED').length,
     featured: listings.filter(l => l.isWeeklyBest).length,
   };
+
+  if (isLoading) {
+    return <div className="p-8">목록을 불러오는 중...</div>;
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -99,7 +103,7 @@ export default function AdminDashboardPage() {
           </div>
 
           {/* 통계 카드 */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-6 mb-8">
             <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
               <div className="flex items-center">
                 <div className="flex-shrink-0">
@@ -157,6 +161,24 @@ export default function AdminDashboardPage() {
             <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
               <div className="flex items-center">
                 <div className="flex-shrink-0">
+                  <div className="w-8 h-8 bg-gray-500 rounded-lg flex items-center justify-center">
+                    <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+                    </svg>
+                  </div>
+                </div>
+                <div className="ml-5 w-0 flex-1">
+                  <dl>
+                    <dt className="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">블라인드</dt>
+                    <dd className="text-lg font-semibold text-gray-900 dark:text-gray-100">{stats.archived}</dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
+              <div className="flex items-center">
+                <div className="flex-shrink-0">
                   <div className="w-8 h-8 bg-purple-500 rounded-lg flex items-center justify-center">
                     <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
@@ -178,7 +200,7 @@ export default function AdminDashboardPage() {
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 mb-8">
           <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">🔍 검색 및 필터</h2>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
             {/* 검색 */}
             <div className="lg:col-span-2">
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">검색</label>
@@ -196,6 +218,22 @@ export default function AdminDashboardPage() {
                   className="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 />
               </div>
+            </div>
+
+            {/* 상태 필터 */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">상태</label>
+              <select 
+                name="status" 
+                onChange={handleFilterChange} 
+                value={filters.status} 
+                className="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              >
+                <option value="">전체</option>
+                <option value="PUBLISHED">공개</option>
+                <option value="DRAFT">임시저장</option>
+                <option value="ARCHIVED">블라인드</option>
+              </select>
             </div>
 
             {/* 업종 필터 */}
@@ -280,7 +318,7 @@ export default function AdminDashboardPage() {
                 </thead>
                 <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                   {filteredListings.map((listing) => (
-                    <tr key={listing.id} className={`hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors ${listing.isWeeklyBest ? 'bg-yellow-50 dark:bg-yellow-900/20' : ''}`}>
+                    <tr key={listing.id} className={`hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors ${listing.isWeeklyBest ? 'bg-yellow-50 dark:bg-yellow-900/20' : ''} ${listing.status === 'ARCHIVED' ? 'opacity-60' : ''}`}>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
                           {listing.isWeeklyBest && (
@@ -306,9 +344,13 @@ export default function AdminDashboardPage() {
                         <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
                           listing.status === 'PUBLISHED' 
                             ? 'bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-300' 
-                            : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/50 dark:text-yellow-300'
+                            : listing.status === 'DRAFT'
+                            ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/50 dark:text-yellow-300'
+                            : 'bg-gray-100 text-gray-800 dark:bg-gray-900/50 dark:text-gray-300'
                         }`}>
-                          {listing.status === 'PUBLISHED' ? '🟢 공개' : '🟡 임시저장'}
+                          {listing.status === 'PUBLISHED' && '🟢 공개'}
+                          {listing.status === 'DRAFT' && '🟡 임시저장'}
+                          {listing.status === 'ARCHIVED' && '⚫ 블라인드'}
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">

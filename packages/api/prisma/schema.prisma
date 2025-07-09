@@ -87,7 +87,7 @@ enum Category {
 enum ListingStatus {
   DRAFT     // 임시저장
   PUBLISHED // 공개
-  ARCHIVED  // 보관(내림)
+  ARCHIVED  // 블라인드(내림)
 }
 
 // 사용자(User) 모델

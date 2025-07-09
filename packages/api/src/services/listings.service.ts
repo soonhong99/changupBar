@@ -2,7 +2,7 @@
 
 import prisma from '../config/prisma.js';
 import { CreateListingInput } from '../../../shared/src/schemas/listing.schema.js';
-import { Prisma } from '@prisma/client'; // Prisma 타입을 가져옵니다.
+import { Prisma, UserRole } from '@prisma/client'; // Prisma 타입을 가져옵니다.
 import { UpdateListingInput } from '../../../shared/src/schemas/listing.schema.js'; // ⬅️ 추가
 
 
@@ -46,30 +46,43 @@ async function getById(id: string) {
 }
 
 /**
- * 필터 조건에 따라 매물 목록을 조회합니다.
- * @returns 필터링된 매물 객체의 배열
+ * 필터 조건과 사용자 역할에 따라 매물 목록을 조회합니다.
+ * @param query 필터 및 정렬 조건
+ * @param role 요청한 사용자의 역할 (예: 'ADMIN', 'USER' 또는 undefined)
  */
-async function getAll(query: GetAllListingsQuery) {
-  console.log('✅ Service: 매물 조회를 시작합니다.', query);
+async function getAll(query: GetAllListingsQuery, role?: UserRole) {
+  console.log(`✅ Service: 매물 조회 시작. 역할: ${role || 'Guest'}`);
 
-  const { region, category, keyMoneyLte, sortBy = 'createdAt', order = 'desc' } = query;
+  const { region, category, status, keyMoneyLte, sortBy = 'createdAt', order = 'desc' } = query;
   const where: Prisma.ListingWhereInput = {};
 
+  // --- 조건부 필터링 ---
+  // 1. 역할 기반 상태 필터링
+  if (role !== 'ADMIN') {
+    // 관리자가 아니면 '공개(PUBLISHED)' 상태의 매물만 보도록 강제
+    where.status = 'PUBLISHED';
+  } else if (status) {
+    // 관리자이고, 상태 필터 값이 있으면 해당 상태로 필터링
+    where.status = status;
+  }
+
+  // 2. 다른 필터들
   if (region) where.region = region;
   if (category) where.category = category;
   if (keyMoneyLte) where.keyMoney = { lte: parseInt(keyMoneyLte, 10) };
 
+  // ⬇️ 역할에 따라 orderBy 조건을 동적으로 설정합니다.
+  const orderBy: Prisma.ListingOrderByWithRelationInput[] = [];
+
+  if (role === 'ADMIN') {
+    orderBy.push({ isWeeklyBest: 'desc' }); // 관리자일 경우 대표 매물 우선 정렬
+  }
+
+  orderBy.push({ [sortBy]: order }); // 기본 정렬 조건 추가
+
   const listings = await prisma.listing.findMany({
     where,
-    // ⬇️ 정렬 로직 수정: 대표 매물을 항상 위로, 그 다음 사용자가 선택한 기준으로 정렬
-    orderBy: [
-      {
-        isWeeklyBest: 'desc', // true가 위로 오도록
-      },
-      {
-        [sortBy]: order,
-      },
-    ],
+    orderBy,
   });
 
   console.log(`✅ Service: 총 ${listings.length}개의 매물 조회 완료!`);
@@ -130,24 +143,27 @@ async function update(id: string, data: UpdateListingInput) {
 }
 
 /**
- * 현재 노출 기간에 해당하는 '주간 대표 매물'들을 조회합니다.
- * @returns 대표 매물 객체의 배열
+ * 현재 노출 기간에 해당하는 '주간 대표 매물'들을 역할에 따라 조회합니다.
+ * @param role 요청한 사용자의 역할
  */
-async function getFeatured() {
-  console.log('✅ Service: 대표 매물 조회를 시작합니다.');
+async function getFeatured(role?: UserRole) {
+  console.log(`✅ Service: 대표 매물 조회 시작. 역할: ${role || 'Guest'}`);
   const now = new Date();
 
+  const where: Prisma.ListingWhereInput = {
+    isWeeklyBest: true,
+    featuredStart: { lte: now },
+    featuredEnd: { gte: now },
+  };
+
+  // 관리자가 아니면 '공개' 상태인 대표 매물만 보여줌
+  if (role !== 'ADMIN') {
+    where.status = 'PUBLISHED';
+  }
+
   const featuredListings = await prisma.listing.findMany({
-    where: {
-      isWeeklyBest: true,
-      featuredStart: {
-        lte: now, // 노출 시작일이 현재보다 이전이고
-      },
-      featuredEnd: {
-        gte: now, // 노출 종료일이 현재보다 이후인 매물
-      },
-    },
-    take: 3, // 최대 3개만 가져옴
+    where,
+    take: 3,
   });
 
   console.log(`✅ Service: 총 ${featuredListings.length}개의 대표 매물 조회 완료!`);
@@ -157,6 +173,7 @@ async function getFeatured() {
 interface GetAllListingsQuery {
   region?: 'METROPOLITAN' | 'NON_METROPOLITAN';
   category?: 'CAFE_BAKERY' | 'RESTAURANT_BAR' | 'RETAIL_ETC';
+  status?: 'DRAFT' | 'PUBLISHED' | 'ARCHIVED'; // ⬅️ 관리자용 상태 필터
   keyMoneyLte?: string;
   sortBy?: 'createdAt' | 'keyMoney'; // 정렬 기준
   order?: 'asc' | 'desc'; // 정렬 순서
@@ -170,6 +187,38 @@ async function remove(id: string) {
   return { message: '매물이 성공적으로 삭제되었습니다.' };
 }
 
+/**
+ * 공개된 매물의 통계를 계산합니다.
+ */
+async function getStats() {
+  console.log('✅ Service: 매물 통계 계산을 시작합니다.');
+
+  // 이번 주의 시작(일요일)을 계산합니다.
+  const today = new Date();
+  const firstDayOfWeek = new Date(today.setDate(today.getDate() - today.getDay()));
+  firstDayOfWeek.setHours(0, 0, 0, 0);
+
+  // 두 가지 카운트를 병렬로 실행합니다.
+  const [totalCount, newThisWeekCount] = await Promise.all([
+    // 1. 공개된 전체 매물 수
+    prisma.listing.count({
+      where: { status: 'PUBLISHED' },
+    }),
+    // 2. 이번 주에 등록된 신규 공개 매물 수
+    prisma.listing.count({
+      where: {
+        status: 'PUBLISHED',
+        createdAt: {
+          gte: firstDayOfWeek, // gte: 크거나 같음
+        },
+      },
+    }),
+  ]);
+
+  console.log(`✅ Service: 통계 계산 완료 - 전체: ${totalCount}, 신규: ${newThisWeekCount}`);
+  return { totalCount, newThisWeekCount };
+}
+
 // 서비스 객체로 내보내기
 export default {
   create,
@@ -179,4 +228,5 @@ export default {
   remove,
   update,
   getFeatured,
+  getStats,
 };

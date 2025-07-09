@@ -523,9 +523,9 @@ export default function NewListingPage() {
                 onChange={handleChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
-                <option value="DRAFT">임시저장</option>
                 <option value="PUBLISHED">공개</option>
-                <option value="ARCHIVED">보관</option>
+                <option value="DRAFT">임시저장</option>
+                <option value="ARCHIVED">블라인드</option>
               </select>
             </div>
 

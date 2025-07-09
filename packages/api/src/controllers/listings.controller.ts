@@ -53,8 +53,8 @@ async function getListingById(req: Request, res: Response) {
  * 모든 매물 목록을 조회하는 컨트롤러 (필터링 기능 추가)
  */
 async function getAllListings(req: Request, res: Response) {
-  // req.query에서 필터 조건들을 가져와 서비스로 전달합니다.
-  const listings = await listingService.getAll(req.query);
+  // req.user가 존재하면 role을, 없으면 undefined를 전달
+  const listings = await listingService.getAll(req.query, req.user?.role);
   res.status(200).json(listings);
 }
 
@@ -86,8 +86,13 @@ async function updateListing(req: Request, res: Response) {
  * '주간 대표 매물'을 조회하는 컨트롤러
  */
 async function getFeaturedListings(req: Request, res: Response) {
-  const listings = await listingService.getFeatured();
+  const listings = await listingService.getFeatured(req.user?.role);
   res.status(200).json(listings);
+}
+
+async function getStats(req: Request, res: Response) {
+  const stats = await listingService.getStats();
+  res.status(200).json(stats);
 }
 
 export default {
@@ -98,4 +103,5 @@ export default {
   deleteListing,
   updateListing,
   getFeaturedListings,
+  getStats,
 };

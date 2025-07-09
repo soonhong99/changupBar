@@ -4,16 +4,20 @@ import { Router } from 'express';
 import listingController from '../controllers/listings.controller.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
 import { authMiddleware } from '../middlewares/auth.middleware.js';
+import { optionalAuthMiddleware } from '../middlewares/optionalAuth.middleware.js'; // ⬅️ 추가
 
 const router: Router = Router();
 
 // 1. 가장 구체적인 경로를 맨 위로 올립니다.
 // GET /api/v1/listings/featured - 대표 매물 조회
-router.get('/featured', asyncHandler(listingController.getFeaturedListings));
+router.get('/featured', optionalAuthMiddleware, asyncHandler(listingController.getFeaturedListings));
+
+// GET /api/v1/listings/stats - 매물 통계 조회
+router.get('/stats', asyncHandler(listingController.getStats)); // ⬅️ 추가
 
 // 2. 그 다음 일반적인 목록 경로를 조회합니다.
 // GET /api/v1/listings - 모든 매물 조회
-router.get('/', asyncHandler(listingController.getAllListings));
+router.get('/', optionalAuthMiddleware, asyncHandler(listingController.getAllListings));
 
 // 3. 가장 마지막에 동적인 :id 경로를 조회합니다.
 // GET /api/v1/listings/:id - 특정 매물 조회

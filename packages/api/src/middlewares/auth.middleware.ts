@@ -1,5 +1,6 @@
 // packages/api/src/middlewares/auth.middleware.ts
 
+import { UserRole } from '@prisma/client';
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 
@@ -7,7 +8,7 @@ import jwt from 'jsonwebtoken';
 declare global {
   namespace Express {
     interface Request {
-      user?: { userId: string; role: string };
+      user?: { userId: string; role: UserRole };
     }
   }
 }
@@ -29,7 +30,7 @@ export const authMiddleware = (
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET!) as {
       userId: string;
-      role: string;
+      role: UserRole;
     };
     req.user = decoded; // 요청 객체에 사용자 정보 추가
     next(); // 다음 미들웨어 또는 컨트롤러로 진행

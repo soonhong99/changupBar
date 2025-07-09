@@ -122,7 +122,7 @@ export default async function HomePage() {
                 잠시만요, 새로운 특급 매물을 준비 중입니다!
               </p>
               <p className="text-gray-500 dark:text-gray-400">
-                곧 놀라운 매물들을 공개할 예정이니 조금만 기다려주세요.
+                곧 매물을 공개할 예정이니 조금만 기다려주세요.
               </p>
             </div>
           ) : (
