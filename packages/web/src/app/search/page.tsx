@@ -3,12 +3,12 @@
 "use client";
 
 import { useEffect, useState, useMemo } from "react";
-import { getAllListings, ListingFilter, getListingStats } from "@/lib/api";
+import { getAllListings, ListingFilter, getListingStats, ListingWithCounts } from "@/lib/api";
 import ListingCard from "@/components/ui/ListingCard";
 import { Listing } from "@prisma/client";
 
 export default function SearchPage() {
-  const [listings, setListings] = useState<Listing[]>([]);
+  const [listings, setListings] = useState<ListingWithCounts[]>([]);
   const [filters, setFilters] = useState<ListingFilter>({});
   const [isLoading, setIsLoading] = useState(true);
   const [stats, setStats] = useState({ totalCount: 0, newThisWeekCount: 0 }); // ⬅️ 통계 상태 추가
@@ -46,7 +46,11 @@ export default function SearchPage() {
   // ⬇️ 정렬 select를 위한 핸들러 추가
   const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const [sortBy, order] = e.target.value.split('-');
-    setFilters(prev => ({ ...prev, sortBy, order }));
+    setFilters(prev => ({ 
+      ...prev, 
+      sortBy: sortBy as ListingFilter['sortBy'], // ⬅️ 타입을 강제(assertion)합니다.
+      order: order as ListingFilter['order']     // ⬅️ 타입을 강제(assertion)합니다.
+    }));
   };
 
   // --- 공통 스타일 클래스 ---
@@ -216,19 +220,19 @@ export default function SearchPage() {
               <span className="ml-2 text-blue-500">🎯</span>
             </h2>
             <div className="flex items-center space-x-4">
-              <div className="text-sm text-gray-600 dark:text-gray-400">
+              {/* <div className="text-sm text-gray-600 dark:text-gray-400" style={{ writingMode: 'horizontal-tb' }}>
                 정렬:
-              </div>
+              </div> */}
               <select
                 id="sort"
                 onChange={handleSortChange}
-                value={`${filters.sortBy}-${filters.order}`} // 현재 정렬 상태를 value로 설정
+                value={`${filters.sortBy}-${filters.order}`}
                 className={selectClasses}
+                style={{ height: '48px', width: '150px' }} // 또는 '8rem' 같은 값
               >
                 <option value="createdAt-desc">최신순</option>
                 <option value="keyMoney-asc">권리금 낮은순</option>
                 <option value="keyMoney-desc">권리금 높은순</option>
-                {/* 인기순은 별도 로직(예: 찜하기 횟수)이 필요하므로 추후 구현 */}
               </select>
             </div>
           </div>
@@ -272,11 +276,6 @@ export default function SearchPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {listings.map((listing, index) => (
                   <div key={listing.id} className="relative group">
-                    {/* {index < 3 && (
-                      <div className="absolute -top-2 -right-2 z-10 bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-2 py-1 rounded-full text-xs font-semibold shadow-lg">
-                        {index === 0 ? '🥇 Top' : index === 1 ? '🥈 Best' : '🥉 Hot'}
-                      </div>
-                    )} */}
                     <div className="relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 group-hover:scale-105">
                       <ListingCard listing={listing} />
                     </div>

@@ -32,9 +32,25 @@ async function create(data: CreateListingInput) {
 async function getById(id: string) {
   console.log(`✅ Service: ID(${id})로 매물 조회를 시작합니다.`);
 
-  const listing = await prisma.listing.findUnique({
-    where: { id },
-  });
+  const [_, listing] = await prisma.$transaction([
+    prisma.listing.update({
+      where: { id },
+      data: {
+        viewCount: {
+          increment: 1, // ⬅️ 조회수를 1 증가시킵니다.
+        },
+      },
+    }),
+    prisma.listing.findUnique({
+      where: { id },
+      // ⬇️ 찜한 사람 수를 함께 조회하도록 include 추가
+      include: {
+        _count: {
+          select: { likedBy: true },
+        },
+      },
+    }),
+  ]);
 
   if (!listing) {
     console.log(`⚠️ Service: ID(${id})에 해당하는 매물을 찾지 못했습니다.`);
@@ -83,6 +99,11 @@ async function getAll(query: GetAllListingsQuery, role?: UserRole) {
   const listings = await prisma.listing.findMany({
     where,
     orderBy,
+    include: {
+      _count: {
+        select: { likedBy: true },
+      },
+    },
   });
 
   console.log(`✅ Service: 총 ${listings.length}개의 매물 조회 완료!`);
@@ -96,39 +117,35 @@ async function getAll(query: GetAllListingsQuery, role?: UserRole) {
  * @param listingId '찜'할 매물의 ID
  */
 async function like(userId: string, listingId: string) {
-  // 1. 이미 찜했는지 확인
   const existingLike = await prisma.user.findFirst({
-    where: {
-      id: userId,
-      likedListings: {
-        some: { id: listingId },
-      },
-    },
+    where: { id: userId, likedListings: { some: { id: listingId } } },
   });
 
   if (existingLike) {
-    // 이미 찜했다면 '찜 취소' 로직 실행 (토글 기능)
-    console.log(`✅ Service: 사용자(${userId})가 매물(${listingId}) 찜을 취소합니다.`);
-    await prisma.user.update({
-      where: { id: userId },
-      data: {
-        likedListings: {
-          disconnect: { id: listingId },
-        },
-      },
-    });
+    // 찜 취소 로직
+    await prisma.$transaction([
+      prisma.user.update({
+        where: { id: userId },
+        data: { likedListings: { disconnect: { id: listingId } } },
+      }),
+      prisma.listing.update({
+        where: { id: listingId },
+        data: { likeCount: { decrement: 1 } }, // ⬅️ 카운트 감소
+      }),
+    ]);
     return { message: '매물 찜을 취소했습니다.' };
   } else {
-    // 찜하지 않았다면 '찜하기' 로직 실행
-    console.log(`✅ Service: 사용자(${userId})가 매물(${listingId})을 찜합니다.`);
-    await prisma.user.update({
-      where: { id: userId },
-      data: {
-        likedListings: {
-          connect: { id: listingId },
-        },
-      },
-    });
+    // 찜하기 로직
+    await prisma.$transaction([
+      prisma.user.update({
+        where: { id: userId },
+        data: { likedListings: { connect: { id: listingId } } },
+      }),
+      prisma.listing.update({
+        where: { id: listingId },
+        data: { likeCount: { increment: 1 } }, // ⬅️ 카운트 증가
+      }),
+    ]);
     return { message: '매물을 찜했습니다.' };
   }
 }
@@ -164,6 +181,11 @@ async function getFeatured(role?: UserRole) {
   const featuredListings = await prisma.listing.findMany({
     where,
     take: 3,
+    include: {
+      _count: {
+        select: { likedBy: true },
+      },
+    },
   });
 
   console.log(`✅ Service: 총 ${featuredListings.length}개의 대표 매물 조회 완료!`);
@@ -175,7 +197,7 @@ interface GetAllListingsQuery {
   category?: 'CAFE_BAKERY' | 'RESTAURANT_BAR' | 'RETAIL_ETC';
   status?: 'DRAFT' | 'PUBLISHED' | 'ARCHIVED'; // ⬅️ 관리자용 상태 필터
   keyMoneyLte?: string;
-  sortBy?: 'createdAt' | 'keyMoney'; // 정렬 기준
+  sortBy?: 'createdAt' | 'keyMoney' | 'status' | 'viewCount' |'likeCount'; // ⬅️ 'status' 추가
   order?: 'asc' | 'desc'; // 정렬 순서
 }
 

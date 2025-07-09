@@ -27,13 +27,13 @@ export default async function HomePage() {
           </div>
           <h1 className="text-4xl font-extrabold tracking-tight text-gray-900 dark:text-gray-100 sm:text-5xl md:text-6xl">
             <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              이번 주 한정
+              스마트창업 한정
             </span>
             <br />
             특급 매물 공개
           </h1>
           <p className="mt-4 max-w-2xl mx-auto text-xl text-gray-600 dark:text-gray-400">
-            하이브창업에서 검증된 S급 매물들을 <strong className="text-blue-600 dark:text-blue-400">72시간 한정</strong>으로 공개합니다
+            스마트창업에서 검증된 S급 매물들을 <strong className="text-blue-600 dark:text-blue-400">최저권리금</strong>으로 만날수있는 기회
           </p>
         </div>
 

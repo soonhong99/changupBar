@@ -5,12 +5,13 @@
 import { Listing } from '@prisma/client';
 import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
-import { likeListing } from '@/lib/api';
+import { likeListing, ListingWithCounts } from '@/lib/api';
 import { MouseEvent } from 'react';
 import { useRouter } from 'next/navigation';
+import { Eye, Heart } from 'lucide-react'; // ⬅️ 아이콘 import
 
 interface ListingCardProps {
-  listing: Listing;
+  listing: ListingWithCounts;
 }
 
 export default function ListingCard({ listing }: ListingCardProps) {
@@ -98,6 +99,16 @@ export default function ListingCard({ listing }: ListingCardProps) {
              <p className="text-xl font-bold text-gray-900 dark:text-gray-200">
                 {listing.keyMoney > 0 ? `${listing.keyMoney.toLocaleString()}만 원` : '없음'}
              </p>
+          </div>
+          <div className="flex items-center justify-end space-x-4 mt-2 pt-2 border-t text-sm text-gray-500">
+            <div className="flex items-center gap-1">
+              <Eye className="w-4 h-4" />
+              <span>{listing.viewCount.toLocaleString()}</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <Heart className="w-4 h-4" />
+              <span>{listing._count.likedBy.toLocaleString()}</span>
+            </div>
           </div>
         </div>
       </div>

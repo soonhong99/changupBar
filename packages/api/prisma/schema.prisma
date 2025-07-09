@@ -1,5 +1,6 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
+// packages/api/prisma/schema.prisma
 
 // 1. Prisma Client 생성기 설정 (Node.js 환경에서 사용)
 generator client {
@@ -58,10 +59,10 @@ model Listing {
 
   // --- 공개 설정 ---
   status   ListingStatus @default(DRAFT) // 공개 상태 (DRAFT, PUBLISHED, ARCHIVED)
+  viewCount Int @default(0) // ⬇️ 추가: 조회수
+  likeCount Int           @default(0) // ⬅️ 추가: 찜하기 수
   isBest   Boolean       @default(false) // BEST 매물 여부
   bestUntil DateTime?     // BEST 매물 노출 종료일 (Optional)
-
-  // ⬇️ 아래 3줄을 isBest, bestUntil 필드 근처에 추가합니다.
   isWeeklyBest   Boolean   @default(false) // 주간 대표 매물 여부
   featuredStart DateTime? // 대표 매물 노출 시작일
   featuredEnd   DateTime? // 대표 매물 노출 종료일

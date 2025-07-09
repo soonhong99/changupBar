@@ -263,6 +263,8 @@ export default function AdminDashboardPage() {
               >
                 <option value="createdAt">등록순</option>
                 <option value="keyMoney">권리금순</option>
+                <option value="viewCount">조회수순</option> {/* ⬅️ 추가 */}
+                <option value="likeCount">인기순</option>   {/* ⬅️ 추가 */}
               </select>
             </div>
 

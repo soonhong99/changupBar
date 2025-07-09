@@ -1,3 +1,5 @@
+// packages/web/src/app/(admin)/admin/edit/[id]/page.tsx
+
 "use client";
 
 import { useEffect, useState, FormEvent } from 'react';

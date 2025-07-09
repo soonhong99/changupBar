@@ -11,12 +11,12 @@ export interface ListingFilter {
   region?: string;
   category?: string;
   keyMoneyLte?: number;
-  sortBy?: string; // 추가
+  sortBy?: 'createdAt' | 'keyMoney' | 'status' | 'viewCount' | 'likeCount'; // ⬅️ 추가
   order?: string;  // 추가
   status?: string; // ⬅️ 이 줄을 추가합니다.
 }
 
-export async function getListingById(id: string): Promise<Listing | null> {
+export async function getListingById(id: string): Promise<ListingWithCounts | null> {
   try {
     const res = await fetch(`${API_URL}/listings/${id}`);
 
@@ -36,7 +36,7 @@ export async function getListingById(id: string): Promise<Listing | null> {
 
 
 
-export async function getAllListings(filter: ListingFilter = {}, token?: string | null): Promise<Listing[]> {
+export async function getAllListings(filter: ListingFilter = {}, token?: string | null): Promise<ListingWithCounts[]> {
     // 쿼리 스트링을 생성합니다.
     const query = new URLSearchParams();
     if (filter.region) query.append('region', filter.region);
@@ -203,7 +203,8 @@ export async function getMe(token: string): Promise<User | null> {
   }
 }
 
-export async function getFeaturedListings(): Promise<Listing[]> {
+// getFeaturedListings 함수의 반환 타입을 ListingWithCounts[]로 변경합니다.
+export async function getFeaturedListings(): Promise<ListingWithCounts[]> {
   try {
     const res = await fetch(`${API_URL}/listings/featured`);
     if (!res.ok) {
@@ -226,3 +227,9 @@ export async function getListingStats(): Promise<{ totalCount: number; newThisWe
     return { totalCount: 0, newThisWeekCount: 0 };
   }
 }
+
+export type ListingWithCounts = Listing & {
+  _count: {
+    likedBy: number;
+  };
+};

@@ -32,7 +32,7 @@ export default function Header() {
                 <span className="text-white font-bold text-lg">🏠</span>
               </div>
               <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                하이브창업
+                스마트창업
               </span>
               <div className="px-2 py-1 bg-gradient-to-r from-red-500 to-orange-500 text-white text-xs font-semibold rounded-full shadow-sm">
                 HOT
