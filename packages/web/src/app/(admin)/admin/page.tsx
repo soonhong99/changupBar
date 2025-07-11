@@ -1,3 +1,5 @@
+// packages/web/src/app/(admin)/admin/page.tsx
+
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
@@ -60,7 +62,8 @@ export default function AdminDashboardPage() {
   // 검색 필터링
   const filteredListings = listings.filter(listing =>
     listing.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    listing.region.toLowerCase().includes(searchTerm.toLowerCase())
+    (listing.sido || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (listing.sigungu || '').toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   // 통계 계산
@@ -176,23 +179,25 @@ export default function AdminDashboardPage() {
               </div>
             </div>
 
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
-              <div className="flex items-center">
-                <div className="flex-shrink-0">
-                  <div className="w-8 h-8 bg-purple-500 rounded-lg flex items-center justify-center">
-                    <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
-                    </svg>
+            <Link href="/admin/consultations" className="block">
+              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
+                <div className="flex items-center">
+                  <div className="flex-shrink-0">
+                    <div className="w-8 h-8 bg-cyan-500 rounded-lg flex items-center justify-center">
+                      <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
+                      </svg>
+                    </div>
+                  </div>
+                  <div className="ml-5 w-0 flex-1">
+                    <dl>
+                      <dt className="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">신규 상담 신청</dt>
+                      <dd className="text-lg font-semibold text-gray-900 dark:text-white">5</dd>
+                    </dl>
                   </div>
                 </div>
-                <div className="ml-5 w-0 flex-1">
-                  <dl>
-                    <dt className="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">특급 매물</dt>
-                    <dd className="text-lg font-semibold text-gray-900 dark:text-gray-100">{stats.featured}</dd>
-                  </dl>
-                </div>
               </div>
-            </div>
+            </Link>
           </div>
         </div>
 
@@ -263,6 +268,7 @@ export default function AdminDashboardPage() {
               >
                 <option value="createdAt">등록순</option>
                 <option value="keyMoney">권리금순</option>
+                <option value="status">상태순</option>
                 <option value="viewCount">조회수순</option> {/* ⬅️ 추가 */}
                 <option value="likeCount">인기순</option>   {/* ⬅️ 추가 */}
               </select>
@@ -311,7 +317,7 @@ export default function AdminDashboardPage() {
                 <thead className="bg-gray-50 dark:bg-gray-700">
                   <tr>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">매물 정보</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">지역</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">주소</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">권리금</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">상태</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">등록일</th>
@@ -337,7 +343,7 @@ export default function AdminDashboardPage() {
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
-                        {listing.region}
+                        {listing.sido} {listing.sigungu}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">
                         {listing.keyMoney.toLocaleString()}만 원

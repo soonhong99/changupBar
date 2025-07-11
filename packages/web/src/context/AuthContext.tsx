@@ -27,15 +27,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(true); // ⬅️ 로딩 상태 추가 (초기값 true)
 
   useEffect(() => {
-    // 앱이 처음 로드될 때 localStorage에서 토큰을 가져옵니다.
-    const storedToken = localStorage.getItem('authToken');
-    if (storedToken) {
-      setToken(storedToken);
-      fetchUserAndLikes(storedToken); // ⬅️ 유저/찜 정보 모두 불러오기
-    }
-    setIsLoading(false); // ⬅️ 토큰 확인 작업이 끝나면 로딩 상태를 false로 변경
-  }, []);
+    // useEffect 내부에서 비동기 작업을 처리하기 위한 함수 선언
+    const bootstrapAuth = async () => {
+      const storedToken = localStorage.getItem('authToken');
+      if (storedToken) {
+        setToken(storedToken);
+        // fetchUserAndLikes가 끝날 때까지 기다립니다.
+        await fetchUserAndLikes(storedToken);
+      }
+      // 모든 작업이 끝난 후 로딩 상태를 false로 변경합니다.
+      setIsLoading(false); 
+    };
 
+    bootstrapAuth();
+  }, []); // 이 useEffect는 앱이 처음 마운트될 때 한 번만 실행됩니다.
   const fetchUserAndLikes = async (currentToken: string) => {
     try {
       // 사용자 정보와 '찜' 목록을 동시에 요청해서 받아옵니다.

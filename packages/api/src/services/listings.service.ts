@@ -5,6 +5,8 @@ import { CreateListingInput } from '../../../shared/src/schemas/listing.schema.j
 import { Prisma, UserRole } from '@prisma/client'; // Prisma 타입을 가져옵니다.
 import { UpdateListingInput } from '../../../shared/src/schemas/listing.schema.js'; // ⬅️ 추가
 
+let cachedMostViewed: { listing: any; timestamp: number } | null = null;
+const CACHE_DURATION = 5 * 60 * 1000; // 5분 (밀리초 단위)ㄴ
 
 /**
  * 신규 매물을 데이터베이스에 생성합니다.
@@ -69,7 +71,7 @@ async function getById(id: string) {
 async function getAll(query: GetAllListingsQuery, role?: UserRole) {
   console.log(`✅ Service: 매물 조회 시작. 역할: ${role || 'Guest'}`);
 
-  const { region, category, status, keyMoneyLte, sortBy = 'createdAt', order = 'desc' } = query;
+  const { region, category, status, keyMoneyLte, sido, sigungu, sortBy = 'createdAt', order = 'desc' } = query;
   const where: Prisma.ListingWhereInput = {};
 
   // --- 조건부 필터링 ---
@@ -86,6 +88,8 @@ async function getAll(query: GetAllListingsQuery, role?: UserRole) {
   if (region) where.region = region;
   if (category) where.category = category;
   if (keyMoneyLte) where.keyMoney = { lte: parseInt(keyMoneyLte, 10) };
+  if (sido) where.sido = sido;
+  if (sigungu) where.sigungu = sigungu;
 
   // ⬇️ 역할에 따라 orderBy 조건을 동적으로 설정합니다.
   const orderBy: Prisma.ListingOrderByWithRelationInput[] = [];
@@ -199,6 +203,8 @@ interface GetAllListingsQuery {
   keyMoneyLte?: string;
   sortBy?: 'createdAt' | 'keyMoney' | 'status' | 'viewCount' |'likeCount'; // ⬅️ 'status' 추가
   order?: 'asc' | 'desc'; // 정렬 순서
+  sido?: string;
+  sigungu?: string;
 }
 
 async function remove(id: string) {
@@ -241,6 +247,33 @@ async function getStats() {
   return { totalCount, newThisWeekCount };
 }
 
+/**
+ * 공개된 매물 중 가장 조회수가 높은 매물 1개를 조회합니다. (5분 캐시 적용)
+ */
+async function getMostViewed() {
+  const now = Date.now();
+
+  // 1. 캐시가 유효하면 캐시된 데이터를 반환
+  if (cachedMostViewed && now - cachedMostViewed.timestamp < CACHE_DURATION) {
+    console.log('✅ Service: 캐시된 인기 매물을 반환합니다.');
+    return cachedMostViewed.listing;
+  }
+
+  // 2. 캐시가 없거나 만료되면 DB에서 새로 조회
+  console.log('✅ Service: DB에서 새로운 인기 매물을 조회합니다.');
+  const mostViewedListing = await prisma.listing.findFirst({
+    where: { status: 'PUBLISHED' },
+    orderBy: { viewCount: 'desc' },
+    include: { _count: { select: { likedBy: true } } },
+  });
+
+  // 3. 새로운 데이터로 캐시를 업데이트
+  cachedMostViewed = { listing: mostViewedListing, timestamp: now };
+
+  return mostViewedListing;
+}
+
+
 // 서비스 객체로 내보내기
 export default {
   create,
@@ -251,4 +284,5 @@ export default {
   update,
   getFeatured,
   getStats,
+  getMostViewed,
 };

@@ -44,9 +44,9 @@ export default function Header() {
               <Link href="/search" className={navLinkClasses}>
                 🔍 매물 찾기
               </Link>
-              <Link href="/featured" className={navLinkClasses}>
+              {/* <Link href="/featured" className={navLinkClasses}>
                 ⭐ 특급 매물
-              </Link>
+              </Link> */}
               <Link href="/consulting" className={navLinkClasses}>
                 💼 창업 컨설팅
               </Link>

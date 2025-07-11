@@ -5,7 +5,11 @@ import { z } from 'zod';
 export const createListingSchema = z.object({
   name: z.string().min(1, '매물 이름은 필수입니다.'),
   summary: z.string().min(1, '한 줄 요약은 필수입니다.'),
-  address: z.string().min(1, '상세 주소는 필수입니다.'),
+  sido: z.string().optional(),
+  sigungu: z.string().optional(),
+  eupmyeondong: z.string().optional(),
+  roadAddress: z.string().optional(),
+  detailAddress: z.string().optional(),
   
   region: z.enum(['METROPOLITAN', 'NON_METROPOLITAN']),
   category: z.enum(['CAFE_BAKERY', 'RESTAURANT_BAR', 'RETAIL_ETC']),
@@ -25,6 +29,8 @@ export const createListingSchema = z.object({
   hasParking: z.boolean().default(false),
   isFirstFloor: z.boolean().default(false),
   isNearStation: z.boolean().default(false),
+  isBeginnerFriendly: z.boolean().default(false).optional(), // ⬇️ 추가
+  isWomanFriendly: z.boolean().default(false).optional(),   // ⬇️ 추가
 
   description: z.string().min(1, '상세 설명은 필수입니다.'),
   coverImage: z.string().url('유효한 URL을 입력해주세요.'),

@@ -3,44 +3,75 @@
 "use client";
 
 import { useEffect, useState, useMemo } from "react";
-import { getAllListings, ListingFilter, getListingStats, ListingWithCounts } from "@/lib/api";
+import { getAllListings, ListingFilter, getListingStats, ListingWithCounts, getMostViewedListing } from "@/lib/api";
 import ListingCard from "@/components/ui/ListingCard";
-import { Listing } from "@prisma/client";
+import { administrativeDistricts } from '@/data/districts'; // ⬅️ 여기서 import
+import Modal from "@/components/ui/Modal"; // ⬅️ Modal import
+import ConsultationForm from "@/components/forms/ConsultationForm";
 
 export default function SearchPage() {
   const [listings, setListings] = useState<ListingWithCounts[]>([]);
-  const [filters, setFilters] = useState<ListingFilter>({});
+  const [filters, setFilters] = useState<ListingFilter>({
+    sido: '',
+    sigungu: '',
+  });
   const [isLoading, setIsLoading] = useState(true);
   const [stats, setStats] = useState({ totalCount: 0, newThisWeekCount: 0 }); // ⬅️ 통계 상태 추가
+  const [mostViewed, setMostViewed] = useState<ListingWithCounts | null>(null); // ⬅️ 추가
+  const [isModalOpen, setIsModalOpen] = useState(false); // ⬅️ 모달 상태 추가
 
+  // useEffect 1: 페이지가 처음 로드될 때 한 번만 실행 (통계, 인기 매물)
   useEffect(() => {
-    async function loadListings() {
+    // 통계 데이터 불러오기
+    getListingStats().then(setStats);
+
+    // 인기 매물을 불러오고, 5분마다 반복하도록 설정
+    const fetchMostViewed = () => {
+      getMostViewedListing().then(setMostViewed);
+    };
+    fetchMostViewed(); // 즉시 실행
+    const interval = setInterval(fetchMostViewed, 5 * 60 * 1000); // 5분마다
+
+    // 컴포넌트가 사라질 때 인터벌 정리
+    return () => clearInterval(interval);
+  }, []); // ⬅️ 의존성 배열이 비어있어, 최초 1회만 실행됨
+
+  // useEffect 2: 필터가 변경될 때마다 실행 (매물 목록)
+  useEffect(() => {
+    const loadListings = async () => {
       setIsLoading(true);
-      // 필터 객체에서 빈 값(undefined, '')은 제외하고 API를 호출합니다.
-      const activeFilters = Object.entries(filters).reduce((acc, [key, value]) => {
-        if (value) {
-          acc[key as keyof ListingFilter] = value;
-        }
-        return acc;
-      }, {} as ListingFilter);
       
+      // 실제 데이터 로딩과 최소 로딩 시간(500ms)을 동시에 시작
+      const startTime = Date.now();
+      const activeFilters = Object.fromEntries(Object.entries(filters).filter(([_, v]) => v));
       const data = await getAllListings(activeFilters);
+      
+      // 최소 500ms를 보장
+      const elapsedTime = Date.now() - startTime;
+      const remainingTime = Math.max(0, 500 - elapsedTime);
+      
+      if (remainingTime > 0) {
+        await new Promise(resolve => setTimeout(resolve, remainingTime));
+      }
+      
       setListings(data);
       setIsLoading(false);
-    }
+    };
 
-    getListingStats().then(setStats);
-    
-    // 300ms 디바운스를 적용하여 필터 변경 시 API 호출을 최적화합니다.
-    const timer = setTimeout(() => {
-      loadListings();
-    }, 300);
-
-    return () => clearTimeout(timer); // 컴포넌트 언마운트 시 타이머 제거
-  }, [filters]);
-
+    // 300ms 디바운스
+    const timer = setTimeout(loadListings, 300);
+    return () => clearTimeout(timer);
+  }, [filters]); // ⬅️ filters가 변경될 때만 실행됨
+  
   const handleFilterChange = (key: keyof ListingFilter, value: string | number | undefined) => {
-    setFilters(prev => ({ ...prev, [key]: value }));
+    setFilters(prev => {
+      const newFilters = { ...prev, [key]: value };
+      // 시/도가 바뀌면, 시/군/구 선택을 초기화합니다.
+      if (key === 'sido') {
+        newFilters.sigungu = '';
+      }
+      return newFilters;
+    });
   };
 
   // ⬇️ 정렬 select를 위한 핸들러 추가
@@ -79,7 +110,7 @@ export default function SearchPage() {
             지금 바로 찾아보세요
           </h1>
           <p className="mt-4 max-w-2xl mx-auto text-xl text-gray-600 dark:text-gray-400">
-            <strong className="text-blue-600 dark:text-blue-400">10,000+</strong> 검증된 매물 중에서 
+           검증된 <strong className="text-blue-600 dark:text-blue-400">스마트창업</strong> 매물 중에서 
             당신에게 딱 맞는 <strong className="text-purple-600 dark:text-purple-400">황금 매물</strong>을 찾아보세요
           </p>
         </div>
@@ -99,12 +130,60 @@ export default function SearchPage() {
             <div className="text-sm text-gray-600 dark:text-gray-400">이번 주 신규</div>
           </div>
           <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md text-center">
-            <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">서울 강남 카페</div>
-            <div className="text-sm text-gray-600 dark:text-gray-400">가장 많은 하트를 받은 매물</div>
+            {mostViewed ? (
+              <>
+                <div className="text-2xl font-bold text-purple-600 dark:text-purple-400 truncate">
+                  {mostViewed.name}
+                </div>
+                <div className="text-sm text-gray-600 dark:text-gray-400">
+                  가장 인기 있는 매물 (조회수 {mostViewed.viewCount})
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">-</div>
+                <div className="text-sm text-gray-600 dark:text-gray-400">가장 많이 본 매물</div>
+              </>
+            )}
           </div>
+
           <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md text-center">
             <div className="text-2xl font-bold text-orange-600 dark:text-orange-400">97%</div>
             <div className="text-sm text-gray-600 dark:text-gray-400">고객 만족도</div>
+          </div>
+        </div>
+
+        {/* --- 지역 안내 섹션 --- */}
+        <div className="mb-8">
+          <div className="bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 border-l-4 border-amber-400 p-6 rounded-lg shadow-sm">
+            <div className="flex items-start space-x-3">
+              <div className="flex-shrink-0">
+                <svg className="w-6 h-6 text-amber-600 dark:text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+              </div>
+              <div className="flex-1">
+                <h3 className="text-lg font-semibold text-amber-800 dark:text-amber-200 mb-2">
+                  📍 현재 서비스 지역 안내
+                </h3>
+                <p className="text-amber-700 dark:text-amber-300 mb-3">
+                  현재 <span className="font-semibold">서울특별시, 인천광역시, 대전광역시, 경기도</span> 지역의 검증된 매물을 
+                  집중적으로 소개해드리고 있습니다.
+                </p>
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                  <p className="text-sm text-amber-600 dark:text-amber-400 mb-2 sm:mb-0">
+                    전국 매물 확대를 위해 열심히 준비하고 있으니, 조금만 기다려 주세요! 🙏
+                  </p>
+                  <div className="flex items-center space-x-2 text-sm text-amber-600 dark:text-amber-400">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span>매주 새로운 특급매물 추가 중</span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       
@@ -168,28 +247,35 @@ export default function SearchPage() {
               
               {/* 추가 필터 플레이스홀더 */}
               <div className="space-y-2">
-                <label className={labelClasses}>
-                  <span className="flex items-center">
-                    📍 지역 선택
-                    <span className="ml-1 text-xs text-gray-500">(곧 출시)</span>
-                  </span>
-                </label>
-                <select disabled className={`${selectClasses} opacity-50 cursor-not-allowed`}>
-                  <option>전체 지역</option>
-                </select>
-              </div>
-              
-              <div className="space-y-2">
-                <label className={labelClasses}>
-                  <span className="flex items-center">
-                    🏠 월세 범위
-                    <span className="ml-1 text-xs text-gray-500">(곧 출시)</span>
-                  </span>
-                </label>
-                <select disabled className={`${selectClasses} opacity-50 cursor-not-allowed`}>
-                  <option>금액 제한 없음</option>
-                </select>
-              </div>
+              <label htmlFor="sido" className={labelClasses}>📍 시/도 선택</label>
+              <select
+                id="sido"
+                onChange={(e) => handleFilterChange('sido', e.target.value || undefined)}
+                value={filters.sido}
+                className={selectClasses}
+              >
+                <option value="">전체</option>
+                {Object.keys(administrativeDistricts).map(sido => (
+                  <option key={sido} value={sido}>{sido}</option>
+                ))}
+              </select>
+            </div>
+
+            <div className="space-y-2">
+              <label htmlFor="sigungu" className={labelClasses}>시/군/구 선택</label>
+              <select
+                id="sigungu"
+                onChange={(e) => handleFilterChange('sigungu', e.target.value || undefined)}
+                value={filters.sigungu}
+                disabled={!filters.sido} // 시/도가 선택되어야 활성화
+                className={`${selectClasses} ${!filters.sido ? 'opacity-50 cursor-not-allowed' : ''}`}
+              >
+                <option value="">전체</option>
+                {filters.sido && administrativeDistricts[filters.sido]?.map(sigungu => (
+                  <option key={sigungu} value={sigungu}>{sigungu}</option>
+                ))}
+              </select>
+            </div>
             </div>
             
             {/* 검색 결과 미리보기 */}
@@ -197,7 +283,13 @@ export default function SearchPage() {
               <div className="flex items-center justify-between">
                 <div className="text-sm text-gray-600 dark:text-gray-300">
                   {isLoading ? (
-                    <span>🔍 검색 중...</span>
+                    <span className="flex items-center">
+                      <svg className="animate-spin -ml-1 mr-2 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      🔍 최적의 매물을 찾고 있습니다...
+                    </span>
                   ) : (
                     <span>
                       📊 검색 결과: <strong className="text-blue-600 dark:text-blue-400">{listings.length}개</strong> 매물 발견
@@ -284,11 +376,11 @@ export default function SearchPage() {
               </div>
               
               {/* 더 많은 매물 보기 버튼 */}
-              <div className="text-center mt-12">
+              {/* <div className="text-center mt-12">
                 <button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-4 rounded-xl font-semibold text-lg shadow-lg transition-all duration-300 transform hover:scale-105">
                   더 많은 매물 보기 📈
                 </button>
-              </div>
+              </div> */}
             </>
           )}
         </div>
@@ -303,8 +395,8 @@ export default function SearchPage() {
               전문 컨설턴트가 직접 맞춤 매물을 찾아드립니다
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="bg-white text-green-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
-                📞 맞춤 상담 신청
+              <button onClick={() => setIsModalOpen(true)} className="bg-white text-green-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
+                💬 맞춤 매물 신청
               </button>
               <button className="bg-yellow-400 text-gray-900 px-6 py-3 rounded-lg font-semibold hover:bg-yellow-300 transition-colors">
                 🔔 매물 알림 설정
@@ -314,6 +406,13 @@ export default function SearchPage() {
         </div>
 
       </div>
+      <Modal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)}
+        title="맞춤 매물 상담 신청"
+      >
+        <ConsultationForm onSuccess={() => setIsModalOpen(false)} />
+      </Modal>
     </main>
   );
 }

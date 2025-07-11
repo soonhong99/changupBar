@@ -26,7 +26,10 @@ import {
   PiggyBank,
   TrendingDown,
   Calculator,
-  Home
+  Home,
+  BikeIcon,
+  Leaf,
+  Smile
 } from 'lucide-react';
 
 type Props = {
@@ -63,12 +66,6 @@ export default async function ListingDetailPage({ params }: Props) {
   // 금액 포맷팅
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('ko-KR').format(amount);
-  };
-
-  // 주소에서 구 정보 추출
-  const getDistrict = (address: string) => {
-    const parts = address.split(' ');
-    return parts[1] || address;
   };
 
   // 수익률 계산
@@ -123,7 +120,9 @@ export default async function ListingDetailPage({ params }: Props) {
             <div className="flex items-center gap-4 text-white/80">
               <div className="flex items-center gap-2">
                 <MapPin className="w-5 h-5" />
-                <span className="font-medium">{listing.address}</span>
+                <span className="font-medium">
+                  {listing.sido} {listing.sigungu} 
+                </span>
               </div>
             </div>
           </div>
@@ -197,9 +196,23 @@ export default async function ListingDetailPage({ params }: Props) {
                 역세권
               </div>
             )}
+            {listing.isBeginnerFriendly && (
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-teal-100 dark:bg-teal-900/30 text-teal-700 dark:text-teal-400 rounded-full font-medium">
+                <Leaf className="w-4 h-4" />
+                초보 추천
+              </div>
+            )}
+
+            {/* ⬇️ '여성 추천' 배지 추가 */}
+            {listing.isWomanFriendly && (
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-pink-100 dark:bg-pink-900/30 text-pink-700 dark:text-pink-400 rounded-full font-medium">
+                <Smile className="w-4 h-4" />
+                여성 추천
+              </div>
+            )}
             {listing.deliveryPercent > 0 && (
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400 rounded-full font-medium">
-                <Truck className="w-4 h-4" />
+                <BikeIcon className="w-4 h-4" />
                 배달 {listing.deliveryPercent}%
               </div>
             )}
@@ -367,7 +380,7 @@ export default async function ListingDetailPage({ params }: Props) {
             <div className="bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 rounded-xl p-6 border border-indigo-100 dark:border-indigo-800">
               <div className="flex items-center gap-3 mb-4">
                 <Shield className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">창업바 보증 매물</h3>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">스마트 보증 매물</h3>
               </div>
               <ul className="space-y-3">
                 <li className="flex items-start gap-2">

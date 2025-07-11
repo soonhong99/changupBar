@@ -5,6 +5,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext"; // ⬅️ AuthProvider import
 import Header from "@/components/layout/Header";
+import Script from 'next/script'; // ⬅️ Script 컴포넌트 import
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,9 +23,14 @@ export default function RootLayout({
     <html lang="ko">
       <body className={inter.className}>
         <AuthProvider>
-          <Header /> {/* ⬅️ Header를 여기에 추가 */}
-          <main>{children}</main> {/* ⬅️ children을 main 태그로 감싸주면 좋습니다. */}
+          <Header />
+          <main>{children}</main>
         </AuthProvider>
+        {/* ⬇️ Daum 우편번호 서비스를 위한 스크립트를 추가합니다. */}
+        <Script
+          src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   );

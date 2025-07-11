@@ -1,8 +1,9 @@
 // packages/web/src/lib/api.ts
 
-import { Listing, User } from '@prisma/client'; // Prisma 타입을 재사용!
+import { Listing, User, ConsultationRequest } from '@prisma/client'; // Prisma 타입을 재사용!
 import { LoginUserInput, RegisterUserInput } from '../../../shared/src/schemas/auth.schema'; // ⬅️ 추가
 import { CreateListingInput, UpdateListingInput } from '../../../shared/src/schemas/listing.schema'; // ⬅️ 추가
+import { CreateConsultationInput } from '@shared/schemas/consultation.schema'; // ⬅️ 추가
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -14,6 +15,8 @@ export interface ListingFilter {
   sortBy?: 'createdAt' | 'keyMoney' | 'status' | 'viewCount' | 'likeCount'; // ⬅️ 추가
   order?: string;  // 추가
   status?: string; // ⬅️ 이 줄을 추가합니다.
+  sido?: string;
+  sigungu?: string;
 }
 
 export async function getListingById(id: string): Promise<ListingWithCounts | null> {
@@ -44,6 +47,8 @@ export async function getAllListings(filter: ListingFilter = {}, token?: string 
     if (filter.keyMoneyLte) query.append('keyMoneyLte', filter.keyMoneyLte.toString());
     if (filter.sortBy) query.append('sortBy', filter.sortBy); // 추가
     if (filter.order) query.append('order', filter.order); // 추가
+    if (filter.sido) query.append('sido', filter.sido);
+    if (filter.sigungu) query.append('sigungu', filter.sigungu);
   
     const queryString = query.toString();
     const url = queryString ? `${API_URL}/listings?${queryString}` : `${API_URL}/listings`;
@@ -233,3 +238,44 @@ export type ListingWithCounts = Listing & {
     likedBy: number;
   };
 };
+
+export async function getMostViewedListing(): Promise<ListingWithCounts | null> {
+  try {
+    const res = await fetch(`${API_URL}/listings/most-viewed`);
+    if (!res.ok) return null;
+    return res.json();
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}
+
+export async function createConsultation(data: CreateConsultationInput) {
+  const res = await fetch(`${API_URL}/consultations`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) {
+    const errorData = await res.json();
+    throw new Error(errorData.message || '상담 신청에 실패했습니다.');
+  }
+  return res.json();
+}
+
+export async function getConsultationRequests(token: string): Promise<ConsultationRequest[]> {
+  const res = await fetch(`${API_URL}/consultations`, {
+    headers: { 'Authorization': `Bearer ${token}` }
+  });
+  if (!res.ok) throw new Error('상담 신청 목록을 불러오는데 실패했습니다.');
+  return res.json();
+}
+
+export async function deleteConsultationRequest(id: string, token: string) {
+  const res = await fetch(`${API_URL}/consultations/${id}`, {
+    method: 'DELETE',
+    headers: { 'Authorization': `Bearer ${token}` }
+  });
+  if (!res.ok) throw new Error('상담 내역 삭제에 실패했습니다.');
+  return res.json();
+}

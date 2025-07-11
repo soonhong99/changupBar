@@ -95,6 +95,11 @@ async function getStats(req: Request, res: Response) {
   res.status(200).json(stats);
 }
 
+async function getMostViewedListing(req: Request, res: Response) {
+  const listing = await listingService.getMostViewed();
+  res.status(200).json(listing);
+}
+
 export default {
   createListing,
   getListingById,
@@ -104,4 +109,5 @@ export default {
   updateListing,
   getFeaturedListings,
   getStats,
+  getMostViewedListing,
 };

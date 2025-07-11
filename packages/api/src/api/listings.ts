@@ -12,6 +12,9 @@ const router: Router = Router();
 // GET /api/v1/listings/featured - 대표 매물 조회
 router.get('/featured', optionalAuthMiddleware, asyncHandler(listingController.getFeaturedListings));
 
+// GET /api/v1/listings/most-viewed - 가장 인기있는 매물 조회
+router.get('/most-viewed', asyncHandler(listingController.getMostViewedListing)); 
+
 // GET /api/v1/listings/stats - 매물 통계 조회
 router.get('/stats', asyncHandler(listingController.getStats)); // ⬅️ 추가
 

@@ -79,7 +79,7 @@ export default function ListingCard({ listing }: ListingCardProps) {
           {/* 위치 태그 */}
           <div className="mb-2">
             <span className="inline-block bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 text-xs font-semibold px-2.5 py-1 rounded-full">
-              {listing.address.split(' ')[0]} {listing.address.split(' ')[1]}
+              {listing.sido} {listing.sigungu}
             </span>
           </div>
 
@@ -94,12 +94,87 @@ export default function ListingCard({ listing }: ListingCardProps) {
           </p>
 
           {/* 가격 정보 (구분선 추가) */}
-          <div className="mt-4 pt-4 border-t border-gray-100 dark:border-gray-700 text-right">
-             <span className="text-xs text-gray-500 dark:text-gray-400 block">권리금</span>
-             <p className="text-xl font-bold text-gray-900 dark:text-gray-200">
-                {listing.keyMoney > 0 ? `${listing.keyMoney.toLocaleString()}만 원` : '없음'}
-             </p>
-          </div>
+          <div className="mt-4 pt-4 border-t border-gray-100 dark:border-gray-700 flex justify-between items-end">
+  {/* 특징 아이콘 그룹 - 제한된 개수만 표시 */}
+  <div className="flex items-center space-x-2 text-lg">
+    {(() => {
+      const features = [
+        { 
+          condition: listing.isAutomated, 
+          element: (
+            <span key="auto" title="풀오토 매장" className="inline-flex items-center gap-1 px-2.5 py-1.5 bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300 rounded-lg text-xs font-semibold shadow-sm">
+              ⚡ 오토
+            </span>
+          )
+        },
+        { 
+          condition: listing.isFirstFloor, 
+          element: (
+            <span key="first" title="1층 매물" className="inline-flex items-center gap-1 px-2.5 py-1.5 bg-emerald-50 dark:bg-emerald-950 border border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300 rounded-lg text-xs font-semibold shadow-sm">
+              🏢 1층
+            </span>
+          )
+        },
+        { 
+          condition: listing.isNearStation, 
+          element: (
+            <span key="station" title="역세권" className="inline-flex items-center gap-1 px-2.5 py-1.5 bg-purple-50 dark:bg-purple-950 border border-purple-200 dark:border-purple-800 text-purple-700 dark:text-purple-300 rounded-lg text-xs font-semibold shadow-sm">
+              🚇 역세
+            </span>
+          )
+        },
+        { 
+          condition: listing.isBeginnerFriendly, 
+          element: (
+            <span key="beginner" title="초보 추천" className="inline-flex items-center gap-1 px-2.5 py-1.5 bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 text-green-700 dark:text-green-300 rounded-lg text-xs font-semibold shadow-sm">
+              🌱 초보
+            </span>
+          )
+        },
+        { 
+          condition: listing.isWomanFriendly, 
+          element: (
+            <span key="woman" title="여성 추천" className="inline-flex items-center gap-1 px-2.5 py-1.5 bg-pink-50 dark:bg-pink-950 border border-pink-200 dark:border-pink-800 text-pink-700 dark:text-pink-300 rounded-lg text-xs font-semibold shadow-sm">
+              👩 여성
+            </span>
+          )
+        },
+        { 
+          condition: listing.hasParking, 
+          element: (
+            <span key="parking" title="주차 가능" className="inline-flex items-center gap-1 px-2.5 py-1.5 bg-orange-50 dark:bg-orange-950 border border-orange-200 dark:border-orange-800 text-orange-700 dark:text-orange-300 rounded-lg text-xs font-semibold shadow-sm">
+              🅿️ 주차
+            </span>
+          )
+        }
+      ];
+      
+      const activeFeatures = features.filter(f => f.condition);
+      const visibleFeatures = activeFeatures.slice(0, 3);
+      const remainingCount = activeFeatures.length - 3;
+      
+      return (
+        <>
+          {visibleFeatures.map(f => f.element)}
+          {remainingCount > 0 && (
+            <span className="inline-flex items-center px-2.5 py-1.5 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 rounded-lg text-xs font-semibold shadow-sm">
+              +{remainingCount}
+            </span>
+          )}
+        </>
+      );
+    })()}
+  </div>
+
+  {/* 가격 정보 */}
+  <div className="text-right">
+    <span className="text-xs text-gray-500 dark:text-gray-400 block">권리금</span>
+    <p className="text-xl font-bold text-gray-900 dark:text-gray-200">
+        {listing.keyMoney > 0 ? `${(listing.keyMoney).toLocaleString()}만 원` : '없음'}
+    </p>
+  </div>
+</div>
+
           <div className="flex items-center justify-end space-x-4 mt-2 pt-2 border-t text-sm text-gray-500">
             <div className="flex items-center gap-1">
               <Eye className="w-4 h-4" />
