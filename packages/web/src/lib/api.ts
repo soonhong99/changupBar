@@ -279,3 +279,26 @@ export async function deleteConsultationRequest(id: string, token: string) {
   if (!res.ok) throw new Error('상담 내역 삭제에 실패했습니다.');
   return res.json();
 }
+
+export async function sendSmsVerification(phone: string) {
+  const res = await fetch(`${API_URL}/verification/send`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ phone }),
+  });
+  if (!res.ok) throw new Error('인증번호 발송에 실패했습니다.');
+  return res.json();
+}
+
+export async function checkSmsVerification(phone: string, code: string) {
+  const res = await fetch(`${API_URL}/verification/check`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ phone, code }),
+  });
+  if (!res.ok) {
+    const errorData = await res.json();
+    throw new Error(errorData.message || '인증에 실패했습니다.');
+  }
+  return res.json();
+}

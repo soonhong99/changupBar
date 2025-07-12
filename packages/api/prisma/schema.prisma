@@ -111,6 +111,7 @@ model User {
   email     String   @unique // 이메일은 고유해야 함
   name      String
   password  String?   // 실제 비밀번호가 아닌, 암호화된 해시값이 저장될 필드
+  phone     String?  @unique // ⬅️ 추가: 핸드폰 번호 (고유값)
 
   provider    Provider @default(LOCAL) // ⬅️ 추가: 가입 방식 (LOCAL, KAKAO)
   providerId  String?  @unique       // ⬅️ 추가: 소셜 로그인 ID
@@ -151,4 +152,20 @@ model ConsultationRequest {
   details            String?  // ⬅️ 추가: 상세 요청사항 (선택적)
   
   status             ConsultationStatus @default(PENDING)
+}
+
+enum VerificationType {
+  PHONE
+}
+
+model Verification {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+
+  type      VerificationType // 인증 종류 (지금은 PHONE만 사용)
+  target    String           // 인증 대상 (예: "01012345678")
+  code      String           // 6자리 인증번호
+  expiresAt DateTime         // 만료 시간
+
+  @@unique([type, target]) // 같은 종류의 같은 대상에 대해선 하나의 인증만 존재
 }

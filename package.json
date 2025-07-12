@@ -12,5 +12,8 @@
   "packageManager": "pnpm@10.12.4",
   "devDependencies": {
     "@prisma/client": "^6.10.1"
+  },
+  "dependencies": {
+    "coolsms-node-sdk": "^2.1.0"
   }
 }
