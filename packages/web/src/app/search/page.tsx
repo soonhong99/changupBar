@@ -396,11 +396,11 @@ export default function SearchPage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button onClick={() => setIsModalOpen(true)} className="bg-white text-green-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
-                💬 맞춤 매물 신청
+                💬 맞춤 매물 신청하기
               </button>
-              <button className="bg-yellow-400 text-gray-900 px-6 py-3 rounded-lg font-semibold hover:bg-yellow-300 transition-colors">
+              {/* <button className="bg-yellow-400 text-gray-900 px-6 py-3 rounded-lg font-semibold hover:bg-yellow-300 transition-colors">
                 🔔 매물 알림 설정
-              </button>
+              </button> */}
             </div>
           </div>
         </div>

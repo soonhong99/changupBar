@@ -16,4 +16,10 @@ router.post('/login', asyncHandler(authController.login));
 // GET /api/v1/auth/me - 내 정보 확인 (로그인 필요)
 router.get('/me', authMiddleware, asyncHandler(authController.getMe)); 
 
+// GET /api/v1/auth/kakao - 카카오 로그인 페이지로 리다이렉트
+router.get('/kakao', authController.redirectToKakao);
+
+// GET /api/v1/auth/kakao/callback - 카카오 로그인 콜백 처리
+router.get('/kakao/callback', asyncHandler(authController.handleKakaoCallback));
+
 export default router;

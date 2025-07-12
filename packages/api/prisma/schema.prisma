@@ -110,7 +110,11 @@ model User {
   id        String   @id @default(cuid())
   email     String   @unique // 이메일은 고유해야 함
   name      String
-  password  String   // 실제 비밀번호가 아닌, 암호화된 해시값이 저장될 필드
+  password  String?   // 실제 비밀번호가 아닌, 암호화된 해시값이 저장될 필드
+
+  provider    Provider @default(LOCAL) // ⬅️ 추가: 가입 방식 (LOCAL, KAKAO)
+  providerId  String?  @unique       // ⬅️ 추가: 소셜 로그인 ID
+
   role      UserRole @default(USER) // 사용자 역할 (일반유저/관리자)
 
   createdAt DateTime @default(now())
@@ -124,6 +128,11 @@ model User {
 enum UserRole {
   USER
   ADMIN
+}
+
+enum Provider {
+  LOCAL
+  KAKAO
 }
 
 // 상담 신청 모델

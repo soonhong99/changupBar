@@ -53,8 +53,31 @@ async function getMe(req: Request, res: Response) {
   res.status(200).json(user);
 }
 
+function redirectToKakao(req: Request, res: Response) {
+  const kakaoAuthURL = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.KAKAO_CLIENT_ID}&redirect_uri=${process.env.KAKAO_REDIRECT_URI}&response_type=code`;
+  res.redirect(kakaoAuthURL);
+}
+
+async function handleKakaoCallback(req: Request, res: Response) {
+  const { code } = req.query;
+  if (!code || typeof code !== 'string') {
+    return res.status(400).send('카카오 인증 코드가 없습니다.');
+  }
+
+  try {
+    const { token } = await authService.handleKakaoLogin(code);
+    // 로그인 성공 시, 토큰을 쿠키에 저장하고 프론트엔드 메인 페이지로 리다이렉트
+    res.redirect(`http://localhost:3000/auth/social?token=${token}`);
+  } catch (error) {
+    console.error('카카오 로그인 실패:', error);
+    res.redirect('http://localhost:3000/login?error=kakao-login-failed');
+  }
+}
+
 export default {
   register,
   login,
   getMe,
+  redirectToKakao,
+  handleKakaoCallback,
 };

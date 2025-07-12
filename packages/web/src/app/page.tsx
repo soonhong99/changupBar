@@ -139,92 +139,164 @@ export default async function HomePage() {
           )}
         </div>
         
-{/* --- 찜하기 기능 가이드 섹션 --- */}
-<div className="mb-12 bg-gradient-to-r from-pink-50 to-purple-50 dark:from-gray-800 dark:to-gray-700 rounded-2xl p-8 border border-pink-200 dark:border-pink-800">
-  <div className="max-w-4xl mx-auto">
-    <div className="text-center mb-6">
-      <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-pink-500 to-red-500 rounded-full mb-4 shadow-lg">
-        <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
-          <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
-        </svg>
-      </div>
-      <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">
-        마음에 드는 매물을 놓치지 마세요!
-      </h3>
-      <p className="text-lg text-gray-600 dark:text-gray-300">
-        하트 버튼으로 관심 매물을 저장하고 실시간 알림을 받아보세요
-      </p>
-    </div>
+        {/* --- 찜하기 기능 가이드 섹션 --- */}
+        <div className="mb-12 bg-gradient-to-r from-pink-50 to-purple-50 dark:from-gray-800 dark:to-gray-700 rounded-2xl p-8 border border-pink-200 dark:border-pink-800">
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-6">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-pink-500 to-red-500 rounded-full mb-4 shadow-lg">
+                <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
+                </svg>
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">
+                마음에 드는 매물을 놓치지 마세요!
+              </h3>
+              <p className="text-lg text-gray-600 dark:text-gray-300">
+                하트 버튼으로 관심 매물을 저장하고 실시간 알림을 받아보세요
+              </p>
+            </div>
 
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-md">
-        <div className="flex items-center mb-3">
-          <div className="w-10 h-10 bg-pink-100 dark:bg-pink-900 rounded-full flex items-center justify-center mr-3">
-            <span className="text-pink-500 dark:text-pink-400 font-bold">1</span>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-md">
+                <div className="flex items-center mb-3">
+                  <div className="w-10 h-10 bg-pink-100 dark:bg-pink-900 rounded-full flex items-center justify-center mr-3">
+                    <span className="text-pink-500 dark:text-pink-400 font-bold">1</span>
+                  </div>
+                  <h4 className="font-semibold text-gray-900 dark:text-gray-100">하트 클릭</h4>
+                </div>
+                <p className="text-gray-600 dark:text-gray-400 text-sm">
+                  마음에 드는 매물의 <span className="text-pink-500 font-semibold">♥</span> 버튼을 클릭하면 마이페이지에 자동 저장됩니다
+                </p>
+              </div>
+
+              <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-md">
+                <div className="flex items-center mb-3">
+                  <div className="w-10 h-10 bg-pink-100 dark:bg-pink-900 rounded-full flex items-center justify-center mr-3">
+                    <span className="text-pink-500 dark:text-pink-400 font-bold">2</span>
+                  </div>
+                  <h4 className="font-semibold text-gray-900 dark:text-gray-100">실시간 모니터링</h4>
+                </div>
+                <p className="text-gray-600 dark:text-gray-400 text-sm">
+                  찜한 매물의 <span className="font-semibold">권리금 변동</span>, <span className="font-semibold">판매 상태</span>, <span className="font-semibold">정보 업데이트</span>를 자동으로 추적합니다
+                </p>
+              </div>
+
+              <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-md">
+                <div className="flex items-center mb-3">
+                  <div className="w-10 h-10 bg-pink-100 dark:bg-pink-900 rounded-full flex items-center justify-center mr-3">
+                    <span className="text-pink-500 dark:text-pink-400 font-bold">3</span>
+                  </div>
+                  <h4 className="font-semibold text-gray-900 dark:text-gray-100">즉시 알림</h4>
+                </div>
+                <p className="text-gray-600 dark:text-gray-400 text-sm">
+                  변동사항 발생 시 <span className="font-semibold text-blue-600">문자</span> 또는 <span className="font-semibold text-yellow-600">카카오톡</span>으로 즉시 알려드립니다
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-6 bg-gradient-to-r from-yellow-100 to-orange-100 dark:from-yellow-900/20 dark:to-orange-900/20 rounded-lg p-4 border border-yellow-300 dark:border-yellow-700">
+              <div className="flex items-start">
+                <svg className="w-5 h-5 text-yellow-600 dark:text-yellow-400 mt-0.5 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                </svg>
+                <div className="text-sm">
+                  <p className="text-yellow-800 dark:text-yellow-200 font-semibold mb-1">💡 알고 계셨나요?</p>
+                  <p className="text-yellow-700 dark:text-yellow-300">
+                    찜한 매물의 권리금이 <span className="font-bold">10% 이상 낮아지면</span> 즉시 알림을 받을 수 있어, 최적의 타이밍에 계약할 수 있습니다!
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
-          <h4 className="font-semibold text-gray-900 dark:text-gray-100">하트 클릭</h4>
         </div>
-        <p className="text-gray-600 dark:text-gray-400 text-sm">
-          마음에 드는 매물의 <span className="text-pink-500 font-semibold">♥</span> 버튼을 클릭하면 마이페이지에 자동 저장됩니다
-        </p>
-      </div>
 
-      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-md">
-        <div className="flex items-center mb-3">
-          <div className="w-10 h-10 bg-pink-100 dark:bg-pink-900 rounded-full flex items-center justify-center mr-3">
-            <span className="text-pink-500 dark:text-pink-400 font-bold">2</span>
+                {/* --- 행동 유도 섹션 --- */}
+                {/* --- 행동 유도 섹션 --- */}
+        <div className="relative overflow-hidden">
+          {/* 배경 패턴 */}
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl">
+            <div className="absolute inset-0 bg-black opacity-10"></div>
+            <div className="absolute inset-0" style={{
+              backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+            }}></div>
           </div>
-          <h4 className="font-semibold text-gray-900 dark:text-gray-100">실시간 모니터링</h4>
-        </div>
-        <p className="text-gray-600 dark:text-gray-400 text-sm">
-          찜한 매물의 <span className="font-semibold">권리금 변동</span>, <span className="font-semibold">판매 상태</span>, <span className="font-semibold">정보 업데이트</span>를 자동으로 추적합니다
-        </p>
-      </div>
+          
+          <div className="relative text-center text-white p-10 rounded-2xl shadow-xl">
+            <div className="max-w-4xl mx-auto">
+              {/* 메인 헤드라인 */}
+              <div className="mb-8">
+                <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-medium mb-4">
+                  <span className="relative flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
+                  </span>
+                  스마트창업 전문가 직접 상담
+                </div>
+                
+                <h3 className="text-3xl font-bold mb-4">
+                  지금 바로 전문가와 상담하고<br />
+                  <span className="text-yellow-300">실질적인 혜택</span>을 받아보세요!
+                </h3>
+              </div>
 
-      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-md">
-        <div className="flex items-center mb-3">
-          <div className="w-10 h-10 bg-pink-100 dark:bg-pink-900 rounded-full flex items-center justify-center mr-3">
-            <span className="text-pink-500 dark:text-pink-400 font-bold">3</span>
-          </div>
-          <h4 className="font-semibold text-gray-900 dark:text-gray-100">즉시 알림</h4>
-        </div>
-        <p className="text-gray-600 dark:text-gray-400 text-sm">
-          변동사항 발생 시 <span className="font-semibold text-blue-600">문자</span> 또는 <span className="font-semibold text-yellow-600">카카오톡</span>으로 즉시 알려드립니다
-        </p>
-      </div>
-    </div>
+              {/* 혜택 그리드 */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
+                  <div className="text-3xl mb-2">📊</div>
+                  <h4 className="font-semibold mb-1">상권 분석 보고서</h4>
+                  <p className="text-sm text-blue-100">희망 지역의 유동인구, 매출 데이터 무료 제공</p>
+                </div>
+                
+                <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
+                  <div className="text-3xl mb-2">💼</div>
+                  <h4 className="font-semibold mb-1">권리금 협상 대행</h4>
+                  <p className="text-sm text-blue-100">전문가가 최대 20% 권리금 절감 협상</p>
+                </div>
+                
+                <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
+                  <div className="text-3xl mb-2">📋</div>
+                  <h4 className="font-semibold mb-1">계약서 검토 서비스</h4>
+                  <p className="text-sm text-blue-100">변호사 자문 계약서 무료 검토 (3만원 상당)</p>
+                </div>
+              </div>
 
-    <div className="mt-6 bg-gradient-to-r from-yellow-100 to-orange-100 dark:from-yellow-900/20 dark:to-orange-900/20 rounded-lg p-4 border border-yellow-300 dark:border-yellow-700">
-      <div className="flex items-start">
-        <svg className="w-5 h-5 text-yellow-600 dark:text-yellow-400 mt-0.5 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-          <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
-        </svg>
-        <div className="text-sm">
-          <p className="text-yellow-800 dark:text-yellow-200 font-semibold mb-1">💡 알고 계셨나요?</p>
-          <p className="text-yellow-700 dark:text-yellow-300">
-            찜한 매물의 권리금이 <span className="font-bold">10% 이상 낮아지면</span> 즉시 알림을 받을 수 있어, 최적의 타이밍에 계약할 수 있습니다!
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+              {/* CTA 버튼들 */}
+              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <a 
+                  href="tel:01025361178" 
+                  className="group bg-white text-blue-600 px-8 py-4 rounded-full font-semibold hover:bg-yellow-400 hover:text-gray-900 transition-all duration-300 shadow-lg flex items-center gap-3"
+                >
+                  <svg className="w-5 h-5 group-hover:animate-bounce" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
+                  </svg>
+                  <span>전문가 전화 상담</span>
+                </a>
+                
+                {/* <button className="group bg-yellow-400 text-gray-900 px-8 py-4 rounded-full font-semibold hover:bg-yellow-300 transition-all duration-300 shadow-lg flex items-center gap-3">
+                  <svg className="w-5 h-5 group-hover:rotate-12 transition-transform" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M5 5a3 3 0 015-2.236A3 3 0 0114.83 6H16a2 2 0 110 4h-5V9a1 1 0 10-2 0v1H4a2 2 0 110-4h1.17C5.06 5.687 5 5.35 5 5zm4 1V5a1 1 0 10-1 1h1zm3 0a1 1 0 10-1-1v1h1z" clipRule="evenodd" />
+                    <path d="M9 11H3v5a2 2 0 002 2h4v-7zM11 18h4a2 2 0 002-2v-5h-6v7z" />
+                  </svg>
+                  <span>혜택 자세히 보기</span>
+                </button> */}
+              </div>
 
-        {/* --- 행동 유도 섹션 --- */}
-        <div className="text-center bg-gradient-to-r from-blue-600 to-purple-600 text-white p-8 rounded-2xl shadow-xl">
-          <h3 className="text-2xl font-bold mb-4">
-            지금 바로 상담 받고 특별 혜택까지!
-          </h3>
-          <p className="text-blue-100 mb-6">
-            창업 전문가와 무료 상담 후 최대 500만원 창업 지원 쿠폰까지 받아보세요
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="bg-white text-blue-600 px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition-colors shadow-lg">
-              📞 무료 상담 신청
-            </button>
-            <button className="bg-yellow-400 text-gray-900 px-8 py-3 rounded-full font-semibold hover:bg-yellow-300 transition-colors shadow-lg">
-              💰 지원쿠폰 확인하기
-            </button>
+              {/* 추가 안내 문구 */}
+              <div className="mt-6 flex items-center justify-center gap-6 text-sm text-blue-100">
+                <div className="flex items-center gap-2">
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                  <span>상담 후 계약 시 적용</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                  <span>당일 상담 가능</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 

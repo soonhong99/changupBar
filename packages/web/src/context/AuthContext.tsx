@@ -3,7 +3,7 @@
 "use client";
 
 import { User } from '@prisma/client'; // ⬅️ User 타입 import
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
 import Cookies from 'js-cookie'; // ⬅️ import 추가
 import { getMyLikedListings, getMe } from '@/lib/api'; // ⬅️ 추가
 
@@ -26,54 +26,48 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [likedIds, setLikedIds] = useState<Set<string>>(new Set()); // ⬅️ 추가
   const [isLoading, setIsLoading] = useState(true); // ⬅️ 로딩 상태 추가 (초기값 true)
 
-  useEffect(() => {
-    // useEffect 내부에서 비동기 작업을 처리하기 위한 함수 선언
-    const bootstrapAuth = async () => {
-      const storedToken = localStorage.getItem('authToken');
-      if (storedToken) {
-        setToken(storedToken);
-        // fetchUserAndLikes가 끝날 때까지 기다립니다.
-        await fetchUserAndLikes(storedToken);
-      }
-      // 모든 작업이 끝난 후 로딩 상태를 false로 변경합니다.
-      setIsLoading(false); 
-    };
-
-    bootstrapAuth();
-  }, []); // 이 useEffect는 앱이 처음 마운트될 때 한 번만 실행됩니다.
-  const fetchUserAndLikes = async (currentToken: string) => {
+  const fetchUserAndLikes = useCallback(async (currentToken: string) => {
     try {
-      // 사용자 정보와 '찜' 목록을 동시에 요청해서 받아옵니다.
       const [userData, likedListingsData] = await Promise.all([
         getMe(currentToken),
         getMyLikedListings(currentToken)
       ]);
-      
       setUser(userData);
       if (likedListingsData) {
         setLikedIds(new Set(likedListingsData.map(l => l.id)));
       }
     } catch (error) {
-      // 토큰이 유효하지 않은 경우 등 에러 발생 시 로그아웃 처리
       console.error("Failed to fetch user data:", error);
-      logout();
+      // logout(); // 무한 루프를 막기 위해 logout 호출은 신중해야 합니다.
     }
-  };
+  }, []); // ⬅️ 의존성 배열 추가
 
-  const login = (newToken: string) => {
+  useEffect(() => {
+    const bootstrapAuth = async () => {
+      const storedToken = localStorage.getItem('authToken');
+      if (storedToken) {
+        setToken(storedToken);
+        await fetchUserAndLikes(storedToken);
+      }
+      setIsLoading(false); 
+    };
+    bootstrapAuth();
+  }, [fetchUserAndLikes]); // ⬅️ 의존성 배열에 fetchUserAndLikes 추가
+
+  const login = useCallback((newToken: string) => {
     setToken(newToken);
-    localStorage.setItem('authToken', newToken); // 토큰을 localStorage에 저장
+    localStorage.setItem('authToken', newToken);
     Cookies.set('authToken', newToken, { expires: 1 });
-    fetchUserAndLikes(newToken); // ⬅️ 유저/찜 정보 모두 불러오기
-  };
+    fetchUserAndLikes(newToken);
+  }, [fetchUserAndLikes]); // ⬅️ 의존성 배열에 fetchUserAndLikes 추가
 
-  const logout = () => {
+  const logout = useCallback(() => {
     setToken(null);
-    setUser(null); // ⬅️ 로그아웃 시 user 정보 비우기
-    setLikedIds(new Set()); // ⬅️ 로그아웃 시 '찜 목록' 비우기
-    localStorage.removeItem('authToken'); // localStorage에서 토큰 제거
-    Cookies.remove('authToken'); // ⬅️ 쿠키에서 제거
-  };
+    setUser(null);
+    setLikedIds(new Set());
+    localStorage.removeItem('authToken');
+    Cookies.remove('authToken');
+  }, []); // ⬅️ 의존성 배열 추가
 
   const toggleLike = (listingId: string) => { // ⬅️ 추가
     setLikedIds(prev => {
