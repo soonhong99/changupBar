@@ -136,7 +136,7 @@ export default function SearchPage() {
                   {mostViewed.name}
                 </div>
                 <div className="text-sm text-gray-600 dark:text-gray-400">
-                  가장 인기 있는 매물 (조회수 {mostViewed.viewCount})
+                  가장 인기 있는 매물
                 </div>
               </>
             ) : (
