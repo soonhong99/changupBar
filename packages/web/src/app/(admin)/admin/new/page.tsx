@@ -39,7 +39,7 @@ const initialFormData: Omit<CreateListingInput, 'bestUntil' | 'coverImage' | 'fe
   isNearStation: false,
   description: '',
   imageUrls: [],
-  status: 'DRAFT',
+  status: 'PUBLISHED',
   isBest: false,
   isWeeklyBest: false,
 };

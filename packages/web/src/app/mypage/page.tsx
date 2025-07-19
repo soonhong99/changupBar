@@ -4,13 +4,12 @@
 import { useEffect, useState } from "react";
 import Link from 'next/link';
 import { useAuth } from "@/context/AuthContext";
-import { getMyLikedListings } from "@/lib/api";
-import { Listing } from "@prisma/client";
+import { getMyLikedListings, ListingWithCounts } from "@/lib/api";
 import ListingCard from "@/components/ui/ListingCard";
 
 export default function MyPage() {
   const { isLoggedIn, token } = useAuth();
-  const [likedListings, setLikedListings] = useState<Listing[]>([]);
+  const [likedListings, setLikedListings] = useState<ListingWithCounts[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -56,6 +55,21 @@ export default function MyPage() {
           ))}
         </div>
       )}
+
+      <div className="mt-16 text-center bg-gradient-to-r from-blue-50 to-purple-50 dark:from-gray-800 dark:to-gray-700 p-10 rounded-2xl shadow-lg">
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+          궁금한 점이 있으신가요?
+        </h2>
+        <p className="text-gray-600 dark:text-gray-300 mb-6">
+          찜한 매물에 대한 내용을 스마트창업이 친절히 알려드리겠습니다.
+        </p>
+        <a 
+          href="tel:010-2536-1178"
+          className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-lg shadow-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-200 transform hover:scale-105"
+        >
+          📞 전화 문의하기
+        </a>
+      </div>
     </main>
   );
 }

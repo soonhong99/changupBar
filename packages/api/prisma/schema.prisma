@@ -65,7 +65,8 @@ model Listing {
   imageUrls   String[] // 추가 사진 URL 목록 (문자열 배열)
 
   // --- 공개 설정 ---
-  status   ListingStatus @default(DRAFT) // 공개 상태 (DRAFT, PUBLISHED, ARCHIVED)
+  status   ListingStatus @default(PUBLISHED) // 공개 상태 (DRAFT, PUBLISHED, ARCHIVED)
+  contractStatus ContractStatus @default(AVAILABLE) // ⬇️ 추가: 계약 상태
   viewCount Int @default(0) // ⬇️ 추가: 조회수
   likeCount Int           @default(0) // ⬅️ 추가: 찜하기 수
   isBest   Boolean       @default(false) // BEST 매물 여부
@@ -96,6 +97,12 @@ enum ListingStatus {
   DRAFT     // 임시저장
   PUBLISHED // 공개
   ARCHIVED  // 블라인드(내림)
+}
+
+enum ContractStatus {
+  AVAILABLE // 판매중
+  PENDING   // 계약중
+  SOLD      // 계약완료
 }
 
 // 상담 신청 상태를 위한 Enum

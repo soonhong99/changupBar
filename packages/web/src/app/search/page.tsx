@@ -111,7 +111,7 @@ export default function SearchPage() {
           </h1>
           <p className="mt-4 max-w-2xl mx-auto text-xl text-gray-600 dark:text-gray-400">
            검증된 <strong className="text-blue-600 dark:text-blue-400">스마트창업</strong> 매물 중에서 
-            당신에게 딱 맞는 <strong className="text-purple-600 dark:text-purple-400">황금 매물</strong>을 찾아보세요
+            나에게 딱 맞는 <strong className="text-purple-600 dark:text-purple-400">황금 매물</strong>을 찾아보세요
           </p>
         </div>
 

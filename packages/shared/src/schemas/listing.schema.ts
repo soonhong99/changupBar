@@ -36,7 +36,8 @@ export const createListingSchema = z.object({
   coverImage: z.string().url('유효한 URL을 입력해주세요.'),
   imageUrls: z.array(z.string().url()),
 
-  status: z.enum(['DRAFT', 'PUBLISHED', 'ARCHIVED']).default('DRAFT'),
+  status: z.enum(['DRAFT', 'PUBLISHED', 'ARCHIVED']).default('PUBLISHED'),
+  contractStatus: z.enum(['AVAILABLE', 'PENDING', 'SOLD']).default('AVAILABLE').optional(), // ⬇️ 추가
   isBest: z.boolean().default(false),
   bestUntil: z.string().datetime().optional(), // ISO 8601 날짜 문자열
   isWeeklyBest: z.boolean().default(false).optional(),

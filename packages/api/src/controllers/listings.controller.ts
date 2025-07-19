@@ -2,9 +2,8 @@
 
 import { Request, Response } from 'express';
 import { ZodError } from 'zod';
-import { createListingSchema } from '../../../shared/src/schemas/listing.schema.js';
+import { createListingSchema, updateListingSchema } from '../../../shared/src/schemas/listing.schema.js';
 import listingService from '../services/listings.service.js';
-import { updateListingSchema } from '../../../shared/src/schemas/listing.schema.js'; // ⬅️ 추가
 
 async function createListing(req: Request, res: Response) {
   try {

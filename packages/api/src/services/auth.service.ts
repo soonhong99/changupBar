@@ -7,7 +7,7 @@ import { RegisterUserInput, LoginUserInput } from '../../../shared/src/schemas/a
 import axios from 'axios'; // ⬅️ 추가
 
 async function register(data: RegisterUserInput) {
-  const { email, name, password } = data;
+  const { email, name, password, phone } = data;
 
   // 1. 이메일 중복 확인
   const existingUser = await prisma.user.findUnique({ where: { email } });
@@ -24,6 +24,7 @@ async function register(data: RegisterUserInput) {
       email,
       name,
       password: hashedPassword,
+      phone,
     },
   });
 

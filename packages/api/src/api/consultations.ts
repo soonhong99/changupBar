@@ -14,4 +14,12 @@ router.post('/', asyncHandler(consultationsController.createRequest));
 
 router.delete('/:id', authMiddleware, asyncHandler(consultationsController.deleteRequest)); // ⬅️ 추가
 
+router.get('/pending-count', authMiddleware, asyncHandler(consultationsController.getPendingCount)); // ⬅️ 추가
+
+router.patch(
+    '/mark-as-contacted', 
+    authMiddleware, 
+    asyncHandler(consultationsController.markAllAsContacted)
+); // ⬅️ 추가
+
 export default router;

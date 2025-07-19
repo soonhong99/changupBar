@@ -4,7 +4,7 @@
 
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
-import { getConsultationRequests, deleteConsultationRequest } from '@/lib/api';
+import { getConsultationRequests, deleteConsultationRequest, markConsultationsAsContacted } from '@/lib/api';
 import { ConsultationRequest } from '@prisma/client';
 
 export default function ConsultationsPage() {
@@ -29,9 +29,18 @@ export default function ConsultationsPage() {
 
   useEffect(() => {
     if (token) {
+      setIsLoading(true);
       getConsultationRequests(token)
-        .then(setRequests)
+        .then(data => {
+          setRequests(data);
+          // ⬇️ 목록을 성공적으로 불러온 후, '모두 확인' API를 호출합니다.
+          if (data.some(req => req.status === 'PENDING')) {
+            markConsultationsAsContacted(token);
+          }
+        })
         .finally(() => setIsLoading(false));
+    } else {
+      setIsLoading(false);
     }
   }, [token]);
 

@@ -102,7 +102,7 @@ export default async function HomePage() {
         <div className="mb-8">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
-              엄선된 특급 매물 
+              주간 특급 매물 
               <span className="text-red-500 text-2xl ml-2">🔥</span>
             </h2>
             <div className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
@@ -230,11 +230,11 @@ export default async function HomePage() {
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
                     <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
                   </span>
-                  스마트창업 전문가 직접 상담
+                  스마트창업 고객 맞춤 상담
                 </div>
                 
                 <h3 className="text-3xl font-bold mb-4">
-                  지금 바로 전문가와 상담하고<br />
+                  지금 바로 스마트창업과 상담하고<br />
                   <span className="text-yellow-300">실질적인 혜택</span>을 받아보세요!
                 </h3>
               </div>
@@ -269,7 +269,7 @@ export default async function HomePage() {
                   <svg className="w-5 h-5 group-hover:animate-bounce" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
                   </svg>
-                  <span>전문가 전화 상담</span>
+                  <span>스마트 전화 상담</span>
                 </a>
                 
                 {/* <button className="group bg-yellow-400 text-gray-900 px-8 py-4 rounded-full font-semibold hover:bg-yellow-300 transition-all duration-300 shadow-lg flex items-center gap-3">

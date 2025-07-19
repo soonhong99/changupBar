@@ -4,7 +4,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
-import { getAllListings, deleteListingById, ListingFilter} from "@/lib/api";
+import { getAllListings, deleteListingById, ListingFilter, getPendingConsultationCount} from "@/lib/api";
 import { Listing } from "@prisma/client";
 import { useAuth } from "@/context/AuthContext";
 
@@ -19,29 +19,36 @@ export default function AdminDashboardPage() {
   });
   const [searchTerm, setSearchTerm] = useState('');
   const { token } = useAuth();
+  const [pendingCount, setPendingCount] = useState(0); // ⬅️ 신규 상담 건수 state 추가
 
   const handleFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFilters(prev => ({ ...prev, [name]: value }));
   };
 
-  const fetchListings = useCallback(async () => {
-    if (!token) return; // ⬅️ 토큰이 없으면 실행하지 않습니다.
+  const fetchListingsAndStats = useCallback(async () => { // ⬅️ 함수 이름 변경 및 로직 통합
+    if (!token) return;
 
     setIsLoading(true);
-    const activeFilters = Object.fromEntries(Object.entries(filters).filter(([_, v]) => v));
-    
-    // ⬇️ API 호출 시 토큰을 전달합니다.
-    const data = await getAllListings(activeFilters, token);
-    
-    setListings(data);
-    setIsLoading(false);
-  }, [filters, token]); // ⬅️ token도 의존성 배열에 추가
+    try {
+      // 두 API를 병렬로 호출하여 성능 최적화
+      const [listingsData, countData] = await Promise.all([
+        getAllListings(Object.fromEntries(Object.entries(filters).filter(([_, v]) => v)), token),
+        getPendingConsultationCount(token)
+      ]);
+      setListings(listingsData);
+      setPendingCount(countData.count);
+    } catch (error) {
+      console.error("Failed to fetch dashboard data:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [filters, token]);
 
   useEffect(() => {
-    const timer = setTimeout(fetchListings, 300);
+    const timer = setTimeout(fetchListingsAndStats, 300);
     return () => clearTimeout(timer);
-  }, [fetchListings]); // ⬅️ 이제 fetchListings 함수 자체를 의존성으로 가집니다.
+  }, [fetchListingsAndStats]); // ⬅️ 이제 fetchListings 함수 자체를 의존성으로 가집니다.
 
   const handleDelete = async (id: string) => {
     if (confirm('정말로 이 매물을 삭제하시겠습니까?')) {
@@ -52,7 +59,7 @@ export default function AdminDashboardPage() {
       try {
         await deleteListingById(id, token);
         alert('삭제되었습니다.');
-        fetchListings();
+        fetchListingsAndStats();
       } catch (error) {
         alert('삭제에 실패했습니다.');
       }
@@ -119,7 +126,7 @@ export default function AdminDashboardPage() {
                 <div className="ml-5 w-0 flex-1">
                   <dl>
                     <dt className="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">전체 매물</dt>
-                    <dd className="text-lg font-semibold text-gray-900 dark:text-gray-100">{stats.total}</dd>
+                    <dd className="text-lg font-semibold text-gray-900 dark:text-gray-100">{stats.total} 건</dd>
                   </dl>
                 </div>
               </div>
@@ -137,7 +144,7 @@ export default function AdminDashboardPage() {
                 <div className="ml-5 w-0 flex-1">
                   <dl>
                     <dt className="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">공개된 매물</dt>
-                    <dd className="text-lg font-semibold text-gray-900 dark:text-gray-100">{stats.published}</dd>
+                    <dd className="text-lg font-semibold text-gray-900 dark:text-gray-100">{stats.published} 건</dd>
                   </dl>
                 </div>
               </div>
@@ -155,7 +162,7 @@ export default function AdminDashboardPage() {
                 <div className="ml-5 w-0 flex-1">
                   <dl>
                     <dt className="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">임시저장</dt>
-                    <dd className="text-lg font-semibold text-gray-900 dark:text-gray-100">{stats.draft}</dd>
+                    <dd className="text-lg font-semibold text-gray-900 dark:text-gray-100">{stats.draft} 건</dd>
                   </dl>
                 </div>
               </div>
@@ -173,30 +180,43 @@ export default function AdminDashboardPage() {
                 <div className="ml-5 w-0 flex-1">
                   <dl>
                     <dt className="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">블라인드</dt>
-                    <dd className="text-lg font-semibold text-gray-900 dark:text-gray-100">{stats.archived}</dd>
+                    <dd className="text-lg font-semibold text-gray-900 dark:text-gray-100">{stats.archived} 건</dd>
                   </dl>
                 </div>
               </div>
             </div>
 
-            <Link href="/admin/consultations" className="block">
-              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
-                <div className="flex items-center">
-                  <div className="flex-shrink-0">
-                    <div className="w-8 h-8 bg-cyan-500 rounded-lg flex items-center justify-center">
-                      <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
-                      </svg>
+            {/* ⬇️ '신규 상담 신청' 카드를 아래 코드로 교체합니다. */}
+            <Link href="/admin/consultations" className="block relative"> {/* ⬅️ 1. relative 추가 */}
+              {/* 2. 빨간 알림 배지 (조건부 렌더링) */}
+              {pendingCount > 0 && (
+                <div className="absolute top-0 right-0 -mt-2 -mr-2 z-10">
+                  <span className="flex h-6 w-6 relative">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-6 w-6 bg-red-500 text-white text-xs items-center justify-center">
+                      {pendingCount}
+                    </span>
+                  </span>
+                </div>
+              )}
+              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700 h-full hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                  <div className="flex items-center">
+                    <div className="flex-shrink-0">
+                      <div className="w-8 h-8 bg-cyan-500 rounded-lg flex items-center justify-center">
+                        <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
+                        </svg>
+                      </div>
+                    </div>
+                    <div className="ml-5 w-0 flex-1">
+                      <dl>
+                        <dt className="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">신규 상담 신청</dt>
+                        {/* 3. 하드코딩된 숫자 '5'를 상태 변수로 교체 */}
+                        <dd className="text-lg font-semibold text-gray-900 dark:text-gray-100">{pendingCount} 건</dd>
+                      </dl>
                     </div>
                   </div>
-                  <div className="ml-5 w-0 flex-1">
-                    <dl>
-                      <dt className="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">신규 상담 신청</dt>
-                      <dd className="text-lg font-semibold text-gray-900 dark:text-white">5</dd>
-                    </dl>
-                  </div>
                 </div>
-              </div>
             </Link>
           </div>
         </div>

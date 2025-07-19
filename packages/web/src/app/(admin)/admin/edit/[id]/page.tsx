@@ -301,6 +301,23 @@ export default function EditListingPage() {
               </select>
             </div>
 
+            <div>
+              <label htmlFor="contractStatus" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                계약 상태
+              </label>
+              <select
+                name="contractStatus"
+                id="contractStatus"
+                value={formData.contractStatus || 'AVAILABLE'}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md ..."
+              >
+                <option value="AVAILABLE">판매중</option>
+                <option value="PENDING">계약중</option>
+                <option value="SOLD">계약완료</option>
+              </select>
+            </div>
+
             <div className="space-y-4">
               <label className="flex items-center space-x-3">
                 <input

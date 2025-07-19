@@ -37,8 +37,20 @@ async function deleteRequest(req: Request, res: Response) {
   res.status(200).json({ message: '삭제되었습니다.' });
 }
 
+async function getPendingCount(req: Request, res: Response) {
+  const count = await consultationsService.getPendingCount();
+  res.status(200).json({ count });
+}
+
+async function markAllAsContacted(req: Request, res: Response) {
+  const result = await consultationsService.markAllAsContacted();
+  res.status(200).json(result);
+}
+
 export default {
   createRequest,
   getAllRequests,
   deleteRequest,
+  getPendingCount,
+  markAllAsContacted,
 };

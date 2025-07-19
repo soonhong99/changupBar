@@ -48,10 +48,13 @@ export default function Header() {
                 ⭐ 특급 매물
               </Link> */}
               <Link href="/consulting" className={navLinkClasses}>
-                💼 창업 컨설팅
+                💼 컨설턴트 소개
               </Link>
               <Link href="/success-stories" className={navLinkClasses}>
                 📈 성공 사례
+              </Link>
+              <Link href="/process" className={navLinkClasses}> {/* ⬅️ 추가 */}
+                🚀 창업 과정
               </Link>
             </div>
           </div>
@@ -138,10 +141,13 @@ export default function Header() {
                 ⭐ 특급 매물
               </Link>
               <Link href="/consulting" className="block px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors">
-                💼 창업 컨설팅
+                💼 컨설턴트 소개
               </Link>
               <Link href="/success-stories" className="block px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors">
                 📈 성공 사례
+              </Link>
+              <Link href="/process" className="block px-3 py-2 ..."> {/* ⬅️ 추가 */}
+                🚀 창업 과정
               </Link>
             </div>
           </div>

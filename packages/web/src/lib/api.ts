@@ -188,7 +188,7 @@ export async function registerUser(data: RegisterUserInput): Promise<User> {
   return res.json();
 }
 
-export async function getMyLikedListings(token: string): Promise<Listing[]> {
+export async function getMyLikedListings(token: string): Promise<ListingWithCounts[]> {
   const res = await fetch(`${API_URL}/users/me/likes`, {
     headers: { 'Authorization': `Bearer ${token}` }
   });
@@ -301,4 +301,19 @@ export async function checkSmsVerification(phone: string, code: string) {
     throw new Error(errorData.message || '인증에 실패했습니다.');
   }
   return res.json();
+}
+
+export async function getPendingConsultationCount(token: string): Promise<{ count: number }> {
+  const res = await fetch(`${API_URL}/consultations/pending-count`, {
+    headers: { 'Authorization': `Bearer ${token}` }
+  });
+  if (!res.ok) throw new Error('신규 상담 건수를 불러오는데 실패했습니다.');
+  return res.json();
+}
+
+export async function markConsultationsAsContacted(token: string) {
+  await fetch(`${API_URL}/consultations/mark-as-contacted`, {
+    method: 'PATCH',
+    headers: { 'Authorization': `Bearer ${token}` }
+  });
 }

@@ -8,7 +8,7 @@ import { useAuth } from '@/context/AuthContext';
 import { likeListing, ListingWithCounts } from '@/lib/api';
 import { MouseEvent } from 'react';
 import { useRouter } from 'next/navigation';
-import { Eye, Heart } from 'lucide-react'; // ⬅️ 아이콘 import
+import { Eye, Heart, BadgeCheck, XCircle } from 'lucide-react'; // ⬅️ 아이콘 import
 
 interface ListingCardProps {
   listing: ListingWithCounts;
@@ -52,7 +52,87 @@ export default function ListingCard({ listing }: ListingCardProps) {
     <Link href={`/listings/${listing.id}`} className="block group rounded-lg">
       <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden h-full flex flex-col
                       shadow-sm hover:shadow-xl dark:hover:border-gray-600 transition-all duration-300 relative">
-        
+        {listing.contractStatus !== 'AVAILABLE' && (
+  <div className="absolute inset-0 z-20 pointer-events-none">
+    {/* 그라디언트 오버레이 - 위에서 아래로 점점 진해지는 효과 */}
+    <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/60 to-black/80"></div>
+    
+    {/* 상태 표시 - 우측 상단 */}
+    <div className="absolute top-4 left-4">
+      {listing.contractStatus === 'PENDING' && (
+        <div className="bg-amber-500/90 backdrop-blur-sm text-white px-4 py-2 rounded-lg shadow-lg flex items-center gap-2 animate-pulse">
+          <div className="relative">
+            <div className="w-2 h-2 bg-white rounded-full"></div>
+            <div className="absolute inset-0 w-2 h-2 bg-white rounded-full animate-ping"></div>
+          </div>
+          <span className="text-sm font-bold tracking-wide">계약 진행중</span>
+        </div>
+      )}
+      {listing.contractStatus === 'SOLD' && (
+        <div className="bg-red-600/90 backdrop-blur-sm text-white px-4 py-2 rounded-lg shadow-lg flex items-center gap-2">
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+          </svg>
+          <span className="text-sm font-bold tracking-wide">계약 완료</span>
+        </div>
+      )}
+    </div>
+
+    {/* 중앙 메시지 - 더 세련된 디자인 */}
+    <div className="absolute inset-0 flex items-center justify-center p-6">
+      <div className="text-center">
+        {listing.contractStatus === 'PENDING' && (
+          <>
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-amber-500/20 backdrop-blur-sm rounded-full mb-3">
+              <svg className="w-8 h-8 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <p className="text-white text-sm font-medium leading-tight">
+              {/* <span className="block text-base font-bold mb-1">계약 진행 중</span> */}
+              {/* <span className="opacity-90">이미 다른 분이 상담 중입니다</span> */}
+            </p>
+          </>
+        )}
+        {listing.contractStatus === 'SOLD' && (
+          <>
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-white/10 backdrop-blur-sm rounded-full mb-3 border border-white/20">
+              <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <p className="text-white text-sm font-medium leading-tight">
+              {/* <span className="block text-base font-bold mb-1">계약 완료</span> */}
+              {/* <span className="opacity-90">좋은 매물은 정말 빨리 나가네요</span> */}
+            </p>
+          </>
+        )}
+      </div>
+    </div>
+
+    {/* 하단 정보 바 */}
+    <div className="absolute bottom-0 left-0 right-0 bg-black/30 backdrop-blur-sm border-t border-white/10">
+      <div className="px-4 py-3 flex items-center justify-between">
+        <p className="text-white/80 text-xs">
+          {listing.contractStatus === 'PENDING' 
+            ? '⚡ 예비 순번 접수 가능!' 
+            : '✨ 비슷한 매물을 찾고 계셨나요?'}
+        </p>
+        {/* <button 
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            // 비슷한 매물 보기 로직
+          }}
+          className="text-white text-xs font-medium hover:underline pointer-events-auto"
+        >
+          비슷한 매물 보기 →
+        </button> */}
+      </div>
+    </div>
+  </div>
+)}
+
         {/* '찜하기' 버튼: 반투명 배경과 블러 효과로 개선 */}
         <button
           onClick={handleLikeClick}

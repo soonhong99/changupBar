@@ -146,7 +146,7 @@ export default function RegisterPage() {
         </div>
 
         {/* 진행 상태 표시 */}
-        <div className="mb-8">
+        {/* <div className="mb-8">
           <div className="flex items-center justify-between">
             <div className={`flex items-center ${step >= 1 ? 'text-blue-600 dark:text-blue-400' : 'text-gray-400'}`}>
               <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
@@ -168,7 +168,7 @@ export default function RegisterPage() {
               <span className="ml-2 font-medium hidden sm:inline">본인 인증</span>
             </div>
           </div>
-        </div>
+        </div> */}
 
         {/* 메인 폼 */}
         <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-2xl shadow-xl p-8 border border-gray-200/50 dark:border-gray-700/50">
@@ -432,7 +432,7 @@ export default function RegisterPage() {
             <p className="text-sm text-gray-600 dark:text-gray-400">
               이미 계정이 있으신가요?{' '}
               <a href="/login" className="font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 hover:underline">
-                이메일로 로그인하기
+                로그인하기
               </a>
             </p>
           </div>

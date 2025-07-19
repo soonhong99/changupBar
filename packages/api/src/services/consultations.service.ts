@@ -25,8 +25,25 @@ async function remove(id: string) {
   return { message: '상담 신청 내역이 삭제되었습니다.' };
 }
 
+async function getPendingCount() {
+  return prisma.consultationRequest.count({
+    where: { status: 'PENDING' },
+  });
+}
+
+async function markAllAsContacted() {
+  // status가 'PENDING'인 모든 레코드를 'CONTACTED'로 변경합니다.
+  const result = await prisma.consultationRequest.updateMany({
+    where: { status: 'PENDING' },
+    data: { status: 'CONTACTED' },
+  });
+  return { count: result.count }; // 몇 개의 레코드가 변경되었는지 반환
+}
+
 export default {
   create,
   getAll,
   remove,
+  getPendingCount,
+  markAllAsContacted,
 };

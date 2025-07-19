@@ -29,7 +29,9 @@ import {
   Home,
   BikeIcon,
   Leaf,
-  Smile
+  Smile,
+  BadgeCheck,
+  XCircle
 } from 'lucide-react';
 
 type Props = {
@@ -128,6 +130,36 @@ export default async function ListingDetailPage({ params }: Props) {
           </div>
         </div>
       </div>
+
+      {listing.contractStatus !== 'AVAILABLE' && (
+        <div className="max-w-6xl mx-auto px-4 mb-8 mt-8">
+          <div className={`rounded-xl p-6 border ${
+            listing.contractStatus === 'PENDING' 
+              ? 'bg-blue-50 border-blue-200 dark:bg-blue-900/20 dark:border-blue-800'
+              : 'bg-gray-100 border-gray-200 dark:bg-gray-800 dark:border-gray-700'
+          }`}>
+            <div className="flex items-center">
+              <div className="flex-shrink-0">
+                {listing.contractStatus === 'PENDING' 
+                  ? <BadgeCheck className="w-8 h-8 text-blue-600 dark:text-blue-400" />
+                  : <XCircle className="w-8 h-8 text-gray-600 dark:text-gray-400" />
+                }
+              </div>
+              <div className="ml-4">
+                <h3 className="text-lg font-bold text-gray-900 dark:text-white">
+                  {listing.contractStatus === 'PENDING' ? '현재 계약이 진행 중인 매물입니다.' : '계약이 완료된 매물입니다.'}
+                </h3>
+                <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">
+                  {listing.contractStatus === 'PENDING' 
+                    ? '상담 신청은 가능하지만, 계약이 파기될 경우를 대비한 예비 순번으로 접수됩니다.'
+                    : '아쉽게도 해당 매물은 더 이상 계약이 불가능합니다. 전화문의 주실 시 비슷한 매물을 반드시 찾아드리겠습니다.'
+                  }
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* 핵심 지표 섹션 - 가장 중요한 정보 */}
       <div className="max-w-6xl mx-auto px-4 mt-8">
@@ -406,11 +438,14 @@ export default async function ListingDetailPage({ params }: Props) {
               <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
                 전문 상담사가 자세한 정보와 함께 창업 성공을 도와드립니다.
               </p>
-              <button className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-4 px-6 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 group shadow-lg hover:shadow-xl">
+              <a 
+                href="tel:010-2536-1178"
+                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-4 px-6 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 group shadow-lg hover:shadow-xl"
+              >
                 <Phone className="w-5 h-5" />
                 상담 신청하기
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </button>
+              </a>
               <p className="text-xs text-gray-500 dark:text-gray-400 mt-3 text-center">
                 평일 09:00-18:00 | 주말 10:00-17:00
               </p>
