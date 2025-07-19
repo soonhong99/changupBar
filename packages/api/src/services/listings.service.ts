@@ -4,6 +4,8 @@ import prisma from '../config/prisma.js';
 import { CreateListingInput } from '../../../shared/src/schemas/listing.schema.js';
 import { Prisma, UserRole } from '@prisma/client'; // Prisma 타입을 가져옵니다.
 import { UpdateListingInput } from '../../../shared/src/schemas/listing.schema.js'; // ⬅️ 추가
+import notificationService from './notification.service.js'; // ⬅️ 추가
+import { getContractStatusName } from '../utils/helpers.js'; // ⬅️ 추가
 
 let cachedMostViewed: { listing: any; timestamp: number } | null = null;
 const CACHE_DURATION = 5 * 60 * 1000; // 5분 (밀리초 단위)ㄴ
@@ -155,11 +157,57 @@ async function like(userId: string, listingId: string) {
 }
 
 async function update(id: string, data: UpdateListingInput) {
-  console.log(`✅ Service: ID(${id}) 매물 수정을 시작합니다.`);
+  const originalListing = await prisma.listing.findUnique({ where: { id } });
+  if (!originalListing) throw new Error('매물을 찾을 수 없습니다.');
+
   const updatedListing = await prisma.listing.update({
     where: { id },
     data,
   });
+
+  // --- 알림 발송 로직 ---
+  // 1. 계약 상태 변경 알림 (기존과 동일)
+  if (originalListing.contractStatus !== updatedListing.contractStatus) {
+    let message = '';
+    const listingName = updatedListing.name;
+
+    // ⬇️ 상태에 따라 다른 메시지를 생성합니다.
+    switch (updatedListing.contractStatus) {
+      case 'PENDING':
+        message = `[인기 매물 계약 진행중] 찜하신 '${listingName}' 매물의 계약이 진행 중입니다. 좋은 매물은 빠르게 소진되니, 다른 추천 매물도 서둘러 확인해보세요!`;
+        break;
+      case 'SOLD':
+        message = `[계약 완료 알림] 아쉽게도 찜하신 '${listingName}' 매물은 방금 계약이 완료되었습니다.`;
+        break;
+      case 'AVAILABLE':
+        // PENDING 또는 SOLD 상태에서 다시 AVAILABLE로 돌아온 경우
+        if (originalListing.contractStatus !== 'AVAILABLE') {
+          message = `[긴급! 재등록 알림] ⚡️ 찜하신 인기 매물 '${listingName}'이 다시 나왔습니다! 지금 바로 선점할 수 있는 기회입니다. 서두르세요!`;
+        }
+        break;
+    }
+
+    // 메시지가 생성된 경우에만 알림을 보냅니다.
+    if (message) {
+      notificationService.notifyUsersWhoLikedListing(updatedListing, message);
+    }
+  }
+
+  // ⬇️ 2. 권리금 변경 알림 로직 수정
+  if (originalListing.keyMoney !== updatedListing.keyMoney) {
+    const difference = updatedListing.keyMoney - originalListing.keyMoney;
+    let message = '';
+
+    if (difference > 0) {
+      // 권리금 인상
+      message = `찜하신 '${updatedListing.name}' 매물의 권리금이 ${(difference).toLocaleString()}만원 인상되었습니다. (현재 ${ (updatedListing.keyMoney).toLocaleString()}만원)`;
+    } else {
+      // 권리금 인하
+      message = `찜하신 '${updatedListing.name}' 매물의 권리금이 ${Math.abs(difference).toLocaleString()}만원 인하되었습니다. (현재 ${(updatedListing.keyMoney).toLocaleString()}만원)`;
+    }
+    notificationService.notifyUsersWhoLikedListing(updatedListing, message);
+  }
+
   return updatedListing;
 }
 
