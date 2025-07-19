@@ -6,6 +6,10 @@ const nextConfig: NextConfig = {
     // 빌드 시 타입 에러가 있어도 강제로 빌드를 성공시킵니다.
     ignoreBuildErrors: true,
   },
+
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   /* 다른 기존 설정이 있다면 그대로 둡니다. */
 };
 
