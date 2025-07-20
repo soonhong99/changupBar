@@ -1,9 +1,9 @@
 // packages/api/src/services/listings.service.ts
 
 import prisma from '../config/prisma.js';
-import { CreateListingInput } from '../../../shared/src/schemas/listing.schema.js';
+import { CreateListingInput } from '../../../shared/dist/src/schemas/listing.schema.js';
 import { Prisma, UserRole } from '@prisma/client'; // Prisma 타입을 가져옵니다.
-import { UpdateListingInput } from '../../../shared/src/schemas/listing.schema.js'; // ⬅️ 추가
+import { UpdateListingInput } from '../../../shared/dist/src/schemas/listing.schema.js'; // ⬅️ 추가
 import notificationService from './notification.service.js'; // ⬅️ 추가
 import { getContractStatusName } from '../utils/helpers.js'; // ⬅️ 추가
 

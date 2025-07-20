@@ -3,7 +3,7 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken'; // ⬅️ jwt import 추가
 import prisma from '../config/prisma.js';
-import { RegisterUserInput, LoginUserInput } from '../../../shared/src/schemas/auth.schema.js';
+import { RegisterUserInput, LoginUserInput } from '../../../shared/dist/src/schemas/auth.schema.js';
 import axios from 'axios'; // ⬅️ 추가
 
 async function register(data: RegisterUserInput) {

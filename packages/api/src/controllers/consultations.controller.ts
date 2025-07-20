@@ -2,7 +2,7 @@
 
 import { Request, Response } from 'express';
 import { ZodError } from 'zod';
-import { createConsultationSchema } from '../../../shared/src/schemas/consultation.schema.js';
+import { createConsultationSchema } from '../../../shared/dist/src/schemas/consultation.schema.js';
 import consultationsService from '../services/consultations.service.js';
 
 async function createRequest(req: Request, res: Response) {

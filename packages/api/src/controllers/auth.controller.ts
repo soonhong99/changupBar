@@ -2,7 +2,7 @@
 
 import { Request, Response } from 'express';
 import { ZodError } from 'zod';
-import { registerUserSchema, loginUserSchema} from '../../../shared/src/schemas/auth.schema.js';
+import { registerUserSchema, loginUserSchema} from '../../../shared/dist/src/schemas/auth.schema.js';
 import authService from '../services/auth.service.js';
 
 async function register(req: Request, res: Response) {
