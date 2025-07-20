@@ -3,7 +3,18 @@
   "type": "module",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./schemas/*": {
+      "types": "./dist/src/schemas/*.d.ts",
+      "import": "./dist/src/schemas/*.js"
+    }
+  },
   "scripts": {
     "build": "tsc"
   },
