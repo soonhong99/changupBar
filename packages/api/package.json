@@ -5,6 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
+    "postinstall": "prisma generate",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon",
     "build": "NODE_OPTIONS=--max-old-space-size=2048 tsc",
