@@ -1,8 +1,284 @@
 // packages/api/src/services/listings.service.ts
-// 아직 실제 로직은 없습니다.
+import prisma from '../config/prisma.js';
+import notificationService from './notification.service.js'; // ⬅️ 추가
+let cachedMostViewed = null;
+const CACHE_DURATION = 5 * 60 * 1000; // 5분 (밀리초 단위)ㄴ
+/**
+ * 신규 매물을 데이터베이스에 생성합니다.
+ * @param data 컨트롤러에서 유효성 검사를 마친 매물 데이터
+ * @returns 생성된 매물 객체
+ */
+async function create(data) {
+    console.log('✅ Service: 데이터베이스에 매물 생성을 시작합니다.');
+    // Prisma Client를 사용해 데이터베이스에 새로운 Listing 레코드를 생성합니다.
+    // Zod 스키마와 Prisma 모델의 필드명이 일치하므로, 데이터를 그대로 전달할 수 있습니다.
+    const newListing = await prisma.listing.create({
+        data,
+    });
+    console.log('✅ Service: 매물 생성 완료!', newListing.id);
+    return newListing;
+}
+/**
+ * ID로 특정 매물 하나를 조회합니다.
+ * @param id 조회할 매물의 ID
+ * @returns 조회된 매물 객체, 없으면 null
+ */
+async function getById(id) {
+    console.log(`✅ Service: ID(${id})로 매물 조회를 시작합니다.`);
+    const [_, listing] = await prisma.$transaction([
+        prisma.listing.update({
+            where: { id },
+            data: {
+                viewCount: {
+                    increment: 1, // ⬅️ 조회수를 1 증가시킵니다.
+                },
+            },
+        }),
+        prisma.listing.findUnique({
+            where: { id },
+            // ⬇️ 찜한 사람 수를 함께 조회하도록 include 추가
+            include: {
+                _count: {
+                    select: { likedBy: true },
+                },
+            },
+        }),
+    ]);
+    if (!listing) {
+        console.log(`⚠️ Service: ID(${id})에 해당하는 매물을 찾지 못했습니다.`);
+        return null;
+    }
+    console.log(`✅ Service: ID(${id}) 매물 조회 완료!`);
+    return listing;
+}
+/**
+ * 필터 조건과 사용자 역할에 따라 매물 목록을 조회합니다.
+ * @param query 필터 및 정렬 조건
+ * @param role 요청한 사용자의 역할 (예: 'ADMIN', 'USER' 또는 undefined)
+ */
+async function getAll(query, role) {
+    console.log(`✅ Service: 매물 조회 시작. 역할: ${role || 'Guest'}`);
+    const { region, category, status, keyMoneyLte, sido, sigungu, sortBy = 'createdAt', order = 'desc' } = query;
+    const where = {};
+    // --- 조건부 필터링 ---
+    // 1. 역할 기반 상태 필터링
+    if (role !== 'ADMIN') {
+        // 관리자가 아니면 '공개(PUBLISHED)' 상태의 매물만 보도록 강제
+        where.status = 'PUBLISHED';
+    }
+    else if (status) {
+        // 관리자이고, 상태 필터 값이 있으면 해당 상태로 필터링
+        where.status = status;
+    }
+    // 2. 다른 필터들
+    if (region)
+        where.region = region;
+    if (category)
+        where.category = category;
+    if (keyMoneyLte)
+        where.keyMoney = { lte: parseInt(keyMoneyLte, 10) };
+    if (sido)
+        where.sido = sido;
+    if (sigungu)
+        where.sigungu = sigungu;
+    // ⬇️ 역할에 따라 orderBy 조건을 동적으로 설정합니다.
+    const orderBy = [];
+    if (role === 'ADMIN') {
+        orderBy.push({ isWeeklyBest: 'desc' }); // 관리자일 경우 대표 매물 우선 정렬
+    }
+    orderBy.push({ [sortBy]: order }); // 기본 정렬 조건 추가
+    const listings = await prisma.listing.findMany({
+        where,
+        orderBy,
+        include: {
+            _count: {
+                select: { likedBy: true },
+            },
+        },
+    });
+    console.log(`✅ Service: 총 ${listings.length}개의 매물 조회 완료!`);
+    return listings;
+}
+/**
+ * 특정 사용자가 특정 매물을 '찜'합니다.
+ * @param userId '찜'하는 사용자의 ID
+ * @param listingId '찜'할 매물의 ID
+ */
+async function like(userId, listingId) {
+    const existingLike = await prisma.user.findFirst({
+        where: { id: userId, likedListings: { some: { id: listingId } } },
+    });
+    if (existingLike) {
+        // 찜 취소 로직
+        await prisma.$transaction([
+            prisma.user.update({
+                where: { id: userId },
+                data: { likedListings: { disconnect: { id: listingId } } },
+            }),
+            prisma.listing.update({
+                where: { id: listingId },
+                data: { likeCount: { decrement: 1 } }, // ⬅️ 카운트 감소
+            }),
+        ]);
+        return { message: '매물 찜을 취소했습니다.' };
+    }
+    else {
+        // 찜하기 로직
+        await prisma.$transaction([
+            prisma.user.update({
+                where: { id: userId },
+                data: { likedListings: { connect: { id: listingId } } },
+            }),
+            prisma.listing.update({
+                where: { id: listingId },
+                data: { likeCount: { increment: 1 } }, // ⬅️ 카운트 증가
+            }),
+        ]);
+        return { message: '매물을 찜했습니다.' };
+    }
+}
+async function update(id, data) {
+    const originalListing = await prisma.listing.findUnique({ where: { id } });
+    if (!originalListing)
+        throw new Error('매물을 찾을 수 없습니다.');
+    const updatedListing = await prisma.listing.update({
+        where: { id },
+        data,
+    });
+    // --- 알림 발송 로직 ---
+    // 1. 계약 상태 변경 알림 (기존과 동일)
+    if (originalListing.contractStatus !== updatedListing.contractStatus) {
+        let message = '';
+        const listingName = updatedListing.name;
+        // ⬇️ 상태에 따라 다른 메시지를 생성합니다.
+        switch (updatedListing.contractStatus) {
+            case 'PENDING':
+                message = `[인기 매물 계약 진행중] 찜하신 '${listingName}' 매물의 계약이 진행 중입니다. 좋은 매물은 빠르게 소진되니, 다른 추천 매물도 서둘러 확인해보세요!`;
+                break;
+            case 'SOLD':
+                message = `[계약 완료 알림] 아쉽게도 찜하신 '${listingName}' 매물은 방금 계약이 완료되었습니다.`;
+                break;
+            case 'AVAILABLE':
+                // PENDING 또는 SOLD 상태에서 다시 AVAILABLE로 돌아온 경우
+                if (originalListing.contractStatus !== 'AVAILABLE') {
+                    message = `[긴급! 재등록 알림] ⚡️ 찜하신 인기 매물 '${listingName}'이 다시 나왔습니다! 지금 바로 선점할 수 있는 기회입니다. 서두르세요!`;
+                }
+                break;
+        }
+        // 메시지가 생성된 경우에만 알림을 보냅니다.
+        if (message) {
+            notificationService.notifyUsersWhoLikedListing(updatedListing, message);
+        }
+    }
+    // ⬇️ 2. 권리금 변경 알림 로직 수정
+    if (originalListing.keyMoney !== updatedListing.keyMoney) {
+        const difference = updatedListing.keyMoney - originalListing.keyMoney;
+        let message = '';
+        if (difference > 0) {
+            // 권리금 인상
+            message = `찜하신 '${updatedListing.name}' 매물의 권리금이 ${(difference).toLocaleString()}만원 인상되었습니다. (현재 ${(updatedListing.keyMoney).toLocaleString()}만원)`;
+        }
+        else {
+            // 권리금 인하
+            message = `찜하신 '${updatedListing.name}' 매물의 권리금이 ${Math.abs(difference).toLocaleString()}만원 인하되었습니다. (현재 ${(updatedListing.keyMoney).toLocaleString()}만원)`;
+        }
+        notificationService.notifyUsersWhoLikedListing(updatedListing, message);
+    }
+    return updatedListing;
+}
+/**
+ * 현재 노출 기간에 해당하는 '주간 대표 매물'들을 역할에 따라 조회합니다.
+ * @param role 요청한 사용자의 역할
+ */
+async function getFeatured(role) {
+    console.log(`✅ Service: 대표 매물 조회 시작. 역할: ${role || 'Guest'}`);
+    const now = new Date();
+    const where = {
+        isWeeklyBest: true,
+        featuredStart: { lte: now },
+        featuredEnd: { gte: now },
+    };
+    // 관리자가 아니면 '공개' 상태인 대표 매물만 보여줌
+    if (role !== 'ADMIN') {
+        where.status = 'PUBLISHED';
+    }
+    const featuredListings = await prisma.listing.findMany({
+        where,
+        take: 3,
+        include: {
+            _count: {
+                select: { likedBy: true },
+            },
+        },
+    });
+    console.log(`✅ Service: 총 ${featuredListings.length}개의 대표 매물 조회 완료!`);
+    return featuredListings;
+}
+async function remove(id) {
+    console.log(`✅ Service: ID(${id}) 매물 삭제를 시작합니다.`);
+    await prisma.listing.delete({
+        where: { id },
+    });
+    return { message: '매물이 성공적으로 삭제되었습니다.' };
+}
+/**
+ * 공개된 매물의 통계를 계산합니다.
+ */
+async function getStats() {
+    console.log('✅ Service: 매물 통계 계산을 시작합니다.');
+    // 이번 주의 시작(일요일)을 계산합니다.
+    const today = new Date();
+    const firstDayOfWeek = new Date(today.setDate(today.getDate() - today.getDay()));
+    firstDayOfWeek.setHours(0, 0, 0, 0);
+    // 두 가지 카운트를 병렬로 실행합니다.
+    const [totalCount, newThisWeekCount] = await Promise.all([
+        // 1. 공개된 전체 매물 수
+        prisma.listing.count({
+            where: { status: 'PUBLISHED' },
+        }),
+        // 2. 이번 주에 등록된 신규 공개 매물 수
+        prisma.listing.count({
+            where: {
+                status: 'PUBLISHED',
+                createdAt: {
+                    gte: firstDayOfWeek, // gte: 크거나 같음
+                },
+            },
+        }),
+    ]);
+    console.log(`✅ Service: 통계 계산 완료 - 전체: ${totalCount}, 신규: ${newThisWeekCount}`);
+    return { totalCount, newThisWeekCount };
+}
+/**
+ * 공개된 매물 중 가장 조회수가 높은 매물 1개를 조회합니다. (5분 캐시 적용)
+ */
+async function getMostViewed() {
+    const now = Date.now();
+    // 1. 캐시가 유효하면 캐시된 데이터를 반환
+    if (cachedMostViewed && now - cachedMostViewed.timestamp < CACHE_DURATION) {
+        console.log('✅ Service: 캐시된 인기 매물을 반환합니다.');
+        return cachedMostViewed.listing;
+    }
+    // 2. 캐시가 없거나 만료되면 DB에서 새로 조회
+    console.log('✅ Service: DB에서 새로운 인기 매물을 조회합니다.');
+    const mostViewedListing = await prisma.listing.findFirst({
+        where: { status: 'PUBLISHED' },
+        orderBy: { viewCount: 'desc' },
+        include: { _count: { select: { likedBy: true } } },
+    });
+    // 3. 새로운 데이터로 캐시를 업데이트
+    cachedMostViewed = { listing: mostViewedListing, timestamp: now };
+    return mostViewedListing;
+}
+// 서비스 객체로 내보내기
 export default {
-    create: async (data) => {
-        console.log('Service received data:', data);
-        return { id: 'temp-id', ...data };
-    },
+    create,
+    getById,
+    getAll,
+    like,
+    remove,
+    update,
+    getFeatured,
+    getStats,
+    getMostViewed,
 };

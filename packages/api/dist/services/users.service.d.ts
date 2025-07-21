@@ -1,0 +1,50 @@
+declare function getLikedListings(userId: string): Promise<({
+    _count: {
+        likedBy: number;
+    };
+} & {
+    name: string;
+    id: string;
+    createdAt: Date;
+    updatedAt: Date;
+    summary: string;
+    sido: string | null;
+    sigungu: string | null;
+    eupmyeondong: string | null;
+    roadAddress: string | null;
+    detailAddress: string | null;
+    region: import("@prisma/client").$Enums.Region;
+    category: import("@prisma/client").$Enums.Category;
+    deposit: number;
+    monthlyRent: number;
+    keyMoney: number;
+    monthlyRevenue: number;
+    materialCost: number;
+    personnelCost: number;
+    utilityCost: number;
+    otherCost: number;
+    deliveryPercent: number;
+    netProfit: number;
+    isAutomated: boolean;
+    hasParking: boolean;
+    isFirstFloor: boolean;
+    isNearStation: boolean;
+    isBeginnerFriendly: boolean;
+    isWomanFriendly: boolean;
+    description: string;
+    coverImage: string;
+    imageUrls: string[];
+    status: import("@prisma/client").$Enums.ListingStatus;
+    contractStatus: import("@prisma/client").$Enums.ContractStatus;
+    viewCount: number;
+    likeCount: number;
+    isBest: boolean;
+    bestUntil: Date | null;
+    isWeeklyBest: boolean;
+    featuredStart: Date | null;
+    featuredEnd: Date | null;
+})[]>;
+declare const _default: {
+    getLikedListings: typeof getLikedListings;
+};
+export default _default;

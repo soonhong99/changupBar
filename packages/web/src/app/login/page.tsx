@@ -21,8 +21,8 @@ function LoginForm() {
     e.preventDefault();
     setError(null);
     try {
-      const data = await loginUser({ email, password });
-      login(data.token);
+      const { token } = await loginUser({ email, password });
+      login(token);
       router.push('/');
     } catch (err) {
       setError(err instanceof Error ? err.message : '알 수 없는 오류가 발생했습니다.');

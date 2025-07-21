@@ -28,22 +28,24 @@ async function register(req: Request, res: Response) {
 
 async function login(req: Request, res: Response) {
   try {
-    const validatedData = loginUserSchema.parse(req.body);
-    const result = await authService.login(validatedData);
-    res.status(200).json(result);
+    const validatedData = loginUserSchema.parse(req.body); 
+    const { token } = await authService.login(validatedData);
+ 
+    res.status(200).json({ token });
+
+    res.status(200).json({message: 'login success!'});
   } catch (error) {
-    if (error instanceof ZodError) {
-      return res.status(400).json({
-        message: '입력값이 올바르지 않습니다.',
-        errors: error.flatten().fieldErrors,
-      });
-    }
-    // 로그인 실패 에러 처리
-    if (error instanceof Error && error.message.includes('비밀번호')) {
-      return res.status(401).json({ message: error.message });
-    }
-    console.error(error);
-    res.status(500).json({ message: '서버 내부 오류가 발생했습니다.' });
+	if (error instanceof ZodError) {
+	    return res.status(400).json({
+		message: '입력값이 올바르지 않습니다.',
+		errors: error.flatten().fieldErrors,
+	    });
+	}
+	if (error instanceof Error && error.message.includes('비밀번호')) {
+	    return res.status(401).json({message: error.message});
+	}
+	console.error(error);
+	res.status(500).json({message: '서버 내부 오류가 발생했습니다.'});
   }
 }
 
@@ -67,10 +69,10 @@ async function handleKakaoCallback(req: Request, res: Response) {
   try {
     const { token } = await authService.handleKakaoLogin(code);
     // 로그인 성공 시, 토큰을 쿠키에 저장하고 프론트엔드 메인 페이지로 리다이렉트
-    res.redirect(`http://localhost:3000/auth/social?token=${token}`);
+    res.redirect(`${process.env.FRONTEND_URL}/auth/social?token=${token}`);
   } catch (error) {
     console.error('카카오 로그인 실패:', error);
-    res.redirect('http://localhost:3000/login?error=kakao-login-failed');
+    res.redirect('${process.env.FRONTEND_URL}/login?error=kakao-login-failed');
   }
 }
 
