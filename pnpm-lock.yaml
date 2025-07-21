@@ -48,6 +48,9 @@ importers:
       jsonwebtoken:
         specifier: ^9.0.2
         version: 9.0.2
+      shared:
+        specifier: workspace:*
+        version: link:../shared
       zod:
         specifier: ^3.25.67
         version: 3.25.67
