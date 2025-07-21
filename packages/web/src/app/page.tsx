@@ -4,6 +4,8 @@ import ListingCard from "@/components/ui/ListingCard";
 import CountdownTimer from "@/components/ui/CountdownTimer";
 import FeaturedListingsCarousel from "@/components/ui/FeaturedListingsCarousel";
 
+export const revalidate = 0;
+
 export default async function HomePage() {
   const featuredListings = await getFeaturedListings();
   // 대표 매물 중 가장 먼저 마감되는 매물의 종료 시간을 찾습니다.
