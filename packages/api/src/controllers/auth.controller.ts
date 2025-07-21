@@ -31,9 +31,7 @@ async function login(req: Request, res: Response) {
     const validatedData = loginUserSchema.parse(req.body); 
     const { token } = await authService.login(validatedData);
  
-    res.status(200).json({ token });
-
-    res.status(200).json({message: 'login success!'});
+    res.status(200).json({ token, message: 'login success!' });
   } catch (error) {
 	if (error instanceof ZodError) {
 	    return res.status(400).json({
@@ -45,7 +43,7 @@ async function login(req: Request, res: Response) {
 	    return res.status(401).json({message: error.message});
 	}
 	console.error(error);
-	res.status(500).json({message: '서버 내부 오류가 발생했습니다.'});
+	return res.status(500).json({message: '서버 내부 오류가 발생했습니다.'});
   }
 }
 

@@ -7,10 +7,10 @@ import { UpdateListingInput } from '../../../shared/dist/src/schemas/listing.sch
  * @returns 생성된 매물 객체
  */
 declare function create(data: CreateListingInput): Promise<{
-    name: string;
     id: string;
     createdAt: Date;
     updatedAt: Date;
+    name: string;
     summary: string;
     sido: string | null;
     sigungu: string | null;
@@ -58,10 +58,10 @@ declare function getById(id: string): Promise<({
         likedBy: number;
     };
 } & {
-    name: string;
     id: string;
     createdAt: Date;
     updatedAt: Date;
+    name: string;
     summary: string;
     sido: string | null;
     sigungu: string | null;
@@ -109,10 +109,10 @@ declare function getAll(query: GetAllListingsQuery, role?: UserRole): Promise<({
         likedBy: number;
     };
 } & {
-    name: string;
     id: string;
     createdAt: Date;
     updatedAt: Date;
+    name: string;
     summary: string;
     sido: string | null;
     sigungu: string | null;
@@ -159,10 +159,10 @@ declare function like(userId: string, listingId: string): Promise<{
     message: string;
 }>;
 declare function update(id: string, data: UpdateListingInput): Promise<{
-    name: string;
     id: string;
     createdAt: Date;
     updatedAt: Date;
+    name: string;
     summary: string;
     sido: string | null;
     sigungu: string | null;
@@ -209,10 +209,10 @@ declare function getFeatured(role?: UserRole): Promise<({
         likedBy: number;
     };
 } & {
-    name: string;
     id: string;
     createdAt: Date;
     updatedAt: Date;
+    name: string;
     summary: string;
     sido: string | null;
     sigungu: string | null;
