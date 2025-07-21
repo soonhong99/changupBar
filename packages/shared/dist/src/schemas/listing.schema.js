@@ -3,7 +3,11 @@ import { z } from 'zod';
 export const createListingSchema = z.object({
     name: z.string().min(1, '매물 이름은 필수입니다.'),
     summary: z.string().min(1, '한 줄 요약은 필수입니다.'),
-    address: z.string().min(1, '상세 주소는 필수입니다.'),
+    sido: z.string().optional(),
+    sigungu: z.string().optional(),
+    eupmyeondong: z.string().optional(),
+    roadAddress: z.string().optional(),
+    detailAddress: z.string().optional(),
     region: z.enum(['METROPOLITAN', 'NON_METROPOLITAN']),
     category: z.enum(['CAFE_BAKERY', 'RESTAURANT_BAR', 'RETAIL_ETC']),
     deposit: z.number().int().min(0),
@@ -12,16 +16,26 @@ export const createListingSchema = z.object({
     monthlyRevenue: z.number().int().min(0),
     materialCost: z.number().int().min(0),
     personnelCost: z.number().int().min(0),
+    utilityCost: z.number().int().min(0).optional(), // ⬅️ 추가
+    otherCost: z.number().int().min(0).optional(), // ⬅️ 추가
+    deliveryPercent: z.number().int().min(0).max(100).optional(), // ⬅️ 추가
     netProfit: z.number().int().min(0),
     isAutomated: z.boolean().default(false),
     hasParking: z.boolean().default(false),
     isFirstFloor: z.boolean().default(false),
     isNearStation: z.boolean().default(false),
+    isBeginnerFriendly: z.boolean().default(false).optional(), // ⬇️ 추가
+    isWomanFriendly: z.boolean().default(false).optional(), // ⬇️ 추가
     description: z.string().min(1, '상세 설명은 필수입니다.'),
     coverImage: z.string().url('유효한 URL을 입력해주세요.'),
     imageUrls: z.array(z.string().url()),
-    status: z.enum(['DRAFT', 'PUBLISHED', 'ARCHIVED']).default('DRAFT'),
+    status: z.enum(['DRAFT', 'PUBLISHED', 'ARCHIVED']).default('PUBLISHED'),
+    contractStatus: z.enum(['AVAILABLE', 'PENDING', 'SOLD']).default('AVAILABLE').optional(), // ⬇️ 추가
     isBest: z.boolean().default(false),
     bestUntil: z.string().datetime().optional(), // ISO 8601 날짜 문자열
+    isWeeklyBest: z.boolean().default(false).optional(),
+    featuredStart: z.string().datetime().optional().nullable(),
+    featuredEnd: z.string().datetime().optional().nullable()
 });
+export const updateListingSchema = createListingSchema.partial();
 //# sourceMappingURL=listing.schema.js.map

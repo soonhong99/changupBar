@@ -219,6 +219,9 @@ async function getFeatured(role?: UserRole) {
   console.log(`✅ Service: 대표 매물 조회 시작. 역할: ${role || 'Guest'}`);
   const now = new Date();
 
+  console.log('Server Current Time (UTC):', now.toISOString()); 
+  console.log('Server Current Time (Locale):', now.toString());
+  
   const where: Prisma.ListingWhereInput = {
     isWeeklyBest: true,
     featuredStart: { lte: now },
@@ -229,6 +232,8 @@ async function getFeatured(role?: UserRole) {
   if (role !== 'ADMIN') {
     where.status = 'PUBLISHED';
   }
+
+  console.log('Prisma Query WHERE clause:', JSON.stringify(where, null, 2));
 
   const featuredListings = await prisma.listing.findMany({
     where,
