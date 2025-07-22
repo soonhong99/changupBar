@@ -180,14 +180,14 @@ async function update(id: string, data: UpdateListingInput) {
 
     switch (updatedListing.contractStatus) {
       case 'PENDING':
-        message = `[스마트창업] 찜하신 '${shortName}' 매물이 계약 진행중입니다. 서두르세요! \n스마트창업.com`;
+        message = `[찜알리미]\n'${shortName}' 매물이 계약 진행중입니다. 서두르세요!\n스마트창업.com`;
         break;
       case 'SOLD':
-        message = `[스마트창업] '${shortName}' 매물이 계약 완료되었습니다. 다른 매물을 확인하세요. \n스마트창업.com`;
+        message = `[찜알리미]\n'${shortName}' 매물이 계약 완료되었습니다. 다른 매물을 확인하세요.\n스마트창업.com`;
         break;
       case 'AVAILABLE':
         if (originalListing.contractStatus !== 'AVAILABLE') {
-          message = `[긴급!] 찜하신 '${shortName}' 매물이 다시 나왔습니다! 바로 확인하세요. \n스마트창업.com`;
+          message = `[찜알리미]\n'${shortName}' 매물이 다시 나왔습니다! 바로 확인하세요.\n스마트창업.com`;
         }
         break;
     }
@@ -202,9 +202,9 @@ async function update(id: string, data: UpdateListingInput) {
     let message = '';
 
     if (difference > 0) {
-      message = `[권리금 인상] '${shortName}' 권리금이 ${ (difference).toLocaleString() }만원 인상되었습니다. \n스마트창업.com`;
+      message = `[권리금 인상]\n'${shortName}' 권리금 ${ difference.toLocaleString() }만원 인상! \n스마트창업.com`;
     } else {
-      message = `[권리금 인하] '${shortName}' 권리금이 ${ (Math.abs(difference)).toLocaleString() }만원 인하되었습니다. \n스마트창업.com`;
+      message = `[권리금 인하]\n'${shortName}' 권리금이 ${ Math.abs(difference).toLocaleString() }만원 인하! \n스마트창업.com`;
     }
     notificationService.notifyUsersWhoLikedListing(updatedListing, message);
   }
