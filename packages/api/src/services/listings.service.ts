@@ -165,45 +165,43 @@ async function update(id: string, data: UpdateListingInput) {
     data,
   });
 
+  const frontendUrl = process.env.FRONTEND_URL || 'https://www.xn--hz2b15nyscisj8ui.com';
+  const listingUrl = `${frontendUrl}/listings/${updatedListing.id}`;
+  const listingName = updatedListing.name;
+
   // --- 알림 발송 로직 ---
   // 1. 계약 상태 변경 알림 (기존과 동일)
   if (originalListing.contractStatus !== updatedListing.contractStatus) {
     let message = '';
-    const listingName = updatedListing.name;
 
-    // ⬇️ 상태에 따라 다른 메시지를 생성합니다.
     switch (updatedListing.contractStatus) {
       case 'PENDING':
-        message = `[인기 매물 계약 진행중] 찜하신 '${listingName}' 매물의 계약이 진행 중입니다. 좋은 매물은 빠르게 소진되니, 다른 추천 매물도 서둘러 확인해보세요!`;
+        message = `[계약 진행중] 찜하신 '${listingName}' 매물의 계약이 진행 중에 있습니다.\n\n그래도 아직 기회는 있습니다!\n▶ 예비번호 접수하러 가기: ${listingUrl}`;
         break;
       case 'SOLD':
-        message = `[계약 완료 알림] 아쉽게도 찜하신 '${listingName}' 매물은 방금 계약이 완료되었습니다.`;
+        message = `[계약 완료] 아쉽게도 찜하신 '${listingName}' 매물은 계약 완료되었습니다.\n\n더 스마트한 매물을 지금 바로 만나보세요!\n▶ 스마트창업: ${frontendUrl}`;
         break;
       case 'AVAILABLE':
-        // PENDING 또는 SOLD 상태에서 다시 AVAILABLE로 돌아온 경우
         if (originalListing.contractStatus !== 'AVAILABLE') {
-          message = `[긴급! 재등록 알림] ⚡️ 찜하신 인기 매물 '${listingName}'이 다시 나왔습니다! 지금 바로 선점할 수 있는 기회입니다. 서두르세요!`;
+          message = `[긴급 재등록!] ⚡️ 찜하신 인기 매물 '${listingName}'이 다시 나왔습니다!\n\n지금 바로 선점할 수 있는 기회입니다!\n▶ 바로 보러 가기: ${listingUrl}`;
         }
         break;
     }
 
-    // 메시지가 생성된 경우에만 알림을 보냅니다.
     if (message) {
       notificationService.notifyUsersWhoLikedListing(updatedListing, message);
     }
   }
 
-  // ⬇️ 2. 권리금 변경 알림 로직 수정
+  // 2. 권리금 변경 알림 로직 수정
   if (originalListing.keyMoney !== updatedListing.keyMoney) {
     const difference = updatedListing.keyMoney - originalListing.keyMoney;
     let message = '';
 
     if (difference > 0) {
-      // 권리금 인상
-      message = `찜하신 '${updatedListing.name}' 매물의 권리금이 ${(difference).toLocaleString()}만원 인상되었습니다. (현재 ${ (updatedListing.keyMoney).toLocaleString()}만원)`;
+      message = `[권리금 인상] 찜하신 '${listingName}' 매물의 권리금이 ${(difference / 10000).toLocaleString()}만원 인상되었습니다.\n\n▶ 현재 권리금: ${(updatedListing.keyMoney / 10000).toLocaleString()}만원\n▶ 바로 보러 가기: ${listingUrl}`;
     } else {
-      // 권리금 인하
-      message = `찜하신 '${updatedListing.name}' 매물의 권리금이 ${Math.abs(difference).toLocaleString()}만원 인하되었습니다. (현재 ${(updatedListing.keyMoney).toLocaleString()}만원)`;
+      message = `[권리금 인하] 찜하신 '${listingName}' 매물의 권리금이 ${(Math.abs(difference) / 10000).toLocaleString()}만원 인하되었습니다.\n\n▶ 현재 권리금: ${(updatedListing.keyMoney / 10000).toLocaleString()}만원\n▶ 바로 보러 가기: ${listingUrl}`;
     }
     notificationService.notifyUsersWhoLikedListing(updatedListing, message);
   }
