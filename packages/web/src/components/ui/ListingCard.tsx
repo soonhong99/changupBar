@@ -48,6 +48,31 @@ export default function ListingCard({ listing }: ListingCardProps) {
     }
   };
 
+  // 권리금 포맷팅 함수
+  const formatKeyMoney = (keyMoney: number) => {
+    if (keyMoney === 0) return '없음';
+    
+    // 10,000만원 이상이면 억 단위로 표시
+    if (keyMoney >= 10000) {
+      const billion = Math.floor(keyMoney / 10000);
+      const remainder = keyMoney % 10000;
+      
+      if (remainder === 0) {
+        return `${billion}억`;
+      } else {
+        // 소수점 한 자리까지만 표시 (예: 1.2억)
+        const decimal = Math.floor(remainder / 1000);
+        if (decimal === 0) {
+          return `${billion}억`;
+        }
+        return `${billion}.${decimal}억`;
+      }
+    }
+    
+    // 10,000만원 미만은 기존처럼 표시
+    return `${keyMoney.toLocaleString()}만원`;
+  };
+
   return (
     <Link href={`/listings/${listing.id}`} className="block group rounded-lg">
       <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden h-full flex flex-col
@@ -250,7 +275,7 @@ export default function ListingCard({ listing }: ListingCardProps) {
   <div className="text-right">
     <span className="text-xs text-gray-500 dark:text-gray-400 block">권리금</span>
     <p className="text-xl font-bold text-gray-900 dark:text-gray-200">
-        {listing.keyMoney > 0 ? `${(listing.keyMoney).toLocaleString()}만 원` : '없음'}
+        {formatKeyMoney(listing.keyMoney)}
     </p>
   </div>
 </div>
