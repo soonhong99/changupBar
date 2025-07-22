@@ -86,29 +86,92 @@ export default async function ListingDetailPage({ params }: Props) {
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
         
-        {/* 상단 배지 */}
-        <div className="absolute top-6 left-6 flex gap-3">
-          {listing.isWeeklyBest && (
-            <div className="bg-yellow-500 text-white px-4 py-2 rounded-full flex items-center gap-2 font-medium shadow-lg">
-              <Star className="w-4 h-4" />
-              주간 베스트
+        // packages/web/src/app/listings/[id]/page.tsx - 상단 배지 부분만
+
+        {/* 상단 배지 - 모바일 최적화 버전 */}
+        <div className="absolute top-4 sm:top-6 left-4 sm:left-6 right-4 sm:right-auto">
+          {/* 모바일: 가로 스크롤 컨테이너 */}
+          <div className="sm:hidden">
+            <div className="flex gap-2 overflow-x-auto scrollbar-hide" style={{ WebkitOverflowScrolling: 'touch' }}>
+              {/* 우선순위 1: 주간 베스트 */}
+              {listing.isWeeklyBest && (
+                <div className="bg-yellow-500 text-white px-3 py-1.5 rounded-full flex items-center gap-1.5 font-medium shadow-lg whitespace-nowrap flex-shrink-0">
+                  <Star className="w-3.5 h-3.5" />
+                  <span className="text-xs">주간 BEST</span>
+                </div>
+              )}
+              
+              {/* 우선순위 2: BEST 매물 */}
+              {listing.isBest && !listing.isWeeklyBest && (
+                <div className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-3 py-1.5 rounded-full flex items-center gap-1.5 font-medium shadow-lg whitespace-nowrap flex-shrink-0">
+                  <Star className="w-3.5 h-3.5" />
+                  <span className="text-xs">BEST</span>
+                </div>
+              )}
+              
+              {/* 카테고리 - 아이콘만 표시 */}
+              <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm px-3 py-1.5 rounded-full flex items-center gap-1.5 font-medium shadow-lg whitespace-nowrap flex-shrink-0">
+                <Building className="w-3.5 h-3.5 text-gray-700 dark:text-gray-300" />
+                <span className="text-xs text-gray-700 dark:text-gray-300">
+                  {listing.category === 'CAFE_BAKERY' ? '카페' : 
+                  listing.category === 'RESTAURANT_BAR' ? '주점' : 
+                  '판매점'}
+                </span>
+              </div>
+              
+              {/* 지역 - 간략하게 */}
+              <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm px-3 py-1.5 rounded-full flex items-center gap-1.5 font-medium shadow-lg whitespace-nowrap flex-shrink-0">
+                <MapPin className="w-3.5 h-3.5 text-gray-700 dark:text-gray-300" />
+                <span className="text-xs text-gray-700 dark:text-gray-300">
+                  {listing.region === 'METROPOLITAN' ? '수도권' : '지방'}
+                </span>
+              </div>
             </div>
-          )}
-          {listing.isBest && (
-            <div className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-full flex items-center gap-2 font-medium shadow-lg">
-              <Star className="w-4 h-4" />
-              BEST 매물
-            </div>
-          )}
-          <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm px-4 py-2 rounded-full flex items-center gap-2 font-medium shadow-lg">
-            <Building className="w-4 h-4 text-gray-700 dark:text-gray-300" />
-            <span className="text-gray-700 dark:text-gray-300">{getCategoryName(listing.category)}</span>
+            
+            {/* 스크롤 표시기 (배지가 많을 때만) */}
+            {(listing.isWeeklyBest || listing.isBest) && (
+              <div className="flex justify-center mt-2 gap-1">
+                <div className="w-6 h-0.5 bg-white/50 rounded-full"></div>
+                <div className="w-1.5 h-0.5 bg-white/30 rounded-full"></div>
+              </div>
+            )}
           </div>
-          <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm px-4 py-2 rounded-full flex items-center gap-2 font-medium shadow-lg">
-            <MapPin className="w-4 h-4 text-gray-700 dark:text-gray-300" />
-            <span className="text-gray-700 dark:text-gray-300">{getRegionName(listing.region)}</span>
+
+          {/* 데스크톱: 기존 레이아웃 유지 */}
+          <div className="hidden sm:flex gap-3 flex-wrap">
+            {listing.isWeeklyBest && (
+              <div className="bg-yellow-500 text-white px-4 py-2 rounded-full flex items-center gap-2 font-medium shadow-lg">
+                <Star className="w-4 h-4" />
+                주간 베스트
+              </div>
+            )}
+            {listing.isBest && (
+              <div className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-full flex items-center gap-2 font-medium shadow-lg">
+                <Star className="w-4 h-4" />
+                BEST 매물
+              </div>
+            )}
+            <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm px-4 py-2 rounded-full flex items-center gap-2 font-medium shadow-lg">
+              <Building className="w-4 h-4 text-gray-700 dark:text-gray-300" />
+              <span className="text-gray-700 dark:text-gray-300">{getCategoryName(listing.category)}</span>
+            </div>
+            <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm px-4 py-2 rounded-full flex items-center gap-2 font-medium shadow-lg">
+              <MapPin className="w-4 h-4 text-gray-700 dark:text-gray-300" />
+              <span className="text-gray-700 dark:text-gray-300">{getRegionName(listing.region)}</span>
+            </div>
           </div>
         </div>
+
+        {/* CSS 추가 (tailwind.config.js 또는 global.css에 추가) */}
+        <style jsx global>{`
+          .scrollbar-hide {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+          }
+          .scrollbar-hide::-webkit-scrollbar {
+            display: none;  /* Chrome, Safari and Opera */
+          }
+        `}</style>
 
         {/* 하단 정보 */}
         <div className="absolute bottom-0 left-0 right-0 p-8">
