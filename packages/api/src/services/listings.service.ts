@@ -202,9 +202,9 @@ async function update(id: string, data: UpdateListingInput) {
     let message = '';
 
     if (difference > 0) {
-      message = `[권리금 인상] '${shortName}' 권리금이 ${ (difference / 10000).toLocaleString() }만원 인상되었습니다. ${listingUrl}`;
+      message = `[권리금 인상] '${shortName}' 권리금이 ${ (difference).toLocaleString() }만원 인상되었습니다. ${listingUrl}`;
     } else {
-      message = `[권리금 인하] '${shortName}' 권리금이 ${ (Math.abs(difference) / 10000).toLocaleString() }만원 인하되었습니다. ${listingUrl}`;
+      message = `[권리금 인하] '${shortName}' 권리금이 ${ (Math.abs(difference)).toLocaleString() }만원 인하되었습니다. ${listingUrl}`;
     }
     notificationService.notifyUsersWhoLikedListing(updatedListing, message);
   }
