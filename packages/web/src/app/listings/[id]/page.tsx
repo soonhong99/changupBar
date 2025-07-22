@@ -86,8 +86,6 @@ export default async function ListingDetailPage({ params }: Props) {
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
         
-        // packages/web/src/app/listings/[id]/page.tsx - 상단 배지 부분만
-
         {/* 상단 배지 - 모바일 최적화 버전 */}
         <div className="absolute top-4 sm:top-6 left-4 sm:left-6 right-4 sm:right-auto">
           {/* 모바일: 가로 스크롤 컨테이너 */}
