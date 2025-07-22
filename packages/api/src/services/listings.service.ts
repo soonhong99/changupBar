@@ -170,7 +170,6 @@ async function update(id: string, data: UpdateListingInput) {
   });
 
   const frontendUrl = process.env.FRONTEND_URL || 'https://www.xn--hz2b15nyscisj8ui.com';
-  const listingUrl = `${frontendUrl}/listings/${updatedListing.id}`;
   const shortName = truncate(updatedListing.name, 15); // 매물 이름을 15자로 줄임
 
   // --- 알림 발송 로직 ---
@@ -198,13 +197,13 @@ async function update(id: string, data: UpdateListingInput) {
   }
 
   if (originalListing.keyMoney !== updatedListing.keyMoney) {
-    const difference = updatedListing.keyMoney - updatedListing.keyMoney;
+    const difference = updatedListing.keyMoney - originalListing.keyMoney;
     let message = '';
 
     if (difference > 0) {
       message = `[권리금 인상]\n'${shortName}' 권리금 ${ difference.toLocaleString() }만원 인상! \n스마트창업.com`;
     } else {
-      message = `[권리금 인하]\n'${shortName}' 권리금이 ${ Math.abs(difference).toLocaleString() }만원 인하! \n스마트창업.com`;
+      message = `[권리금 인하]\n'${shortName}' 권리금 ${ Math.abs(difference).toLocaleString() }만원 인하! \n스마트창업.com`;
     }
     notificationService.notifyUsersWhoLikedListing(updatedListing, message);
   }
