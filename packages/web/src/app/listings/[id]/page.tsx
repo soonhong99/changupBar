@@ -160,17 +160,6 @@ export default async function ListingDetailPage({ params }: Props) {
           </div>
         </div>
 
-        {/* CSS 추가 (tailwind.config.js 또는 global.css에 추가) */}
-        <style jsx global>{`
-          .scrollbar-hide {
-            -ms-overflow-style: none;  /* IE and Edge */
-            scrollbar-width: none;  /* Firefox */
-          }
-          .scrollbar-hide::-webkit-scrollbar {
-            display: none;  /* Chrome, Safari and Opera */
-          }
-        `}</style>
-
         {/* 하단 정보 */}
         <div className="absolute bottom-0 left-0 right-0 p-8">
           <div className="max-w-6xl mx-auto">
