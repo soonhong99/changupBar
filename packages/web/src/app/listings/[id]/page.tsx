@@ -108,13 +108,10 @@ export default async function ListingDetailPage({ params }: Props) {
               )}
               
               {/* 카테고리 - 아이콘만 표시 */}
-              <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm px-3 py-1.5 rounded-full flex items-center gap-1.5 font-medium shadow-lg whitespace-nowrap flex-shrink-0">
-                <Building className="w-3.5 h-3.5 text-gray-700 dark:text-gray-300" />
-                <span className="text-xs text-gray-700 dark:text-gray-300">
-                  {listing.category === 'CAFE_BAKERY' ? '카페' : 
-                  listing.category === 'RESTAURANT_BAR' ? '주점' : 
-                  '판매점'}
-                </span>
+              
+              <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm px-4 py-2 rounded-full flex items-center gap-2 font-medium shadow-lg">
+                <Building className="w-4 h-4 text-gray-700 dark:text-gray-300" />
+                <span className="text-gray-700 dark:text-gray-300">{listing.subCategory}</span>
               </div>
               
               {/* 지역 - 간략하게 */}
@@ -151,7 +148,7 @@ export default async function ListingDetailPage({ params }: Props) {
             )}
             <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm px-4 py-2 rounded-full flex items-center gap-2 font-medium shadow-lg">
               <Building className="w-4 h-4 text-gray-700 dark:text-gray-300" />
-              <span className="text-gray-700 dark:text-gray-300">{getCategoryName(listing.category)}</span>
+              <span className="text-gray-700 dark:text-gray-300">{listing.subCategory}</span>
             </div>
             <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm px-4 py-2 rounded-full flex items-center gap-2 font-medium shadow-lg">
               <MapPin className="w-4 h-4 text-gray-700 dark:text-gray-300" />
@@ -518,7 +515,7 @@ export default async function ListingDetailPage({ params }: Props) {
                 <div className="flex justify-between">
                   <dt className="text-sm text-gray-600 dark:text-gray-400">업종</dt>
                   <dd className="text-sm font-medium text-gray-900 dark:text-white">
-                    {getCategoryName(listing.category)}
+                    {listing.mainCategory} &gt; {listing.subCategory}
                   </dd>
                 </div>
                 <div className="flex justify-between">

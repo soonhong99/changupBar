@@ -2,7 +2,6 @@
 
 "use client";
 
-import { Listing } from '@prisma/client';
 import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
 import { likeListing, ListingWithCounts } from '@/lib/api';

@@ -37,7 +37,9 @@ model Listing {
 
   // --- 카테고리 (Enum 활용) ---
   region   Region   // 지역 구분 (수도권/수도권 외)
-  category Category // 업종 구분
+  // category Category // 업종 구분
+  mainCategory String? // ⬇️ 추가: 대분류 (예: "휴게음식점")
+  subCategory  String? // ⬇️ 추가: 소분류 (예: "제과/베이커리")
 
   // --- 계약 및 비용 정보 (숫자) ---
   deposit        Int // 보증금 (만 원 단위)
@@ -86,11 +88,11 @@ enum Region {
 }
 
 // 업종 구분을 위한 Enum
-enum Category {
-  CAFE_BAKERY    // 카페/베이커리
-  RESTAURANT_BAR // 주점/식당
-  RETAIL_ETC     // 판매점/기타
-}
+// enum Category {
+//   CAFE_BAKERY    // 카페/베이커리
+//   RESTAURANT_BAR // 주점/식당
+//   RETAIL_ETC     // 판매점/기타
+// }
 
 // 공개 상태를 위한 Enum
 enum ListingStatus {

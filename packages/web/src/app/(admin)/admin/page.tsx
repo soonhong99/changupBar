@@ -7,6 +7,7 @@ import Link from "next/link";
 import { getAllListings, deleteListingById, ListingFilter, getPendingConsultationCount} from "@/lib/api";
 import { Listing } from "@prisma/client";
 import { useAuth } from "@/context/AuthContext";
+import { categories, mainCategories } from "@/data/categories"; // ⬅️ 카테고리 데이터 import
 
 export default function AdminDashboardPage() {
   const [listings, setListings] = useState<Listing[]>([]);
@@ -14,7 +15,8 @@ export default function AdminDashboardPage() {
   const [filters, setFilters] = useState<ListingFilter>({
     sortBy: 'createdAt',
     order: 'desc',
-    category: '',
+    mainCategory: '', // ⬅️ category를 mainCategory로 변경
+    subCategory: '',  // ⬅️ subCategory 추가
     status: '', // 'DRAFT', 'PUBLISHED', 'ARCHIVED'
   });
   const [searchTerm, setSearchTerm] = useState('');
@@ -263,17 +265,32 @@ export default function AdminDashboardPage() {
 
             {/* 업종 필터 */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">업종</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">업종 선택</label>
               <select 
-                name="category" 
+                name="mainCategory" 
                 onChange={handleFilterChange} 
-                value={filters.category} 
+                value={filters.mainCategory} 
                 className="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               >
                 <option value="">전체</option>
-                <option value="CAFE_BAKERY">카페/베이커리</option>
-                <option value="RESTAURANT_BAR">주점/식당</option>
-                <option value="RETAIL_ETC">판매점/기타</option>
+                {mainCategories.map(cat => (
+                  <option key={cat} value={cat}>{cat}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">상세 업종</label>
+              <select 
+                name="subCategory" 
+                onChange={handleFilterChange} 
+                value={filters.subCategory}
+                disabled={!filters.mainCategory}
+                className={`block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${!filters.mainCategory ? 'opacity-50 cursor-not-allowed' : ''}`}
+              >
+                <option value="">전체</option>
+                {filters.mainCategory && categories[filters.mainCategory]?.map(subCat => (
+                  <option key={subCat} value={subCat}>{subCat}</option>
+                ))}
               </select>
             </div>
 
@@ -357,7 +374,7 @@ export default function AdminDashboardPage() {
                               {listing.name}
                             </div>
                             <div className="text-sm text-gray-500 dark:text-gray-400">
-                              {listing.category}
+                              {listing.subCategory}
                             </div>
                           </div>
                         </div>

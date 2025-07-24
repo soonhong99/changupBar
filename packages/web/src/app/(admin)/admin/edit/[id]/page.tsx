@@ -9,6 +9,7 @@ import { useAuth } from '@/context/AuthContext';
 import { UpdateListingInput } from '@shared/schemas/listing.schema';
 import { Listing } from '@prisma/client';
 import FeaturedPropertySettings from '@/components/admin/FeaturedPropertySettings';
+import { categories, mainCategories } from '@/data/categories'; // ⬅️ 카테고리 데이터 import
 import {
   ArrowLeft,
   Save,
@@ -74,6 +75,8 @@ export default function EditListingPage() {
             // ⬇️ null을 undefined로 변환하여 타입 불일치 해결
             const formattedData = {
               ...data,
+              mainCategory: data.mainCategory ?? undefined,
+              subCategory: data.subCategory ?? undefined,
               sido: data.sido ?? undefined,
               sigungu: data.sigungu ?? undefined,
               eupmyeondong: data.eupmyeondong ?? undefined,
@@ -436,19 +439,36 @@ export default function EditListingPage() {
             </div>
 
             <div>
-              <label htmlFor="category" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                업종 구분 <span className="text-red-500">*</span>
+              <label htmlFor="mainCategory" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                업종 선택 <span className="text-red-500">*</span>
               </label>
               <select
-                name="category"
-                id="category"
-                value={formData.category || ''}
+                name="mainCategory"
+                id="mainCategory"
+                value={formData.mainCategory || ''}
                 onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md ..."
               >
-                <option value="CAFE_BAKERY">카페/베이커리</option>
-                <option value="RESTAURANT_BAR">주점/식당</option>
-                <option value="RETAIL_ETC">판매점/기타</option>
+                {mainCategories.map(cat => (
+                  <option key={cat} value={cat}>{cat}</option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label htmlFor="subCategory" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                상세 업종 <span className="text-red-500">*</span>
+              </label>
+              <select
+                name="subCategory"
+                id="subCategory"
+                value={formData.subCategory || ''}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md ..."
+              >
+                {formData.mainCategory && categories[formData.mainCategory]?.map(subCat => (
+                  <option key={subCat} value={subCat}>{subCat}</option>
+                ))}
               </select>
             </div>
 

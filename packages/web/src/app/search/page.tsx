@@ -2,18 +2,21 @@
 
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState } from "react";
 import { getAllListings, ListingFilter, getListingStats, ListingWithCounts, getMostViewedListing } from "@/lib/api";
 import ListingCard from "@/components/ui/ListingCard";
 import { administrativeDistricts } from '@/data/districts'; // ⬅️ 여기서 import
 import Modal from "@/components/ui/Modal"; // ⬅️ Modal import
 import ConsultationForm from "@/components/forms/ConsultationForm";
+import { categories, mainCategories } from '@/data/categories'; // ⬅️ 카테고리 데이터 import
 
 export default function SearchPage() {
   const [listings, setListings] = useState<ListingWithCounts[]>([]);
   const [filters, setFilters] = useState<ListingFilter>({
     sido: '',
     sigungu: '',
+    mainCategory: '',
+    subCategory: '',
   });
   const [isLoading, setIsLoading] = useState(true);
   const [stats, setStats] = useState({ totalCount: 0, newThisWeekCount: 0 }); // ⬅️ 통계 상태 추가
@@ -69,6 +72,9 @@ export default function SearchPage() {
       // 시/도가 바뀌면, 시/군/구 선택을 초기화합니다.
       if (key === 'sido') {
         newFilters.sigungu = '';
+      }
+      if (key === 'mainCategory') {
+        newFilters.subCategory = '';
       }
       return newFilters;
     });
@@ -206,24 +212,37 @@ export default function SearchPage() {
             </div>
             
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="space-y-2">
+              <label htmlFor="mainCategory" className={labelClasses}>🏪 업종 선택</label>
+              <select
+                id="mainCategory"
+                onChange={(e) => handleFilterChange('mainCategory', e.target.value || undefined)}
+                value={filters.mainCategory}
+                className={selectClasses}
+              >
+                <option value="">전체</option>
+                {mainCategories.map(cat => (
+                  <option key={cat} value={cat}>{cat}</option>
+                ))}
+              </select>
+            </div>
+
+            {filters.mainCategory && (
               <div className="space-y-2">
-                <label htmlFor="category" className={labelClasses}>
-                  <span className="flex items-center">
-                    🏪 업종 카테고리
-                    <span className="ml-1 text-red-500">*</span>
-                  </span>
-                </label>
-                <select 
-                  id="category"
-                  onChange={(e) => handleFilterChange('category', e.target.value || undefined)}
+                <label htmlFor="subCategory" className={labelClasses}>🍽️ 상세 업종</label>
+                <select
+                  id="subCategory"
+                  onChange={(e) => handleFilterChange('subCategory', e.target.value || undefined)}
+                  value={filters.subCategory}
                   className={selectClasses}
                 >
-                  <option value="">전체 업종</option>
-                  <option value="CAFE_BAKERY">☕ 카페/베이커리</option>
-                  <option value="RESTAURANT_BAR">🍽️ 주점/식당</option>
-                  <option value="RETAIL_ETC">🛍️ 판매점/기타</option>
+                  <option value="">전체</option>
+                  {categories[filters.mainCategory]?.map(subCat => (
+                    <option key={subCat} value={subCat}>{subCat}</option>
+                  ))}
                 </select>
               </div>
+            )}
               
               <div className="space-y-2">
                 <label htmlFor="keyMoney" className={labelClasses}>
@@ -247,7 +266,7 @@ export default function SearchPage() {
               
               {/* 추가 필터 플레이스홀더 */}
               <div className="space-y-2">
-              <label htmlFor="sido" className={labelClasses}>📍 시/도 선택</label>
+              <label htmlFor="sido" className={labelClasses}>📍 지역 선택</label>
               <select
                 id="sido"
                 onChange={(e) => handleFilterChange('sido', e.target.value || undefined)}
@@ -261,22 +280,23 @@ export default function SearchPage() {
               </select>
             </div>
 
-            <div className="space-y-2">
-              <label htmlFor="sigungu" className={labelClasses}>시/군/구 선택</label>
-              <select
-                id="sigungu"
-                onChange={(e) => handleFilterChange('sigungu', e.target.value || undefined)}
-                value={filters.sigungu}
-                disabled={!filters.sido} // 시/도가 선택되어야 활성화
-                className={`${selectClasses} ${!filters.sido ? 'opacity-50 cursor-not-allowed' : ''}`}
-              >
-                <option value="">전체</option>
-                {filters.sido && administrativeDistricts[filters.sido]?.map(sigungu => (
-                  <option key={sigungu} value={sigungu}>{sigungu}</option>
-                ))}
-              </select>
-            </div>
-            </div>
+            {filters.sido && (
+              <div className="space-y-2">
+                <label htmlFor="sigungu" className={labelClasses}>🗺️ 상세 지역</label>
+                <select
+                  id="sigungu"
+                  onChange={(e) => handleFilterChange('sigungu', e.target.value || undefined)}
+                  value={filters.sigungu}
+                  className={selectClasses}
+                >
+                  <option value="">전체</option>
+                  {administrativeDistricts[filters.sido]?.map(sigungu => (
+                    <option key={sigungu} value={sigungu}>{sigungu}</option>
+                  ))}
+                </select>
+              </div>
+            )}
+          </div>
             
             {/* 검색 결과 미리보기 */}
             <div className="mt-6 p-4 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-gray-700 dark:to-gray-600 rounded-lg">

@@ -73,7 +73,7 @@ async function getById(id: string) {
 async function getAll(query: GetAllListingsQuery, role?: UserRole) {
   console.log(`✅ Service: 매물 조회 시작.`);
 
-  const { region, category, status, keyMoneyLte, sido, sigungu, sortBy = 'createdAt', order = 'desc' } = query;
+  const { region, mainCategory, subCategory, status, keyMoneyLte, sido, sigungu, sortBy = 'createdAt', order = 'desc' } = query;
   const where: Prisma.ListingWhereInput = {};
 
   // --- 조건부 필터링 ---
@@ -88,7 +88,8 @@ async function getAll(query: GetAllListingsQuery, role?: UserRole) {
 
   // 2. 다른 필터들
   if (region) where.region = region;
-  if (category) where.category = category;
+  if (mainCategory) where.mainCategory = mainCategory;
+  if (subCategory) where.subCategory = subCategory;
   if (keyMoneyLte) where.keyMoney = { lte: parseInt(keyMoneyLte, 10) };
   if (sido) where.sido = sido;
   if (sigungu) where.sigungu = sigungu;
@@ -250,7 +251,8 @@ async function getFeatured(role?: UserRole) {
 
 interface GetAllListingsQuery {
   region?: 'METROPOLITAN' | 'NON_METROPOLITAN';
-  category?: 'CAFE_BAKERY' | 'RESTAURANT_BAR' | 'RETAIL_ETC';
+  mainCategory?: string;
+  subCategory?: string;
   status?: 'DRAFT' | 'PUBLISHED' | 'ARCHIVED'; // ⬅️ 관리자용 상태 필터
   keyMoneyLte?: string;
   sortBy?: 'createdAt' | 'keyMoney' | 'status' | 'viewCount' |'likeCount'; // ⬅️ 'status' 추가

@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import { createListing, getPresignedUrl } from '@/lib/api';
 import { useAuth } from '@/context/AuthContext';
 import { CreateListingInput } from '@shared/schemas/listing.schema';
+import { categories, mainCategories } from '@/data/categories'; // ⬅️ 카테고리 데이터 import
 
 // 초기 폼 데이터 - optional 필드들을 명시적으로 초기화
 const initialFormData: Omit<CreateListingInput, 'bestUntil' | 'coverImage' | 'featuredStart' | 'featuredEnd'> & {
@@ -22,7 +23,8 @@ const initialFormData: Omit<CreateListingInput, 'bestUntil' | 'coverImage' | 'fe
   roadAddress: '',
   detailAddress: '',
   region: 'METROPOLITAN',
-  category: 'CAFE_BAKERY',
+  mainCategory: mainCategories[0], // 기본값으로 첫 번째 대분류 선택
+  subCategory: categories[mainCategories[0]][0], // 첫 번째 대분류의 첫 번째 소분류 선택
   deposit: 0,
   monthlyRent: 0,
   keyMoney: 0,
@@ -299,19 +301,31 @@ export default function NewListingPage() {
             </div>
 
             <div>
-              <label htmlFor="category" className="block text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-gray-300">
-                업종 구분 <span className="text-red-500">*</span>
-              </label>
-              <select
-                name="category"
-                id="category"
-                value={formData.category}
-                onChange={handleChange}
+              <label htmlFor="mainCategory" className="block text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-gray-300">업종 선택</label>
+              <select 
+                name="mainCategory" 
+                id="mainCategory" 
+                value={formData.mainCategory} 
+                onChange={handleChange} 
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
-                <option value="CAFE_BAKERY">카페/베이커리</option>
-                <option value="RESTAURANT_BAR">주점/식당</option>
-                <option value="RETAIL_ETC">판매점/기타</option>
+                {mainCategories.map(cat => (
+                  <option key={cat} value={cat}>{cat}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label htmlFor="subCategory" className="block text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-gray-300">상세 업종</label>
+              <select 
+                name="subCategory" 
+                id="subCategory" 
+                value={formData.subCategory} 
+                onChange={handleChange} 
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                {formData.mainCategory && categories[formData.mainCategory]?.map(subCat => (
+                  <option key={subCat} value={subCat}>{subCat}</option>
+                ))}
               </select>
             </div>
 

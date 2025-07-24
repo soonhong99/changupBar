@@ -9,7 +9,8 @@ export const createListingSchema = z.object({
     roadAddress: z.string().optional(),
     detailAddress: z.string().optional(),
     region: z.enum(['METROPOLITAN', 'NON_METROPOLITAN']),
-    category: z.enum(['CAFE_BAKERY', 'RESTAURANT_BAR', 'RETAIL_ETC']),
+    mainCategory: z.string().optional(), // 이 줄 추가
+    subCategory: z.string().optional(),  // 이 줄 추가
     deposit: z.number().int().min(0),
     monthlyRent: z.number().int().min(0),
     keyMoney: z.number().int().min(0),

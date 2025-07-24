@@ -10,7 +10,8 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 // 필터 타입을 정의합니다.
 export interface ListingFilter {
   region?: string;
-  category?: string;
+  mainCategory?: string;
+  subCategory?: string;
   keyMoneyLte?: number;
   sortBy?: 'createdAt' | 'keyMoney' | 'status' | 'viewCount' | 'likeCount'; // ⬅️ 추가
   order?: string;  // 추가
@@ -43,8 +44,8 @@ export async function getAllListings(filter: ListingFilter = {}, token?: string 
     // 쿼리 스트링을 생성합니다.
     const query = new URLSearchParams();
     if (filter.region) query.append('region', filter.region);
-    if (filter.category) query.append('category', filter.category);
-    if (filter.keyMoneyLte) query.append('keyMoneyLte', filter.keyMoneyLte.toString());
+    if (filter.mainCategory) query.append('mainCategory', filter.mainCategory);
+    if (filter.subCategory) query.append('subCategory', filter.subCategory);    if (filter.keyMoneyLte) query.append('keyMoneyLte', filter.keyMoneyLte.toString());
     if (filter.sortBy) query.append('sortBy', filter.sortBy); // 추가
     if (filter.order) query.append('order', filter.order); // 추가
     if (filter.sido) query.append('sido', filter.sido);
