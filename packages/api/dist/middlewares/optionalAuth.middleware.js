@@ -2,10 +2,10 @@ import jwt from 'jsonwebtoken';
 export const optionalAuthMiddleware = (req, res, next) => {
     console.log('--- Optional Auth Middleware Triggered ---');
     const authHeader = req.headers.authorization;
-    console.log('Received Authorization Header:', authHeader);
+    // console.log('Received Authorization Header:', authHeader);
     // 토큰이 없거나 'Bearer '로 시작하지 않으면, 그냥 통과시킨다.
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        console.log('no token continue with Guest');
+        // console.log('no token continue with Guest');
         return next();
     }
     const token = authHeader.split(' ')[1];

@@ -12,11 +12,15 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 4000;
 
-const corsOptions = {
-  origin: 'https://www.xn--hz2b15nyscisj8ui.com', // 허용할 프론트엔드 출처
+const corsOptions: cors.CorsOptions = {
+  origin: [
+    'https://www.xn--hz2b15nyscisj8ui.com',
+    'http://localhost:3000',
+    'http://localhost:3001'
+  ],
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true,
-  allowedHeaders: 'Content-Type,Authorization', // Authorization 헤더 허용
+  allowedHeaders: 'Content-Type,Authorization',
 };
 
 // 2. 모든 요청에 대해 CORS를 허용하는 미들웨어를 가장 먼저 적용합니다.

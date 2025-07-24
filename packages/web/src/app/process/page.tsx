@@ -23,7 +23,7 @@ const processSteps = [
   {
     step: "02",
     title: "상권 분석 및 매물 추천",
-    subtitle: "데이터로 검증된 S급 매물만 엄선",
+    subtitle: "데이터로 검증된 명품 매물만 엄선",
     description: "빅데이터 기반의 철저한 상권 분석을 통해, 조건에 맞는 최적의 매물을 선별하여 추천드립니다.",
     icon: <Search className="w-8 h-8 text-white" />,
     details: [

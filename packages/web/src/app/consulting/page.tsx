@@ -20,7 +20,7 @@ export default function ConsultingPage() {
               창업 컨설팅 전문가
             </h1>
             <p className="text-xl md:text-2xl text-blue-100 mb-8">
-              10년 경력의 창업 성공 파트너와 함께하세요
+              18년 경력의 창업 성공 파트너와 함께하세요
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <div className="bg-white/20 backdrop-blur-sm rounded-full px-6 py-3">
@@ -30,7 +30,7 @@ export default function ConsultingPage() {
                 <span className="text-lg font-semibold">🔄 창업 재문의 1위</span>
               </div>
               <div className="bg-white/20 backdrop-blur-sm rounded-full px-6 py-3">
-                <span className="text-lg font-semibold">📈 10년 창업 컨설팅</span>
+                <span className="text-lg font-semibold">📈 18년 창업 컨설팅</span>
               </div>
             </div>
           </div>
@@ -64,7 +64,7 @@ export default function ConsultingPage() {
                     </p>
                     <div className="flex justify-center gap-3">
                       <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
-                        경력 10년
+                        경력 18년
                       </span>
                       <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
                         전문 컨설턴트
@@ -82,7 +82,7 @@ export default function ConsultingPage() {
                   믿을 수 있는 창업 파트너
                 </h3>
                 <p className="text-lg text-gray-600 dark:text-gray-300 leading-relaxed mb-6">
-                  안녕하세요, 하이브창업 박수진 대표입니다. 지난 10년간 수많은 창업자분들과 함께 
+                  안녕하세요, 하이브창업 박수진 대표입니다. 지난 18년간 수많은 창업자분들과 함께 
                   성공적인 창업의 길을 걸어왔습니다. 단순한 컨설팅을 넘어, 여러분의 꿈이 현실이 
                   될 수 있도록 진심을 다해 돕겠습니다.
                 </p>

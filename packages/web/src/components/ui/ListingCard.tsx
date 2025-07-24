@@ -83,7 +83,7 @@ export default function ListingCard({ listing }: ListingCardProps) {
     <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/60 to-black/80"></div>
     
     {/* 상태 표시 - 우측 상단 */}
-    <div className="absolute top-4 left-4">
+    <div className="absolute top-4 left-4 z-10">
       {listing.contractStatus === 'PENDING' && (
         <div className="bg-amber-500/90 backdrop-blur-sm text-white px-4 py-2 rounded-lg shadow-lg flex items-center gap-2 animate-pulse">
           <div className="relative">

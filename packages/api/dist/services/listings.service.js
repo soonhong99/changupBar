@@ -57,7 +57,7 @@ async function getById(id) {
  * @param role 요청한 사용자의 역할 (예: 'ADMIN', 'USER' 또는 undefined)
  */
 async function getAll(query, role) {
-    console.log(`✅ Service: 매물 조회 시작. 역할: ${role || 'Guest'}`);
+    console.log(`✅ Service: 매물 조회 시작.`);
     const { region, category, status, keyMoneyLte, sido, sigungu, sortBy = 'createdAt', order = 'desc' } = query;
     const where = {};
     // --- 조건부 필터링 ---
@@ -191,7 +191,7 @@ async function update(id, data) {
  * @param role 요청한 사용자의 역할
  */
 async function getFeatured(role) {
-    console.log(`✅ Service: 대표 매물 조회 시작. 역할: ${role || 'Guest'}`);
+    console.log(`✅ Service: 대표 매물 조회 시작.`);
     const now = new Date();
     console.log('Server Current Time (UTC):', now.toISOString());
     console.log('Server Current Time (Locale):', now.toString());

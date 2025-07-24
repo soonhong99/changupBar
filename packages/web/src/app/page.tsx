@@ -35,7 +35,7 @@ export default async function HomePage() {
             특급 매물 공개
           </h1>
           <p className="mt-4 max-w-2xl mx-auto text-xl text-gray-600 dark:text-gray-400">
-            스마트창업에서 검증된 S급 매물들을 <strong className="text-blue-600 dark:text-blue-400">최저권리금</strong>으로 만날수있는 기회
+            스마트창업에서 검증된 명품 매물들을 <strong className="text-blue-600 dark:text-blue-400">최저권리금</strong>으로 만날수있는 기회
           </p>
         </div>
 
@@ -127,11 +127,25 @@ export default async function HomePage() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {featuredListings.map((listing, index) => (
                 <div key={listing.id} className="relative group">
-                  {index === 0 && (
-                    <div className="absolute -top-3 -right-3 z-10 bg-gradient-to-r from-red-500 to-orange-500 text-white px-3 py-1 rounded-full text-sm font-semibold shadow-lg">
-                      🏆 Best Pick
-                    </div>
-                  )}
+                  {/* Top 랭킹 배지 - z-20으로 가장 위에 표시 */}
+                  <div className="absolute -top-3 -right-3 z-30">
+                    {index === 0 && (
+                      <div className="bg-gradient-to-r from-yellow-400 to-amber-500 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg flex items-center gap-1">
+                        <span className="text-lg">🥇</span> TOP 1
+                      </div>
+                    )}
+                    {index === 1 && (
+                      <div className="bg-gradient-to-r from-gray-400 to-gray-500 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg flex items-center gap-1">
+                        <span className="text-lg">🥈</span> TOP 2
+                      </div>
+                    )}
+                    {index === 2 && (
+                      <div className="bg-gradient-to-r from-orange-600 to-orange-700 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg flex items-center gap-1">
+                        <span className="text-lg">🥉</span> TOP 3
+                      </div>
+                    )}
+                  </div>
+                  
                   <div className="relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 group-hover:scale-105">
                     <ListingCard listing={listing} />
                   </div>
