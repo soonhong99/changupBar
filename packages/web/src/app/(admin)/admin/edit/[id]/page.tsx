@@ -648,284 +648,284 @@ export default function EditListingPage() {
           <div className="bg-white dark:bg-gray-800 shadow-sm rounded-lg p-6 border border-gray-200 dark:border-gray-700">
   <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-6">매물 특성</h2>
   
-  <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-    {/* 풀오토 매장 */}
-    <label className="group cursor-pointer">
-      <div className={`
-        relative p-4 rounded-xl border-2 transition-all duration-200 
-        ${formData.isAutomated 
-          ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20' 
-          : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500 bg-gray-50 dark:bg-gray-700/50'
-        }
-      `}>
-        <div className="flex flex-col items-center space-y-2">
-          <div className={`
-            w-8 h-8 rounded-lg flex items-center justify-center
-            ${formData.isAutomated 
-              ? 'bg-blue-500 text-white' 
-              : 'bg-gray-300 dark:bg-gray-600 text-gray-600 dark:text-gray-400'
-            }
-          `}>
-            🤖
+    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+      {/* 풀오토 매장 */}
+      <label className="group cursor-pointer">
+        <div className={`
+          relative p-4 rounded-xl border-2 transition-all duration-200 
+          ${formData.isAutomated 
+            ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20' 
+            : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500 bg-gray-50 dark:bg-gray-700/50'
+          }
+        `}>
+          <div className="flex flex-col items-center space-y-2">
+            <div className={`
+              w-8 h-8 rounded-lg flex items-center justify-center
+              ${formData.isAutomated 
+                ? 'bg-blue-500 text-white' 
+                : 'bg-gray-300 dark:bg-gray-600 text-gray-600 dark:text-gray-400'
+              }
+            `}>
+              🤖
+            </div>
+            <span className={`
+              text-sm font-medium text-center
+              ${formData.isAutomated 
+                ? 'text-blue-700 dark:text-blue-300' 
+                : 'text-gray-700 dark:text-gray-300'
+              }
+            `}>
+              풀오토 매장
+            </span>
           </div>
-          <span className={`
-            text-sm font-medium text-center
-            ${formData.isAutomated 
-              ? 'text-blue-700 dark:text-blue-300' 
-              : 'text-gray-700 dark:text-gray-300'
-            }
-          `}>
-            풀오토 매장
-          </span>
+          <input
+            type="checkbox"
+            name="isAutomated"
+            checked={formData.isAutomated || false}
+            onChange={handleChange}
+            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+          />
+          {formData.isAutomated && (
+            <div className="absolute top-2 right-2 w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center">
+              <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+              </svg>
+            </div>
+          )}
         </div>
-        <input
-          type="checkbox"
-          name="isAutomated"
-          checked={formData.isAutomated || false}
-          onChange={handleChange}
-          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-        />
-        {formData.isAutomated && (
-          <div className="absolute top-2 right-2 w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center">
-            <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-            </svg>
-          </div>
-        )}
-      </div>
-    </label>
+      </label>
 
-    {/* 주차 가능 */}
-    <label className="group cursor-pointer">
-      <div className={`
-        relative p-4 rounded-xl border-2 transition-all duration-200 
-        ${formData.hasParking 
-          ? 'border-green-500 bg-green-50 dark:bg-green-900/20' 
-          : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500 bg-gray-50 dark:bg-gray-700/50'
-        }
-      `}>
-        <div className="flex flex-col items-center space-y-2">
-          <div className={`
-            w-8 h-8 rounded-lg flex items-center justify-center
-            ${formData.hasParking 
-              ? 'bg-green-500 text-white' 
-              : 'bg-gray-300 dark:bg-gray-600 text-gray-600 dark:text-gray-400'
-            }
-          `}>
-            🚗
+      {/* 알짜 매장 */}
+      <label className="group cursor-pointer">
+        <div className={`
+          relative p-4 rounded-xl border-2 transition-all duration-200 
+          ${formData.isGoodDeal 
+            ? 'border-amber-500 bg-amber-50 dark:bg-amber-900/20' 
+            : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500 bg-gray-50 dark:bg-gray-700/50'
+          }
+        `}>
+          <div className="flex flex-col items-center space-y-2">
+            <div className={`
+              w-8 h-8 rounded-lg flex items-center justify-center
+              ${formData.isGoodDeal 
+                ? 'bg-amber-500 text-white' 
+                : 'bg-gray-300 dark:bg-gray-600 text-gray-600 dark:text-gray-400'
+              }
+            `}>
+              💰
+            </div>
+            <span className={`
+              text-sm font-medium text-center
+              ${formData.isGoodDeal 
+                ? 'text-amber-700 dark:text-amber-300' 
+                : 'text-gray-700 dark:text-gray-300'
+              }
+            `}>
+              알짜매장
+            </span>
           </div>
-          <span className={`
-            text-sm font-medium text-center
-            ${formData.hasParking 
-              ? 'text-green-700 dark:text-green-300' 
-              : 'text-gray-700 dark:text-gray-300'
-            }
-          `}>
-            주차 가능
-          </span>
+          <input
+            type="checkbox"
+            name="isGoodDeal"
+            checked={formData.isGoodDeal || false}
+            onChange={handleChange}
+            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+          />
+          {formData.isGoodDeal && (
+            <div className="absolute top-2 right-2 w-5 h-5 bg-amber-500 rounded-full flex items-center justify-center">
+              <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+              </svg>
+            </div>
+          )}
         </div>
-        <input
-          type="checkbox"
-          name="hasParking"
-          checked={formData.hasParking || false}
-          onChange={handleChange}
-          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-        />
-        {formData.hasParking && (
-          <div className="absolute top-2 right-2 w-5 h-5 bg-green-500 rounded-full flex items-center justify-center">
-            <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-            </svg>
-          </div>
-        )}
-      </div>
-    </label>
+      </label>
 
-    {/* 여성 추천 */}
-    <label className="group cursor-pointer">
-      <div className={`
-        relative p-4 rounded-xl border-2 transition-all duration-200 
-        ${formData.isWomanFriendly 
-          ? 'border-pink-500 bg-pink-50 dark:bg-pink-900/20' 
-          : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500 bg-gray-50 dark:bg-gray-700/50'
-        }
-      `}>
-        <div className="flex flex-col items-center space-y-2">
-          <div className={`
-            w-8 h-8 rounded-lg flex items-center justify-center
-            ${formData.isWomanFriendly 
-              ? 'bg-pink-500 text-white' 
-              : 'bg-gray-300 dark:bg-gray-600 text-gray-600 dark:text-gray-400'
-            }
-          `}>
-            👩
+      {/* 여성 추천 */}
+      <label className="group cursor-pointer">
+        <div className={`
+          relative p-4 rounded-xl border-2 transition-all duration-200 
+          ${formData.isWomanFriendly 
+            ? 'border-pink-500 bg-pink-50 dark:bg-pink-900/20' 
+            : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500 bg-gray-50 dark:bg-gray-700/50'
+          }
+        `}>
+          <div className="flex flex-col items-center space-y-2">
+            <div className={`
+              w-8 h-8 rounded-lg flex items-center justify-center
+              ${formData.isWomanFriendly 
+                ? 'bg-pink-500 text-white' 
+                : 'bg-gray-300 dark:bg-gray-600 text-gray-600 dark:text-gray-400'
+              }
+            `}>
+              👩
+            </div>
+            <span className={`
+              text-sm font-medium text-center
+              ${formData.isWomanFriendly 
+                ? 'text-pink-700 dark:text-pink-300' 
+                : 'text-gray-700 dark:text-gray-300'
+              }
+            `}>
+              여성 추천
+            </span>
           </div>
-          <span className={`
-            text-sm font-medium text-center
-            ${formData.isWomanFriendly 
-              ? 'text-pink-700 dark:text-pink-300' 
-              : 'text-gray-700 dark:text-gray-300'
-            }
-          `}>
-            여성 추천
-          </span>
+          <input
+            type="checkbox"
+            name="isWomanFriendly"
+            checked={formData.isWomanFriendly || false}
+            onChange={handleChange}
+            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+          />
+          {formData.isWomanFriendly && (
+            <div className="absolute top-2 right-2 w-5 h-5 bg-pink-500 rounded-full flex items-center justify-center">
+              <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+              </svg>
+            </div>
+          )}
         </div>
-        <input
-          type="checkbox"
-          name="isWomanFriendly"
-          checked={formData.isWomanFriendly || false}
-          onChange={handleChange}
-          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-        />
-        {formData.isWomanFriendly && (
-          <div className="absolute top-2 right-2 w-5 h-5 bg-pink-500 rounded-full flex items-center justify-center">
-            <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-            </svg>
-          </div>
-        )}
-      </div>
-    </label>
+      </label>
 
-    {/* 1층 매물 */}
-    <label className="group cursor-pointer">
-      <div className={`
-        relative p-4 rounded-xl border-2 transition-all duration-200 
-        ${formData.isFirstFloor 
-          ? 'border-orange-500 bg-orange-50 dark:bg-orange-900/20' 
-          : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500 bg-gray-50 dark:bg-gray-700/50'
-        }
-      `}>
-        <div className="flex flex-col items-center space-y-2">
-          <div className={`
-            w-8 h-8 rounded-lg flex items-center justify-center
-            ${formData.isFirstFloor 
-              ? 'bg-orange-500 text-white' 
-              : 'bg-gray-300 dark:bg-gray-600 text-gray-600 dark:text-gray-400'
-            }
-          `}>
-            🏢
+      {/* 특수상권 */}
+      <label className="group cursor-pointer">
+        <div className={`
+          relative p-4 rounded-xl border-2 transition-all duration-200 
+          ${formData.isSpecialDistrict 
+            ? 'border-orange-500 bg-orange-50 dark:bg-orange-900/20' 
+            : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500 bg-gray-50 dark:bg-gray-700/50'
+          }
+        `}>
+          <div className="flex flex-col items-center space-y-2">
+            <div className={`
+              w-8 h-8 rounded-lg flex items-center justify-center
+              ${formData.isSpecialDistrict 
+                ? 'bg-orange-500 text-white' 
+                : 'bg-gray-300 dark:bg-gray-600 text-gray-600 dark:text-gray-400'
+              }
+            `}>
+              🏢
+            </div>
+            <span className={`
+              text-sm font-medium text-center
+              ${formData.isSpecialDistrict 
+                ? 'text-orange-700 dark:text-orange-300' 
+                : 'text-gray-700 dark:text-gray-300'
+              }
+            `}>
+              특수상권
+            </span>
           </div>
-          <span className={`
-            text-sm font-medium text-center
-            ${formData.isFirstFloor 
-              ? 'text-orange-700 dark:text-orange-300' 
-              : 'text-gray-700 dark:text-gray-300'
-            }
-          `}>
-            1층 매물
-          </span>
+          <input
+            type="checkbox"
+            name="isSpecialDistrict"
+            checked={formData.isSpecialDistrict || false}
+            onChange={handleChange}
+            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+          />
+          {formData.isSpecialDistrict && (
+            <div className="absolute top-2 right-2 w-5 h-5 bg-orange-500 rounded-full flex items-center justify-center">
+              <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+              </svg>
+            </div>
+          )}
         </div>
-        <input
-          type="checkbox"
-          name="isFirstFloor"
-          checked={formData.isFirstFloor || false}
-          onChange={handleChange}
-          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-        />
-        {formData.isFirstFloor && (
-          <div className="absolute top-2 right-2 w-5 h-5 bg-orange-500 rounded-full flex items-center justify-center">
-            <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-            </svg>
-          </div>
-        )}
-      </div>
-    </label>
+      </label>
 
-    {/* 역세권 */}
-    <label className="group cursor-pointer">
-      <div className={`
-        relative p-4 rounded-xl border-2 transition-all duration-200 
-        ${formData.isNearStation 
-          ? 'border-purple-500 bg-purple-50 dark:bg-purple-900/20' 
-          : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500 bg-gray-50 dark:bg-gray-700/50'
-        }
-      `}>
-        <div className="flex flex-col items-center space-y-2">
-          <div className={`
-            w-8 h-8 rounded-lg flex items-center justify-center
-            ${formData.isNearStation 
-              ? 'bg-purple-500 text-white' 
-              : 'bg-gray-300 dark:bg-gray-600 text-gray-600 dark:text-gray-400'
-            }
-          `}>
-            🚊
+      {/* 역세권 */}
+      <label className="group cursor-pointer">
+        <div className={`
+          relative p-4 rounded-xl border-2 transition-all duration-200 
+          ${formData.isNearStation 
+            ? 'border-purple-500 bg-purple-50 dark:bg-purple-900/20' 
+            : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500 bg-gray-50 dark:bg-gray-700/50'
+          }
+        `}>
+          <div className="flex flex-col items-center space-y-2">
+            <div className={`
+              w-8 h-8 rounded-lg flex items-center justify-center
+              ${formData.isNearStation 
+                ? 'bg-purple-500 text-white' 
+                : 'bg-gray-300 dark:bg-gray-600 text-gray-600 dark:text-gray-400'
+              }
+            `}>
+              🚊
+            </div>
+            <span className={`
+              text-sm font-medium text-center
+              ${formData.isNearStation 
+                ? 'text-purple-700 dark:text-purple-300' 
+                : 'text-gray-700 dark:text-gray-300'
+              }
+            `}>
+              역세권
+            </span>
           </div>
-          <span className={`
-            text-sm font-medium text-center
-            ${formData.isNearStation 
-              ? 'text-purple-700 dark:text-purple-300' 
-              : 'text-gray-700 dark:text-gray-300'
-            }
-          `}>
-            역세권
-          </span>
+          <input
+            type="checkbox"
+            name="isNearStation"
+            checked={formData.isNearStation || false}
+            onChange={handleChange}
+            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+          />
+          {formData.isNearStation && (
+            <div className="absolute top-2 right-2 w-5 h-5 bg-purple-500 rounded-full flex items-center justify-center">
+              <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+              </svg>
+            </div>
+          )}
         </div>
-        <input
-          type="checkbox"
-          name="isNearStation"
-          checked={formData.isNearStation || false}
-          onChange={handleChange}
-          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-        />
-        {formData.isNearStation && (
-          <div className="absolute top-2 right-2 w-5 h-5 bg-purple-500 rounded-full flex items-center justify-center">
-            <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-            </svg>
-          </div>
-        )}
-      </div>
-    </label>
+      </label>
 
-    {/* 초보 추천 */}
-    <label className="group cursor-pointer">
-      <div className={`
-        relative p-4 rounded-xl border-2 transition-all duration-200 
-        ${formData.isBeginnerFriendly 
-          ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20' 
-          : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500 bg-gray-50 dark:bg-gray-700/50'
-        }
-      `}>
-        <div className="flex flex-col items-center space-y-2">
-          <div className={`
-            w-8 h-8 rounded-lg flex items-center justify-center
-            ${formData.isBeginnerFriendly 
-              ? 'bg-emerald-500 text-white' 
-              : 'bg-gray-300 dark:bg-gray-600 text-gray-600 dark:text-gray-400'
-            }
-          `}>
-            🌱
+      {/* 초보 추천 */}
+      <label className="group cursor-pointer">
+        <div className={`
+          relative p-4 rounded-xl border-2 transition-all duration-200 
+          ${formData.isBeginnerFriendly 
+            ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20' 
+            : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500 bg-gray-50 dark:bg-gray-700/50'
+          }
+        `}>
+          <div className="flex flex-col items-center space-y-2">
+            <div className={`
+              w-8 h-8 rounded-lg flex items-center justify-center
+              ${formData.isBeginnerFriendly 
+                ? 'bg-emerald-500 text-white' 
+                : 'bg-gray-300 dark:bg-gray-600 text-gray-600 dark:text-gray-400'
+              }
+            `}>
+              🌱
+            </div>
+            <span className={`
+              text-sm font-medium text-center
+              ${formData.isBeginnerFriendly 
+                ? 'text-emerald-700 dark:text-emerald-300' 
+                : 'text-gray-700 dark:text-gray-300'
+              }
+            `}>
+              초보 추천
+            </span>
           </div>
-          <span className={`
-            text-sm font-medium text-center
-            ${formData.isBeginnerFriendly 
-              ? 'text-emerald-700 dark:text-emerald-300' 
-              : 'text-gray-700 dark:text-gray-300'
-            }
-          `}>
-            초보 추천
-          </span>
+          <input
+            type="checkbox"
+            name="isBeginnerFriendly"
+            checked={formData.isBeginnerFriendly || false}
+            onChange={handleChange}
+            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+          />
+          {formData.isBeginnerFriendly && (
+            <div className="absolute top-2 right-2 w-5 h-5 bg-emerald-500 rounded-full flex items-center justify-center">
+              <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+              </svg>
+            </div>
+          )}
         </div>
-        <input
-          type="checkbox"
-          name="isBeginnerFriendly"
-          checked={formData.isBeginnerFriendly || false}
-          onChange={handleChange}
-          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-        />
-        {formData.isBeginnerFriendly && (
-          <div className="absolute top-2 right-2 w-5 h-5 bg-emerald-500 rounded-full flex items-center justify-center">
-            <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-            </svg>
-          </div>
-        )}
-      </div>
-    </label>
+      </label>
+    </div>
   </div>
-</div>
         </div>
 
         {/* 이미지 업로드 섹션 */}

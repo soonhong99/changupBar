@@ -26,8 +26,8 @@ export const createListingSchema = z.object({
   netProfit: z.number().int().min(0),
 
   isAutomated: z.boolean().default(false),
-  hasParking: z.boolean().default(false),
-  isFirstFloor: z.boolean().default(false),
+  isGoodDeal: z.boolean().default(false).optional(),         // ⬇️ 추가
+  isSpecialDistrict: z.boolean().default(false).optional(),  // ⬇️ 추가
   isNearStation: z.boolean().default(false),
   isBeginnerFriendly: z.boolean().default(false).optional(), // ⬇️ 추가
   isWomanFriendly: z.boolean().default(false).optional(),   // ⬇️ 추가

@@ -31,7 +31,9 @@ import {
   Leaf,
   Smile,
   BadgeCheck,
-  XCircle
+  XCircle,
+  Gem,
+  Landmark,
 } from 'lucide-react';
 
 type Props = {
@@ -257,16 +259,16 @@ export default async function ListingDetailPage({ params }: Props) {
                 풀오토 시스템
               </div>
             )}
-            {listing.hasParking && (
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded-full font-medium">
-                <Car className="w-4 h-4" />
-                주차 가능
+            {listing.isGoodDeal && (
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 rounded-full font-medium">
+                <Gem className="w-4 h-4" />
+                알짜매장
               </div>
             )}
-            {listing.isFirstFloor && (
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400 rounded-full font-medium">
-                <Home className="w-4 h-4" />
-                1층 매물
+            {listing.isSpecialDistrict && (
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-sky-100 dark:bg-sky-900/30 text-sky-700 dark:text-sky-400 rounded-full font-medium">
+                <Landmark className="w-4 h-4" />
+                특수상권
               </div>
             )}
             {listing.isNearStation && (

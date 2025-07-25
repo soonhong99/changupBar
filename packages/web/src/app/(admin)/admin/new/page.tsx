@@ -36,8 +36,8 @@ const initialFormData: Omit<CreateListingInput, 'bestUntil' | 'coverImage' | 'fe
   deliveryPercent: 0,
   netProfit: 0,
   isAutomated: false,
-  hasParking: false,
-  isFirstFloor: false,
+  isGoodDeal: false, // ⬇️ 추가
+  isSpecialDistrict: false, // ⬇️ 추가
   isNearStation: false,
   description: '',
   imageUrls: [],
@@ -560,44 +560,44 @@ export default function NewListingPage() {
       </div>
     </label>
 
-    {/* 주차 가능 */}
+    {/* 알짜 매장 */}
     <label className="group cursor-pointer">
       <div className={`
         relative p-4 rounded-xl border-2 transition-all duration-200 
-        ${formData.hasParking 
-          ? 'border-green-500 bg-green-50 dark:bg-green-900/20' 
+        ${formData.isGoodDeal 
+          ? 'border-amber-500 bg-amber-50 dark:bg-amber-900/20' 
           : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500 bg-gray-50 dark:bg-gray-700/50'
         }
       `}>
         <div className="flex flex-col items-center space-y-2">
           <div className={`
             w-8 h-8 rounded-lg flex items-center justify-center
-            ${formData.hasParking 
-              ? 'bg-green-500 text-white' 
+            ${formData.isGoodDeal 
+              ? 'bg-amber-500 text-white' 
               : 'bg-gray-300 dark:bg-gray-600 text-gray-600 dark:text-gray-400'
             }
           `}>
-            🚗
+            💰
           </div>
           <span className={`
             text-sm font-medium text-center
-            ${formData.hasParking 
-              ? 'text-green-700 dark:text-green-300' 
+            ${formData.isGoodDeal 
+              ? 'text-amber-700 dark:text-amber-300' 
               : 'text-gray-700 dark:text-gray-300'
             }
           `}>
-            주차 가능
+            알짜매장
           </span>
         </div>
         <input
           type="checkbox"
-          name="hasParking"
-          checked={formData.hasParking || false}
+          name="isGoodDeal"
+          checked={formData.isGoodDeal || false}
           onChange={handleChange}
           className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
         />
-        {formData.hasParking && (
-          <div className="absolute top-2 right-2 w-5 h-5 bg-green-500 rounded-full flex items-center justify-center">
+        {formData.isGoodDeal && (
+          <div className="absolute top-2 right-2 w-5 h-5 bg-amber-500 rounded-full flex items-center justify-center">
             <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
             </svg>
@@ -652,11 +652,11 @@ export default function NewListingPage() {
       </div>
     </label>
 
-    {/* 1층 매물 */}
+    {/* 특수상권 */}
     <label className="group cursor-pointer">
       <div className={`
         relative p-4 rounded-xl border-2 transition-all duration-200 
-        ${formData.isFirstFloor 
+        ${formData.isSpecialDistrict 
           ? 'border-orange-500 bg-orange-50 dark:bg-orange-900/20' 
           : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500 bg-gray-50 dark:bg-gray-700/50'
         }
@@ -664,7 +664,7 @@ export default function NewListingPage() {
         <div className="flex flex-col items-center space-y-2">
           <div className={`
             w-8 h-8 rounded-lg flex items-center justify-center
-            ${formData.isFirstFloor 
+            ${formData.isSpecialDistrict 
               ? 'bg-orange-500 text-white' 
               : 'bg-gray-300 dark:bg-gray-600 text-gray-600 dark:text-gray-400'
             }
@@ -673,22 +673,22 @@ export default function NewListingPage() {
           </div>
           <span className={`
             text-sm font-medium text-center
-            ${formData.isFirstFloor 
+            ${formData.isSpecialDistrict 
               ? 'text-orange-700 dark:text-orange-300' 
               : 'text-gray-700 dark:text-gray-300'
             }
           `}>
-            1층 매물
+            특수상권
           </span>
         </div>
         <input
           type="checkbox"
-          name="isFirstFloor"
-          checked={formData.isFirstFloor || false}
+          name="isSpecialDistrict"
+          checked={formData.isSpecialDistrict || false}
           onChange={handleChange}
           className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
         />
-        {formData.isFirstFloor && (
+        {formData.isSpecialDistrict && (
           <div className="absolute top-2 right-2 w-5 h-5 bg-orange-500 rounded-full flex items-center justify-center">
             <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />

@@ -55,8 +55,8 @@ model Listing {
 
   // --- 상세 특성 (Boolean) ---
   isAutomated   Boolean @default(false) // 풀오토 여부
-  hasParking    Boolean @default(false) // 주차 가능 여부
-  isFirstFloor  Boolean @default(false) // 1층 매물 여부
+  isGoodDeal         Boolean @default(false) // ⬇️ 추가: 알짜매장 여부
+  isSpecialDistrict  Boolean @default(false) // ⬇️ 추가: 특수상권 여부
   isNearStation Boolean @default(false) // 역세권 여부
   isBeginnerFriendly Boolean @default(false) // ⬇️ 추가: 초보 추천
   isWomanFriendly   Boolean @default(false) // ⬇️ 추가: 여성 추천
