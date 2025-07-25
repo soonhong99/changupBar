@@ -2,7 +2,6 @@
 import { getFeaturedListings } from "@/lib/api";
 import ListingCard from "@/components/ui/ListingCard";
 import CountdownTimer from "@/components/ui/CountdownTimer";
-import FeaturedListingsCarousel from "@/components/ui/FeaturedListingsCarousel";
 
 export const revalidate = 0;
 
@@ -17,26 +16,133 @@ export default async function HomePage() {
 
   return (
     <main className="bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 min-h-screen">
+
+      {/* 1. 히어로 섹션 (배경 이미지 추가) */}
+      <section className="relative text-center py-20">
+        {/* 배경 이미지: public 폴더에 저장한 이미지 경로를 사용합니다. */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center" 
+          style={{ backgroundImage: `url('/images/main/hero-bg.png')` }}
+        >
+          {/* 개선된 오버레이: 그라데이션과 조절 가능한 투명도 */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/30 to-black/70"></div>
+          {/* 추가 텍스트 배경을 위한 중앙 영역 강조 */}
+          <div className="absolute inset-0 bg-radial-gradient from-transparent via-black/30 to-transparent"></div>
+        </div>
+
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+          {/* 메인 타이틀 - 텍스트 섀도우와 배경 추가 */}
+          <div className="relative">
+            {/* 텍스트 뒤 반투명 배경 */}
+            <div className="absolute inset-0 bg-white/5 backdrop-blur-[2px] rounded-3xl border border-white/20 shadow-2xl"></div>
+            
+            <div className="relative py-8 px-6">
+              <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl">
+                <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent drop-shadow-lg">
+                  스마트창업 한정
+                </span>
+                <br />
+                <span className="text-white drop-shadow-lg">특급 매물 공개</span>
+              </h1>
+              <p className="mt-4 max-w-2xl mx-auto text-xl text-white drop-shadow-lg">
+                스마트창업은 <strong className="text-yellow-300 drop-shadow-sm">국내 유일 AI 분석 리포트</strong>와 함께합니다
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+      
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
 
-        {/* --- 상단 헤더 및 소개 --- */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-orange-500 to-red-500 text-white text-sm font-semibold mb-6 shadow-lg">
-            <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-            </svg>
-            전문가 검증 완료
+        {/* --- 혜택 강조 섹션 --- */}
+        <div className="mb-12 grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* 100% 실매물 보장 카드 */}
+          <div className="bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-xl shadow-lg overflow-hidden">
+            {/* 이미지 영역 - 1:1 비율 */}
+            <div className="relative w-full aspect-square">
+              <img 
+                src="/images/main/real-property.png" 
+                alt="실매물 보장" 
+                className="w-full h-full object-cover"
+              />
+              {/* 이미지 위 그라데이션 오버레이 */}
+              {/* <div className="absolute inset-0 bg-gradient-to-t from-blue-600/80 to-transparent"></div> */}
+              
+              {/* 이미지 위에 아이콘 */}
+              <div className="absolute top-4 left-4">
+                <div className="bg-white/20 backdrop-blur-sm rounded-full p-3">
+                  <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+            
+            {/* 텍스트 영역 */}
+            <div className="p-6">
+              <h3 className="text-lg font-semibold mb-2">100% 실매물 보장</h3>
+              <p className="text-blue-100">매출 증빙 및 AI 매출 예측까지</p>
+            </div>
           </div>
-          <h1 className="text-4xl font-extrabold tracking-tight text-gray-900 dark:text-gray-100 sm:text-5xl md:text-6xl">
-            <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              스마트창업 한정
-            </span>
-            <br />
-            특급 매물 공개
-          </h1>
-          <p className="mt-4 max-w-2xl mx-auto text-xl text-gray-600 dark:text-gray-400">
-            스마트창업에서 검증된 명품 매물들을 <strong className="text-blue-600 dark:text-blue-400">최저권리금</strong>으로 만날수있는 기회
-          </p>
+          
+          {/* 전담 컨설턴트 카드 */}
+          <div className="bg-gradient-to-br from-purple-500 to-purple-600 text-white rounded-xl shadow-lg overflow-hidden">
+            {/* 이미지 영역 - 1:1 비율 */}
+            <div className="relative w-full aspect-square">
+              <img 
+                src="/images/main/consultant.png" 
+                alt="전담 컨설턴트" 
+                className="w-full h-full object-cover"
+              />
+              {/* 이미지 위 그라데이션 오버레이 */}
+              {/* <div className="absolute inset-0 bg-gradient-to-t from-purple-600/80 to-transparent"></div> */}
+              
+              {/* 이미지 위에 아이콘 */}
+              <div className="absolute top-4 left-4">
+                <div className="bg-white/20 backdrop-blur-sm rounded-full p-3">
+                  <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z" clipRule="evenodd" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+            
+            {/* 텍스트 영역 */}
+            <div className="p-6">
+              <h3 className="text-lg font-semibold mb-2">전담 컨설턴트</h3>
+              <p className="text-purple-100">창업 전문가 1:1 맞춤 컨설팅 제공</p>
+            </div>
+          </div>
+
+          {/* 후처리 완벽 카드 */}
+          <div className="bg-gradient-to-br from-green-500 to-green-600 text-white rounded-xl shadow-lg overflow-hidden">
+            {/* 이미지 영역 - 1:1 비율 */}
+            <div className="relative w-full aspect-square">
+              <img 
+                src="/images/main/afterservice.png" 
+                alt="애프터서비스" 
+                className="w-full h-full object-cover"
+              />
+              {/* 이미지 위 그라데이션 오버레이 */}
+              {/* <div className="absolute inset-0 bg-gradient-to-t from-green-600/80 to-transparent"></div> */}
+              
+              {/* 이미지 위에 아이콘 */}
+              <div className="absolute top-4 left-4">
+                <div className="bg-white/20 backdrop-blur-sm rounded-full p-3">
+                  <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+            
+            {/* 텍스트 영역 */}
+            <div className="p-6">
+              <h3 className="text-lg font-semibold mb-2">후처리도 완벽하게</h3>
+              <p className="text-green-100">명품 애프터서비스 제공</p>
+            </div>
+          </div>
         </div>
 
         {/* --- 긴급성 강조 배너 --- */}
@@ -64,39 +170,6 @@ export default async function HomePage() {
                 비밀 보장
               </span>
             </div>
-          </div>
-        </div>
-
-        {/* --- 혜택 강조 섹션 --- */}
-        <div className="mb-12 grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-gradient-to-br from-blue-500 to-blue-600 text-white p-6 rounded-xl shadow-lg">
-            <div className="flex items-center mb-3">
-            <svg className="w-8 h-8 mr-3" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-            </svg>
-              <h3 className="text-lg font-semibold">100% 실매물 보장</h3>
-            </div>
-            <p className="text-blue-100">허위 매물 0%, 모든 매물 현장 확인 완료</p>
-          </div>
-          
-          <div className="bg-gradient-to-br from-green-500 to-green-600 text-white p-6 rounded-xl shadow-lg">
-            <div className="flex items-center mb-3">
-              <svg className="w-8 h-8 mr-3" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
-              </svg>
-              <h3 className="text-lg font-semibold">수수료 50% 할인</h3>
-            </div>
-            <p className="text-green-100">이번 주 계약 시 중개수수료 대폭 할인</p>
-          </div>
-          
-          <div className="bg-gradient-to-br from-purple-500 to-purple-600 text-white p-6 rounded-xl shadow-lg">
-            <div className="flex items-center mb-3">
-              <svg className="w-8 h-8 mr-3" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z" clipRule="evenodd" />
-              </svg>
-              <h3 className="text-lg font-semibold">전담 컨설턴트</h3>
-            </div>
-            <p className="text-purple-100">창업 전문가 1:1 맞춤 컨설팅 제공</p>
           </div>
         </div>
 
@@ -287,14 +360,6 @@ export default async function HomePage() {
                   </svg>
                   <span>스마트 전화 상담</span>
                 </a>
-                
-                {/* <button className="group bg-yellow-400 text-gray-900 px-8 py-4 rounded-full font-semibold hover:bg-yellow-300 transition-all duration-300 shadow-lg flex items-center gap-3">
-                  <svg className="w-5 h-5 group-hover:rotate-12 transition-transform" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M5 5a3 3 0 015-2.236A3 3 0 0114.83 6H16a2 2 0 110 4h-5V9a1 1 0 10-2 0v1H4a2 2 0 110-4h1.17C5.06 5.687 5 5.35 5 5zm4 1V5a1 1 0 10-1 1h1zm3 0a1 1 0 10-1-1v1h1z" clipRule="evenodd" />
-                    <path d="M9 11H3v5a2 2 0 002 2h4v-7zM11 18h4a2 2 0 002-2v-5h-6v7z" />
-                  </svg>
-                  <span>혜택 자세히 보기</span>
-                </button> */}
               </div>
 
               {/* 추가 안내 문구 */}

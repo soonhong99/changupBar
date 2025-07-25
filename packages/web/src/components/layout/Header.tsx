@@ -214,7 +214,7 @@ export default function Header() {
       <div className="bg-gradient-to-r from-red-500 to-orange-500 text-white text-center py-1.5 sm:py-2">
         <div className="flex items-center justify-center space-x-1 sm:space-x-2 text-xs sm:text-sm font-medium px-2">
           <span>🔥</span>
-          <span className="truncate">7월 한정! 컨설팅 무료 + 권리금 100만원↓</span>
+          <span className="truncate">7월 한정! 컨설팅 무료 + AI 분석 리포트 1건 무료 제공</span>
           <span>🔥</span>
         </div>
       </div>

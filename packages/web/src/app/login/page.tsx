@@ -107,7 +107,7 @@ function LoginForm() {
           onClick={handleKakaoLogin}
           className="w-full flex justify-center items-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-gray-800 bg-[#FEE500] hover:bg-yellow-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500"
         >
-          카카오톡으로 로그인
+          카카오톡 로그인/간편 가입
         </button>
 
         <div className="text-center mt-6">
