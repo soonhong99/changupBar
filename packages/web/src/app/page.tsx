@@ -49,7 +49,7 @@ export default async function HomePage() {
                 </span>
               </h1>
               <p className="mt-4 max-w-2xl mx-auto text-xl text-white drop-shadow-lg">
-                스마트창업은 <strong className="text-yellow-300 drop-shadow-sm">국내 유일 AI 분석 리포트</strong>와 함께합니다
+                <strong className="text-yellow-300 drop-shadow-sm">국내 유일 AI 분석 리포트</strong>로 스마트하게 창업하세요
               </p>
             </div>
           </div>
