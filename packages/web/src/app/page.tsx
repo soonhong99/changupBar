@@ -58,89 +58,119 @@ export default async function HomePage() {
         {/* --- 혜택 강조 섹션 --- */}
         <div className="mb-12 grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* 100% 실매물 보장 카드 */}
-          <div className="bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-xl shadow-lg overflow-hidden">
-            {/* 이미지 영역 - 1:1 비율 */}
-            <div className="relative w-full aspect-square">
-              <img 
-                src="/images/main/real-property.png" 
-                alt="실매물 보장" 
-                className="w-full h-full object-cover"
-              />
-              {/* 이미지 위 그라데이션 오버레이 */}
-              {/* <div className="absolute inset-0 bg-gradient-to-t from-blue-600/80 to-transparent"></div> */}
-              
-              {/* 이미지 위에 아이콘 */}
-              <div className="absolute top-4 left-4">
-                <div className="bg-white/20 backdrop-blur-sm rounded-full p-3">
-                  <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-                </div>
+          <div className="bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-xl shadow-md transition transform hover:scale-105 hover:shadow-lg">
+            {/* 모바일용 UI - md 이하에서만 보임 */}
+            <div className="block md:hidden p-6">
+              <div className="flex items-center mb-3">
+                <svg className="w-8 h-8 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                </svg>
+                <h3 className="text-lg font-semibold">100% 실매물 보장</h3>
               </div>
-            </div>
-            
-            {/* 텍스트 영역 */}
-            <div className="p-6">
-              <h3 className="text-lg font-semibold mb-2">100% 실매물 보장</h3>
               <p className="text-blue-100">매출 증빙 및 AI 매출 예측까지</p>
             </div>
-          </div>
-          
-          {/* 전담 컨설턴트 카드 */}
-          <div className="bg-gradient-to-br from-purple-500 to-purple-600 text-white rounded-xl shadow-lg overflow-hidden">
-            {/* 이미지 영역 - 1:1 비율 */}
-            <div className="relative w-full aspect-square">
-              <img 
-                src="/images/main/consultant.png" 
-                alt="전담 컨설턴트" 
-                className="w-full h-full object-cover"
-              />
-              {/* 이미지 위 그라데이션 오버레이 */}
-              {/* <div className="absolute inset-0 bg-gradient-to-t from-purple-600/80 to-transparent"></div> */}
-              
-              {/* 이미지 위에 아이콘 */}
-              <div className="absolute top-4 left-4">
-                <div className="bg-white/20 backdrop-blur-sm rounded-full p-3">
-                  <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z" clipRule="evenodd" />
-                  </svg>
+
+            {/* 데스크톱용 UI - md 이상에서만 보임 */}
+            <div className="hidden md:block overflow-hidden">
+              {/* 이미지 영역 - 1:1 비율 */}
+              <div className="relative w-full aspect-square">
+                <img
+                  src="/images/main/real-property.png"
+                  alt="실매물 보장"
+                  className="w-full h-full object-cover"
+                />
+                {/* 이미지 위에 아이콘 */}
+                <div className="absolute top-4 left-4">
+                  <div className="bg-white/20 backdrop-blur-sm rounded-full p-3">
+                    <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </div>
                 </div>
               </div>
-            </div>
-            
-            {/* 텍스트 영역 */}
-            <div className="p-6">
-              <h3 className="text-lg font-semibold mb-2">전담 컨설턴트</h3>
-              <p className="text-purple-100">창업 전문가 1:1 맞춤 컨설팅 제공</p>
+              {/* 텍스트 영역 */}
+              <div className="p-6">
+                <h3 className="text-lg font-semibold mb-2">100% 실매물 보장</h3>
+                <p className="text-blue-100">매출 증빙 및 AI 매출 예측까지</p>
+              </div>
             </div>
           </div>
 
-          {/* 후처리 완벽 카드 */}
-          <div className="bg-gradient-to-br from-green-500 to-green-600 text-white rounded-xl shadow-lg overflow-hidden">
-            {/* 이미지 영역 - 1:1 비율 */}
-            <div className="relative w-full aspect-square">
-              <img 
-                src="/images/main/afterservice.png" 
-                alt="애프터서비스" 
-                className="w-full h-full object-cover"
-              />
-              {/* 이미지 위 그라데이션 오버레이 */}
-              {/* <div className="absolute inset-0 bg-gradient-to-t from-green-600/80 to-transparent"></div> */}
-              
-              {/* 이미지 위에 아이콘 */}
-              <div className="absolute top-4 left-4">
-                <div className="bg-white/20 backdrop-blur-sm rounded-full p-3">
-                  <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
-                  </svg>
+          {/* 전담 컨설턴트 카드 */}
+          <div className="bg-gradient-to-br from-purple-500 to-purple-600 text-white rounded-xl shadow-md transition transform hover:scale-105 hover:shadow-lg">
+            {/* 모바일용 UI - md 이하에서만 보임 */}
+            <div className="block md:hidden p-6">
+              <div className="flex items-center mb-3">
+                <svg className="w-8 h-8 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z" clipRule="evenodd" />
+                </svg>
+                <h3 className="text-lg font-semibold">전담 컨설턴트</h3>
+              </div>
+              <p className="text-purple-100">창업 전문가 1:1 맞춤 컨설팅 제공</p>
+            </div>
+
+            {/* 데스크톱용 UI - md 이상에서만 보임 */}
+            <div className="hidden md:block overflow-hidden">
+              {/* 이미지 영역 - 1:1 비율 */}
+              <div className="relative w-full aspect-square">
+                <img
+                  src="/images/main/consultant.png"
+                  alt="전담 컨설턴트"
+                  className="w-full h-full object-cover"
+                />
+                {/* 이미지 위에 아이콘 */}
+                <div className="absolute top-4 left-4">
+                  <div className="bg-white/20 backdrop-blur-sm rounded-full p-3">
+                    <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z" clipRule="evenodd" />
+                    </svg>
+                  </div>
                 </div>
               </div>
+              {/* 텍스트 영역 */}
+              <div className="p-6">
+                <h3 className="text-lg font-semibold mb-2">전담 컨설턴트</h3>
+                <p className="text-purple-100">창업 전문가 1:1 맞춤 컨설팅 제공</p>
+              </div>
             </div>
-            
-            {/* 텍스트 영역 */}
-            <div className="p-6">
-              <h3 className="text-lg font-semibold mb-2">후처리도 완벽하게</h3>
+          </div>
+
+          {/* 완벽한 후처리 카드 */}
+          <div className="bg-gradient-to-br from-green-500 to-green-600 text-white rounded-xl shadow-md transition transform hover:scale-105 hover:shadow-lg">
+            {/* 모바일용 UI - md 이하에서만 보임 */}
+            <div className="block md:hidden p-6">
+              <div className="flex items-center mb-3">
+                <svg className="w-8 h-8 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+                </svg>
+                <h3 className="text-lg font-semibold">완벽한 후처리</h3>
+              </div>
               <p className="text-green-100">명품 애프터서비스 제공</p>
+            </div>
+
+            {/* 데스크톱용 UI - md 이상에서만 보임 */}
+            <div className="hidden md:block overflow-hidden">
+              {/* 이미지 영역 - 1:1 비율 */}
+              <div className="relative w-full aspect-square">
+                <img
+                  src="/images/main/afterservice.png"
+                  alt="애프터서비스"
+                  className="w-full h-full object-cover"
+                />
+                {/* 이미지 위에 아이콘 */}
+                <div className="absolute top-4 left-4">
+                  <div className="bg-white/20 backdrop-blur-sm rounded-full p-3">
+                    <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+              {/* 텍스트 영역 */}
+              <div className="p-6">
+                <h3 className="text-lg font-semibold mb-2">완벽한 후처리</h3>
+                <p className="text-green-100">명품 애프터서비스 제공</p>
+              </div>
             </div>
           </div>
         </div>
