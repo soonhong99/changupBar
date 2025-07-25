@@ -39,11 +39,14 @@ export default async function HomePage() {
             
             <div className="relative py-8 px-6">
               <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl">
-                <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent drop-shadow-lg">
-                  스마트창업 한정
+                {/* <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent drop-shadow-lg"> */}
+                <span className="text-white drop-shadow-lg">
+                  언제나 함께하는
                 </span>
                 <br />
-                <span className="text-white drop-shadow-lg">특급 매물 공개</span>
+                <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent drop-shadow-lg">
+                  스마트창업
+                </span>
               </h1>
               <p className="mt-4 max-w-2xl mx-auto text-xl text-white drop-shadow-lg">
                 스마트창업은 <strong className="text-yellow-300 drop-shadow-sm">국내 유일 AI 분석 리포트</strong>와 함께합니다
