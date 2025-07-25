@@ -35,11 +35,11 @@ export default async function HomePage() {
           {/* 메인 타이틀 - 텍스트 섀도우와 배경 추가 */}
           <div className="relative">
             {/* 텍스트 뒤 반투명 배경 */}
-            <div className="absolute inset-0 bg-white/5 backdrop-blur-[2px] rounded-3xl border border-white/20 shadow-2xl"></div>
+            <div className="absolute inset-0 bg-white/10 backdrop-blur-[2px] rounded-3xl border border-white/20 shadow-2xl"></div>
             
             <div className="relative py-8 px-6">
               <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl">
-                <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent drop-shadow-lg">
+                <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent drop-shadow-lg">
                   스마트창업 한정
                 </span>
                 <br />
