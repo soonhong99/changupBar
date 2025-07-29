@@ -33,6 +33,6 @@ app.use(cookieParser());
 // API 라우터 연결
 app.use('/api/v1', apiRouter);
 
-app.listen(PORT, () => {
+app.listen(Number(PORT), '0.0.0.0', () => {
   console.log(`✅ API Server is running at http://localhost:${PORT}`);
 });

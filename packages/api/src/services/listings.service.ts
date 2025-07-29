@@ -233,7 +233,7 @@ async function getFeatured(role?: UserRole) {
     where.status = 'PUBLISHED';
   }
 
-  console.log('Prisma Query WHERE clause:', JSON.stringify(where, null, 2));
+  // console.log('Prisma Query WHERE clause:', JSON.stringify(where, null, 2));
 
   const featuredListings = await prisma.listing.findMany({
     where,
