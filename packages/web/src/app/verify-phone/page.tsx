@@ -49,8 +49,27 @@ export default function VerifyPhonePage() {
   };
 
   useEffect(() => {
-    if (!isAuthLoading && (!user || user.phone)) {
-      router.replace('/');
+    // 디버깅을 위한 로그 추가
+    console.log('Verify Phone Debug:', {
+      isAuthLoading,
+      user: user ? {
+        id: user.id,
+        phone: user.phone,
+        phoneType: typeof user.phone,
+        phoneLength: user.phone?.length
+      } : null
+    });
+  
+    if (!isAuthLoading) {
+      // 사용자가 없거나, phone이 유효한 값이 있으면 홈으로
+      if (!user || (user.phone && user.phone.length >= 10)) {
+        console.log('Redirecting to home because:', {
+          noUser: !user,
+          hasValidPhone: user?.phone && user.phone.length >= 10
+        });
+        router.replace('/');
+      }
+      // phone이 없거나, 빈 문자열이거나, 유효하지 않은 경우는 페이지에 머무름
     }
   }, [user, isAuthLoading, router]);
 
