@@ -1,6 +1,7 @@
 // packages/api/src/services/users.service.ts
 
 import prisma from '../config/prisma.js';
+import { UpdateUserInput } from '../../../shared/src/schemas/user.schema.js';
 
 async function getLikedListings(userId: string) {
   const userWithLikes = await prisma.user.findUnique({
@@ -29,6 +30,16 @@ async function getLikedListings(userId: string) {
   return userWithLikes.likedListings;
 }
 
+async function updateMyPhone(userId: string, data: UpdateUserInput) {
+  return prisma.user.update({
+    where: { id: userId },
+    data: {
+      phone: data.phone,
+    },
+  });
+}
+
 export default {
   getLikedListings,
+  updateMyPhone, // ⬅️ 추가
 };

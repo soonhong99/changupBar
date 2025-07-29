@@ -14,6 +14,7 @@
     "@prisma/client": "^6.10.1"
   },
   "dependencies": {
-    "coolsms-node-sdk": "^2.1.0"
+    "coolsms-node-sdk": "^2.1.0",
+    "react-icons": "^5.5.0"
   }
 }

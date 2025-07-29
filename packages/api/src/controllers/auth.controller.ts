@@ -3,7 +3,9 @@
 import { Request, Response } from 'express';
 import { ZodError } from 'zod';
 import { registerUserSchema, loginUserSchema} from '../../../shared/dist/src/schemas/auth.schema.js';
+import { updateUserSchema } from '../../../shared/src/schemas/user.schema.js';
 import authService from '../services/auth.service.js';
+import prisma from '../config/prisma.js'; // ⬅️ prisma import 추가
 
 async function register(req: Request, res: Response) {
   try {
@@ -65,12 +67,37 @@ async function handleKakaoCallback(req: Request, res: Response) {
   }
 
   try {
-    const { token } = await authService.handleKakaoLogin(code);
-    // 로그인 성공 시, 토큰을 쿠키에 저장하고 프론트엔드 메인 페이지로 리다이렉트
-    res.redirect(`${process.env.FRONTEND_URL}/auth/social?token=${token}`);
+    // ⬇️ 서비스 로직을 컨트롤러로 일부 가져와서 수정합니다.
+    // 1. 카카오로부터 사용자 정보 가져오기
+    const kakaoUserInfo = await authService.getKakaoUserInfo(code); // (이 함수는 아래 서비스에서 새로 만듭니다)
+
+    // 2. 우리 DB에서 사용자 찾기 또는 생성
+    const user = await prisma.user.upsert({
+      where: { providerId: kakaoUserInfo.kakaoId },
+      update: {}, // 이미 있으면 아무것도 변경 안 함
+      create: {
+        provider: 'KAKAO',
+        providerId: kakaoUserInfo.kakaoId,
+        email: kakaoUserInfo.email,
+        name: kakaoUserInfo.name,
+        password: null,
+      },
+    });
+
+    // 3. 우리 서비스의 JWT 발급
+    const token = authService.generateServiceToken(user);
+
+    // 4. 사용자의 전화번호 유무에 따라 다른 주소로 리다이렉트
+    if (!user.phone) {
+      // 전화번호가 없으면, 인증이 필요하다는 신호와 함께 리다이렉트
+      res.redirect(`${process.env.FRONTEND_URL}/auth/social?token=${token}&action=verify_phone`);
+    } else {
+      // 전화번호가 이미 있으면, 바로 메인 페이지로
+      res.redirect(`${process.env.FRONTEND_URL}/auth/social?token=${token}`);
+    }
   } catch (error) {
     console.error('카카오 로그인 실패:', error);
-    res.redirect('${process.env.FRONTEND_URL}/login?error=kakao-login-failed');
+    res.redirect(`${process.env.FRONTEND_URL}/login?error=kakao-login-failed`);
   }
 }
 

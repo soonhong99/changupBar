@@ -8,19 +8,20 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "outDir": "./dist",
-    "rootDir": "./src",
-    "composite": false,
-    "declaration": false,
-    "declarationMap": false,
-    "sourceMap": false,
-    "incremental": false
+    "rootDir": ".",  // ⬅️ "./src"에서 "."로 변경
+    "composite": true,
+    "declaration": true,
+    "baseUrl": ".",
+    "paths": {
+      "shared/*": ["../shared/src/*"]
+    }
   },
   "include": [
-    "src/**/*.ts"
+    "src/**/*.ts",
+    "../shared/src/**/*.ts"  // ⬅️ shared 파일들도 포함
   ],
-  "exclude": [
-    "node_modules",
-    "**/*.spec.ts",
-    "**/*.test.ts"
+  "exclude": ["node_modules"],
+  "references": [
+    { "path": "../shared" }
   ]
 }

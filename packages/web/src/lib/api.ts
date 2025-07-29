@@ -318,3 +318,16 @@ export async function markConsultationsAsContacted(token: string) {
     headers: { 'Authorization': `Bearer ${token}` }
   });
 }
+
+export async function updateMyPhone(phone: string, token: string) {
+  const res = await fetch(`${API_URL}/users/me`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    },
+    body: JSON.stringify({ phone }),
+  });
+  if (!res.ok) throw new Error('핸드폰 번호 등록에 실패했습니다.');
+  return res.json();
+}

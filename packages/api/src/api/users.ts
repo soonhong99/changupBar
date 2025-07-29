@@ -1,3 +1,5 @@
+// packages/api/src/api/users.ts
+
 import { Router } from 'express';
 import { authMiddleware } from '../middlewares/auth.middleware.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
@@ -11,5 +13,8 @@ router.get(
   authMiddleware,
   asyncHandler(usersController.getMyLikedListings)
 );
+
+// PATCH /api/v1/users/me - 내 정보(핸드폰 번호) 업데이트
+router.patch('/me', authMiddleware, asyncHandler(usersController.updateMyPhone)); // ⬅️ 추가
 
 export default router;

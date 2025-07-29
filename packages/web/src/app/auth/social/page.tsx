@@ -1,3 +1,5 @@
+// packages/web/src/app/auth/social/page.tsx
+
 "use client";
 
 import { useEffect, Suspense } from 'react'; // ⬅️ Suspense 추가
@@ -12,9 +14,18 @@ function SocialCallbackComponent() {
 
   useEffect(() => {
     const token = searchParams.get('token');
+    const action = searchParams.get('action'); // ⬅️ action 파라미터를 가져옵니다.
+
     if (token) {
       login(token);
-      router.replace('/');
+      // ⬇️ action 값에 따라 다른 경로로 보냅니다.
+      if (action === 'verify_phone') {
+        // 핸드폰 인증이 필요하면, /verify-phone 페이지로 이동
+        router.replace('/verify-phone');
+      } else {
+        // 핸드폰 인증이 필요 없으면, 메인 페이지로 이동
+        router.replace('/');
+      }
     } else {
       router.replace('/login?error=social-login-failed');
     }
