@@ -88,7 +88,7 @@ async function handleKakaoCallback(req: Request, res: Response) {
     const token = authService.generateServiceToken(user);
 
     // 4. 사용자의 전화번호 유무에 따라 다른 주소로 리다이렉트
-    if (!user.phone) {
+    if (!user.phone || (user.phone && user.phone.length < 10)) {
       // 전화번호가 없으면, 인증이 필요하다는 신호와 함께 리다이렉트
       res.redirect(`${process.env.FRONTEND_URL}/auth/social?token=${token}&action=verify_phone`);
     } else {
