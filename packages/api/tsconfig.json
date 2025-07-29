@@ -1,20 +1,26 @@
-// packages/api/tsconfig.json
 {
   "compilerOptions": {
-    "target": "ESNext",
-    "module": "NodeNext", // ⬅️ 'ESNext'에서 'NodeNext'로 수정
-    "moduleResolution": "NodeNext", // ⬅️ 'node'에서 'NodeNext'로 수정
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "outDir": "./dist",
     "rootDir": "./src",
-    "composite": true
+    "composite": false,
+    "declaration": false,
+    "declarationMap": false,
+    "sourceMap": false,
+    "incremental": false
   },
-  "include": ["src/**/*.ts"],
-  "exclude": ["node_modules"],
-  "references": [
-    { "path": "../shared" }
+  "include": [
+    "src/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/*.spec.ts",
+    "**/*.test.ts"
   ]
 }
