@@ -18,6 +18,9 @@ router.get('/most-viewed', asyncHandler(listingController.getMostViewedListing))
 // GET /api/v1/listings/stats - 매물 통계 조회
 router.get('/stats', asyncHandler(listingController.getStats)); // ⬅️ 추가
 
+// GET /api/v1/listings/random-by-category - 카테고리별 랜덤 매물 조회
+router.get('/random-by-category', asyncHandler(listingController.getRandomByCategory)); // ⬅️ 추가
+
 // 2. 그 다음 일반적인 목록 경로를 조회합니다.
 // GET /api/v1/listings - 모든 매물 조회
 router.get('/', optionalAuthMiddleware, asyncHandler(listingController.getAllListings));
@@ -51,8 +54,5 @@ router.patch(
   authMiddleware,
   asyncHandler(listingController.updateListing)
 );
-
-// GET /api/v1/listings/random-by-category - 카테고리별 랜덤 매물 조회
-router.get('/random-by-category', asyncHandler(listingController.getRandomByCategory)); // ⬅️ 추가
 
 export default router;
