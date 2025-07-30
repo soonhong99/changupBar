@@ -2,7 +2,7 @@
 
 import { Request, Response } from 'express';
 import { ZodError } from 'zod';
-import { registerUserSchema, loginUserSchema} from '../../../shared/dist/src/schemas/auth.schema.js';
+import { registerUserSchema, loginUserSchema} from 'shared/schemas/auth.schema.js';
 import { updateUserSchema } from '../../../shared/src/schemas/user.schema.js';
 import authService from '../services/auth.service.js';
 import prisma from '../config/prisma.js'; // ⬅️ prisma import 추가

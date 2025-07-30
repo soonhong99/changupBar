@@ -2,7 +2,7 @@
 
 import { Request, Response } from 'express';
 import usersService from '../services/users.service.js';
-import { updateUserSchema } from '../../../shared/src/schemas/user.schema.js';
+import { updateUserSchema } from 'shared/schemas/user.schema.js';
 
 async function getMyLikedListings(req: Request, res: Response) {
   const userId = req.user!.userId;

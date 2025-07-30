@@ -1,7 +1,7 @@
 // packages/api/src/services/consultations.service.ts
 
 import prisma from '../config/prisma.js';
-import { CreateConsultationInput } from '../../../shared/dist/src/schemas/consultation.schema.js';
+import { CreateConsultationInput } from 'shared/schemas/consultation.schema.js';
 
 async function create(data: CreateConsultationInput) {
   const newRequest = await prisma.consultationRequest.create({
