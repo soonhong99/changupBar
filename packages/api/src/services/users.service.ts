@@ -1,7 +1,7 @@
 // packages/api/src/services/users.service.ts
 
 import prisma from '../config/prisma.js';
-import { UpdateUserInput } from 'shared/schemas/user.schema.js';
+import { UpdateUserInput } from 'shared/schemas/user.schema';
 
 async function getLikedListings(userId: string) {
   const userWithLikes = await prisma.user.findUnique({

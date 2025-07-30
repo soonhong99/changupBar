@@ -2,7 +2,7 @@
 
 import { Request, Response } from 'express';
 import { ZodError } from 'zod';
-import { createListingSchema, updateListingSchema } from 'shared/schemas/listing.schema.js';
+import { createListingSchema, updateListingSchema } from 'shared/schemas/listing.schema';
 import listingService from '../services/listings.service.js';
 
 async function createListing(req: Request, res: Response) {
