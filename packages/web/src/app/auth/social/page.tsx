@@ -21,7 +21,10 @@ function SocialCallbackComponent() {
       // ⬇️ action 값에 따라 다른 경로로 보냅니다.
       if (action === 'verify_phone') {
         // 핸드폰 인증이 필요하면, /verify-phone 페이지로 이동
-        router.replace('/verify-phone');
+        console.log('[SocialCallback] Redirecting to /verify-phone');
+        // router.replace 대신 router.push 사용
+        router.push('/verify-phone');
+        // router.replace('/verify-phone');
       } else {
         // 핸드폰 인증이 필요 없으면, 메인 페이지로 이동
         router.replace('/');

@@ -50,15 +50,15 @@ export default function VerifyPhonePage() {
 
   useEffect(() => {
     // 디버깅을 위한 로그 추가
-    console.log('Verify Phone Debug:', {
-      isAuthLoading,
-      user: user ? {
-        id: user.id,
-        phone: user.phone,
-        phoneType: typeof user.phone,
-        phoneLength: user.phone?.length
-      } : null
-    });
+    // console.log('Verify Phone Debug:', {
+    //   isAuthLoading,
+    //   user: user ? {
+    //     id: user.id,
+    //     phone: user.phone,
+    //     phoneType: typeof user.phone,
+    //     phoneLength: user.phone?.length
+    //   } : null
+    // });
   
     if (!isAuthLoading) {
       // 사용자가 없거나, phone이 유효한 값이 있으면 홈으로

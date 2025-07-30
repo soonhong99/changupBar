@@ -8,6 +8,11 @@ export async function middleware(request: NextRequest) {
 
   console.log(`[미들웨어 실행] 경로: ${pathname}`); // ⬅️ 1. 실행 확인
 
+  // if (pathname === '/verify-phone') {
+  //   console.log('[verify-phone 경로] 미들웨어 통과 - 리다이렉트 없음');
+  //   return NextResponse.next();
+  // }
+
   if (pathname.startsWith('/admin')) {
     console.log('[어드민 경로 접근 감지]'); // ⬅️ 2. 경로 감지 확인
 
