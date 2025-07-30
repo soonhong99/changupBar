@@ -328,6 +328,11 @@ export async function updateMyPhone(phone: string, token: string) {
     },
     body: JSON.stringify({ phone }),
   });
-  if (!res.ok) throw new Error('핸드폰 번호 등록에 실패했습니다.');
+  if (!res.ok) {
+    // 백엔드로부터 받은 에러 메시지를 읽습니다.
+    const errorData = await res.json(); 
+    // 읽은 메시지를 사용하여 에러를 발생시킵니다.
+    throw new Error(errorData.message || '핸드폰 번호 등록에 실패했습니다.'); 
+  }
   return res.json();
 }

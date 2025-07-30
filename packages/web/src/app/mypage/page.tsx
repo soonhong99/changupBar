@@ -88,11 +88,11 @@ export default function MyPage() {
                   <h4 className="font-medium text-gray-800 dark:text-gray-200 mb-2">💰 가격 변동 알림</h4>
                   <div className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
                     <TrendingDown className="w-4 h-4 text-green-600" />
-                    <span>권리금이 <span className="font-semibold text-green-600">인하</span>되면 즉시 알림</span>
+                    <span>권리금이 <span className="font-semibold text-green-600">인하</span>될 시 즉시 알림</span>
                   </div>
                   <div className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
                     <TrendingUp className="w-4 h-4 text-red-600" />
-                    <span>권리금이 <span className="font-semibold text-red-600">인상</span>되면 즉시 알림</span>
+                    <span>권리금이 <span className="font-semibold text-red-600">인상</span>될 시 즉시 알림</span>
                   </div>
                 </div>
                 

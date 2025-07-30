@@ -16,6 +16,7 @@ interface AuthContextType {
   toggleLike: (listingId: string) => void; // ⬅️ 추가: 찜 상태 토글 함수
   user: User | null; // ⬅️ user 상태 추가
   isLoading: boolean;
+  refreshUser: () => Promise<void>; // ⬅️ 추가
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -83,6 +84,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     });
   };
 
+  const refreshUser = useCallback(async () => {
+    // 1. "나 지금부터 중요한 정보 업데이트 시작할게!" 라고 알립니다.
+    setIsLoading(true);
+    
+    const currentToken = localStorage.getItem('authToken');
+    if (currentToken) {
+      // 2. 실제 업데이트 작업을 기다립니다.
+      await fetchUserAndLikes(currentToken);
+    }
+    
+    // 3. "이제 모든 정보 업데이트 끝났어!" 라고 알립니다.
+    setIsLoading(false);
+  }, [fetchUserAndLikes]);
+
   const value = {
     token,
     user,
@@ -92,6 +107,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     likedIds, // ⬅️ 추가
     toggleLike, // ⬅️ 추가
     isLoading,
+    refreshUser
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

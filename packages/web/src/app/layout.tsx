@@ -7,6 +7,7 @@ import { AuthProvider } from "@/context/AuthContext"; // ⬅️ AuthProvider imp
 import Header from "@/components/layout/Header";
 import Script from 'next/script'; // ⬅️ Script 컴포넌트 import
 import Footer from "@/components/layout/Footer"; // ⬅️ Footer import
+import AuthGuard from "@/components/auth/AuthGuard"; // ⬅️ AuthGuard import
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -27,9 +28,11 @@ export default function RootLayout({
     <html lang="ko">
       <body className={inter.className}>
         <AuthProvider>
+        <AuthGuard>
           <Header />
           <main>{children}</main>
           <Footer /> {/* ⬅️ Footer를 main 태그 다음에 추가 */}
+        </AuthGuard>
         </AuthProvider>
         {/* ⬇️ Daum 우편번호 서비스를 위한 스크립트를 추가합니다. */}
         <Script

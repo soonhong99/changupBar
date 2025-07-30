@@ -74,6 +74,7 @@ async function getMe(userId: string) {
       role: true,
       createdAt: true,
       updatedAt: true,
+      phone: true,
     }
   });
   if (!user) {

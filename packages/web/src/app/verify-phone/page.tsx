@@ -22,8 +22,10 @@ export default function VerifyPhonePage() {
   const [timer, setTimer] = useState(180); // 3분 = 180초
   const [isTimerRunning, setIsTimerRunning] = useState(false);
 
-  const { user, token, isLoading: isAuthLoading } = useAuth();
+  const { user, token, isLoading: isAuthLoading, refreshUser } = useAuth();
   const router = useRouter();
+
+  const [isVerificationComplete, setIsVerificationComplete] = useState(false);
 
   // 타이머 로직
   useEffect(() => {
@@ -48,28 +50,26 @@ export default function VerifyPhonePage() {
     return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
   };
 
+  // ⬇️ 2. 이 useEffect는 오직 '인증이 완료된 후'에만 페이지 이동을 책임집니다.
   useEffect(() => {
-    // 디버깅을 위한 로그 추가
-    // console.log('Verify Phone Debug:', {
-    //   isAuthLoading,
-    //   user: user ? {
-    //     id: user.id,
-    //     phone: user.phone,
-    //     phoneType: typeof user.phone,
-    //     phoneLength: user.phone?.length
-    //   } : null
-    // });
-  
+    console.log("useEffect 체크:", { 
+      isAuthLoading, 
+      isVerificationComplete, 
+      user 
+    });
+    // isAuthLoading이 끝났고, 인증이 완료되었고, 유저 정보에 전화번호가 반영되었다면
+    if (!isAuthLoading && isVerificationComplete && user?.phone) {
+      alert('핸드폰 인증이 완료되었습니다. 서비스를 계속 이용하실 수 있습니다.');
+      router.push('/');
+    }
+  }, [isAuthLoading, isVerificationComplete, user, router]);
+
+  // ⬇️ 이 useEffect는 '잘못된 접근'을 막는 역할만 합니다.
+  useEffect(() => {
     if (!isAuthLoading) {
-      // 사용자가 없거나, phone이 유효한 값이 있으면 홈으로
       if (!user || (user.phone && user.phone.length >= 10)) {
-        console.log('Redirecting to home because:', {
-          noUser: !user,
-          hasValidPhone: user?.phone && user.phone.length >= 10
-        });
         router.replace('/');
       }
-      // phone이 없거나, 빈 문자열이거나, 유효하지 않은 경우는 페이지에 머무름
     }
   }, [user, isAuthLoading, router]);
 
@@ -81,7 +81,7 @@ export default function VerifyPhonePage() {
     }
     setIsSending(true);
     try {
-      // await sendSmsVerification(phone);
+      await sendSmsVerification(phone);
       console.log(`${phone}으로 인증번호 발송 요청 (재전송: ${isResend})`);
       await new Promise(resolve => setTimeout(resolve, 1000));
       
@@ -108,17 +108,39 @@ export default function VerifyPhonePage() {
         return;
     }
     setIsSubmitting(true);
+    // --- 1단계: 인증번호 확인 먼저 수행 ---
     try {
-    //   await checkSmsVerification(phone, verificationCode);
-    //   await updateMyPhone(phone, token);
-      console.log(`${phone} / ${verificationCode} 인증 시도`);
-      await new Promise(resolve => setTimeout(resolve, 1500)); 
-      
-      alert('핸드폰 인증이 완료되었습니다. 서비스를 계속 이용하실 수 있습니다.');
-      router.push('/');
+      console.log(`1단계: ${phone} / ${verificationCode} 인증번호 확인 시도`);
+      await checkSmsVerification(phone, verificationCode);
     } catch (err) {
-      setError('인증에 실패했습니다. 인증번호를 확인하고 다시 시도해주세요.');
-      console.error(err);
+      // 인증번호 확인 실패 시
+      setError('인증번호가 올바르지 않습니다. 다시 확인해주세요.');
+      setIsSubmitting(false); // 로딩 상태 해제
+      console.error('인증번호 확인 실패:', err);
+      return; // 여기서 함수를 완전히 종료
+    }
+
+    // --- 2단계: 인증번호 확인 성공 후, 핸드폰 번호 등록 시도 ---
+    try {
+      console.log('2단계: 핸드폰 번호 등록 시도');
+      await updateMyPhone(phone, token);
+      await refreshUser();
+      // 수동으로 alert를 띄우고 페이지를 이동시키는 대신,
+      // '인증 완료' 상태만 true로 변경해줍니다.
+      setIsVerificationComplete(true);
+      // await new Promise(resolve => setTimeout(resolve, 1000));
+      // alert('핸드폰 인증이 완료되었습니다. 서비스를 계속 이용하실 수 있습니다.');
+      // router.push('/');
+
+    } catch (err) {
+      // 핸드폰 번호 등록 실패 시 (이때 중복 에러가 발생할 수 있음)
+      if (err instanceof Error && err.message.includes('이미 사용 중인')) {
+        setError('이미 저장된 전화번호입니다. 다른 전화번호를 입력해주세요.');
+      } else {
+        // 그 외 서버 문제 등
+        setError('핸드폰 번호 등록에 실패했습니다. 잠시 후 다시 시도해주세요.');
+      }
+      console.error('핸드폰 번호 등록 실패:', err);
     } finally {
       setIsSubmitting(false);
     }
