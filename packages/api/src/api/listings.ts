@@ -52,4 +52,7 @@ router.patch(
   asyncHandler(listingController.updateListing)
 );
 
+// GET /api/v1/listings/random-by-category - 카테고리별 랜덤 매물 조회
+router.get('/random-by-category', asyncHandler(listingController.getRandomByCategory)); // ⬅️ 추가
+
 export default router;

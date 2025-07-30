@@ -99,6 +99,11 @@ async function getMostViewedListing(req: Request, res: Response) {
   res.status(200).json(listing);
 }
 
+async function getRandomByCategory(req: Request, res: Response) {
+  const listings = await listingService.getRandomByCategory();
+  res.status(200).json(listings);
+}
+
 export default {
   createListing,
   getListingById,
@@ -109,4 +114,5 @@ export default {
   getFeaturedListings,
   getStats,
   getMostViewedListing,
+  getRandomByCategory,
 };

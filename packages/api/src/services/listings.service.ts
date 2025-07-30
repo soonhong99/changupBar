@@ -5,10 +5,12 @@ import { CreateListingInput } from 'shared/schemas/listing.schema';
 import { Prisma, UserRole } from '@prisma/client'; // Prisma 타입을 가져옵니다.
 import { UpdateListingInput } from 'shared/schemas/listing.schema'; // ⬅️ 추가
 import notificationService from './notification.service.js'; // ⬅️ 추가
-import { getContractStatusName } from '../utils/helpers.js'; // ⬅️ 추가
 
 let cachedMostViewed: { listing: any; timestamp: number } | null = null;
-const CACHE_DURATION = 5 * 60 * 1000; // 5분 (밀리초 단위)ㄴ
+const CACHE_DURATION = 5 * 60 * 1000; // 5분 (밀리초 단위)
+
+let cachedRandomByCategory: { data: any; timestamp: number } | null = null;
+const RANDOM_CACHE_DURATION = 12 * 60 * 60 * 1000; // 12시간
 
 /**
  * 신규 매물을 데이터베이스에 생성합니다.
@@ -36,30 +38,32 @@ async function create(data: CreateListingInput) {
 async function getById(id: string) {
   console.log(`✅ Service: ID(${id})로 매물 조회를 시작합니다.`);
 
-  const [_, listing] = await prisma.$transaction([
-    prisma.listing.update({
-      where: { id },
-      data: {
-        viewCount: {
-          increment: 1, // ⬅️ 조회수를 1 증가시킵니다.
-        },
+  // 1. 먼저 매물이 존재하는지, _count와 함께 조회합니다.
+  const listing = await prisma.listing.findUnique({
+    where: { id },
+    include: {
+      _count: {
+        select: { likedBy: true },
       },
-    }),
-    prisma.listing.findUnique({
-      where: { id },
-      // ⬇️ 찜한 사람 수를 함께 조회하도록 include 추가
-      include: {
-        _count: {
-          select: { likedBy: true },
-        },
-      },
-    }),
-  ]);
+    },
+  });
 
+  // 2. 매물이 존재하지 않으면, 즉시 null을 반환하여 에러를 막습니다.
   if (!listing) {
     console.log(`⚠️ Service: ID(${id})에 해당하는 매물을 찾지 못했습니다.`);
     return null;
   }
+
+  // 3. 매물이 존재하는 것이 확인된 후에, 조회수를 1 증가시킵니다. (이 작업은 백그라운드에서 실행되도록 await를 사용하지 않아도 괜찮습니다.)
+  prisma.listing.update({
+    where: { id },
+    data: {
+      viewCount: {
+        increment: 1,
+      },
+    },
+  }).catch(err => console.error(`Failed to increment view count for ${id}`, err)); // 혹시 모를 에러는 로그만 남깁니다.
+
 
   console.log(`✅ Service: ID(${id}) 매물 조회 완료!`);
   return listing;
@@ -327,6 +331,51 @@ async function getMostViewed() {
   return mostViewedListing;
 }
 
+/**
+ * 각 대분류별로 판매중인 매물을 3개씩 랜덤으로 추천합니다. (12시간 캐시)
+ */
+async function getRandomByCategory() {
+  const now = Date.now();
+
+  // 1. 캐시가 유효하면 캐시된 데이터를 반환
+  if (cachedRandomByCategory && now - cachedRandomByCategory.timestamp < RANDOM_CACHE_DURATION) {
+    console.log('✅ Service: 캐시된 "카테고리별 랜덤 매물"을 반환합니다.');
+    return cachedRandomByCategory.data;
+  }
+
+  console.log('✅ Service: DB에서 새로운 "카테고리별 랜덤 매물"을 조회합니다.');
+  const mainCategories = [
+    '휴게음식점', '일반음식점', '주류/치킨/호프', 
+    '오락/스포츠/관리', '판매/소매'
+  ];
+
+  const results: { [key: string]: any[] } = {};
+
+  for (const category of mainCategories) {
+    // 2. 각 카테고리별로 판매중인 모든 매물을 가져옵니다.
+    const listings = await prisma.listing.findMany({
+      where: {
+        mainCategory: category,
+        status: 'PUBLISHED',
+        contractStatus: 'AVAILABLE',
+      },
+      include: { _count: { select: { likedBy: true } } },
+    });
+
+    // 3. 가져온 매물을 랜덤으로 섞은 뒤, 최대 3개만 선택합니다. (Fisher-Yates shuffle 알고리즘)
+    for (let i = listings.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [listings[i], listings[j]] = [listings[j], listings[i]];
+    }
+    results[category] = listings.slice(0, 3);
+  }
+
+  // 4. 새로운 데이터로 캐시를 업데이트
+  cachedRandomByCategory = { data: results, timestamp: now };
+
+  return results;
+}
+
 
 // 서비스 객체로 내보내기
 export default {
@@ -339,4 +388,5 @@ export default {
   getFeatured,
   getStats,
   getMostViewed,
+  getRandomByCategory,
 };

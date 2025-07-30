@@ -336,3 +336,16 @@ export async function updateMyPhone(phone: string, token: string) {
   }
   return res.json();
 }
+
+export async function getRandomListingsByCategory(): Promise<Record<string, ListingWithCounts[]>> {
+  try {
+    const res = await fetch(`${API_URL}/listings/random-by-category`, { cache: 'no-store' });
+    if (!res.ok) {
+      throw new Error('카테고리별 추천 매물을 불러오는데 실패했습니다.');
+    }
+    return res.json();
+  } catch (error) {
+    console.error(error);
+    return {}; // 에러 발생 시 빈 객체 반환
+  }
+}

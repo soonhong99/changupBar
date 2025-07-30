@@ -1,18 +1,28 @@
 // packages/web/src/app/page.tsx
-import { getFeaturedListings } from "@/lib/api";
+import { getFeaturedListings, getRandomListingsByCategory } from "@/lib/api";
 import ListingCard from "@/components/ui/ListingCard";
 import CountdownTimer from "@/components/ui/CountdownTimer";
+import Link from 'next/link'; // ⬅️ Link 추가
+import { ArrowRight } from "lucide-react"; // ⬅️ ArrowRight 아이콘 추가
 
 export const revalidate = 0;
 
 export default async function HomePage() {
-  const featuredListings = await getFeaturedListings();
+  const [featuredListings, randomListingsByCategory] = await Promise.all([
+    getFeaturedListings(),
+    getRandomListingsByCategory()
+  ]);
+
   // 대표 매물 중 가장 먼저 마감되는 매물의 종료 시간을 찾습니다.
   const countdownTarget = featuredListings.length > 0
     ? featuredListings.reduce((earliest, current) => 
         new Date(earliest.featuredEnd!) < new Date(current.featuredEnd!) ? earliest : current
       ).featuredEnd!.toString()
     : new Date().toISOString();
+  
+  const categoryOrder = [
+    '휴게음식점', '일반음식점', '주류/치킨/호프', '오락/스포츠/관리', '판매/소매'
+  ];
 
   return (
     <main className="bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 min-h-screen">
@@ -259,6 +269,32 @@ export default async function HomePage() {
               ))}
             </div>
           )}
+        </div>
+
+        <div className="space-y-16">
+          {categoryOrder.map(category => {
+            const listings = randomListingsByCategory[category] || [];
+            if (listings.length === 0) return null; // 해당 카테고리에 매물이 없으면 섹션 자체를 표시하지 않음
+
+            return (
+              <section key={category}>
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
+                    {category} <span className="text-blue-600">추천 매물</span>
+                  </h2>
+                  <Link href={`/search?mainCategory=${encodeURIComponent(category)}`} className="group flex items-center text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300">
+                    <span>더보기</span>
+                    <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
+                  </Link>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                  {listings.map((listing) => (
+                    <ListingCard key={listing.id} listing={listing} />
+                  ))}
+                </div>
+              </section>
+            );
+          })}
         </div>
         
         {/* --- 찜하기 기능 가이드 섹션 --- */}
