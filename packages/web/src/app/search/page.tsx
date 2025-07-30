@@ -2,7 +2,8 @@
 
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
+import { useSearchParams } from 'next/navigation'; // ⬅️ useSearchParams 추가
 import { getAllListings, ListingFilter, getListingStats, ListingWithCounts, getMostViewedListing } from "@/lib/api";
 import ListingCard from "@/components/ui/ListingCard";
 import { administrativeDistricts } from '@/data/districts'; // ⬅️ 여기서 import
@@ -10,14 +11,21 @@ import Modal from "@/components/ui/Modal"; // ⬅️ Modal import
 import ConsultationForm from "@/components/forms/ConsultationForm";
 import { categories, mainCategories } from '@/data/categories'; // ⬅️ 카테고리 데이터 import
 
-export default function SearchPage() {
+// 1. 실제 로직을 수행하는 부분을 별도의 컴포넌트로 분리합니다.
+function SearchComponent() {
+  const searchParams = useSearchParams();
   const [listings, setListings] = useState<ListingWithCounts[]>([]);
+  
+  // ⬇️ useState의 초기값을 searchParams에서 가져옵니다.
   const [filters, setFilters] = useState<ListingFilter>({
-    sido: '',
-    sigungu: '',
-    mainCategory: '',
-    subCategory: '',
+    mainCategory: searchParams.get('mainCategory') || '',
+    subCategory: searchParams.get('subCategory') || '',
+    sido: searchParams.get('sido') || '',
+    sigungu: searchParams.get('sigungu') || '',
+    sortBy: (searchParams.get('sortBy') as ListingFilter['sortBy']) || 'createdAt',
+    order: (searchParams.get('order') as ListingFilter['order']) || 'desc',
   });
+
   const [isLoading, setIsLoading] = useState(true);
   const [stats, setStats] = useState({ totalCount: 0, newThisWeekCount: 0 }); // ⬅️ 통계 상태 추가
   const [mostViewed, setMostViewed] = useState<ListingWithCounts | null>(null); // ⬅️ 추가
@@ -93,11 +101,10 @@ export default function SearchPage() {
   // --- 공통 스타일 클래스 ---
   const labelClasses = "block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2";
   const selectClasses = "w-full rounded-lg shadow-sm bg-white dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 text-gray-900 dark:text-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 px-4 py-3";
-
   const hasActiveFilters = Object.values(filters).some(value => value !== undefined && value !== '');
 
   return (
-    <main className="bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 min-h-screen">
+    <>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         
         {/* --- 상단 헤더 및 소개 --- */}
@@ -433,6 +440,22 @@ export default function SearchPage() {
       >
         <ConsultationForm onSuccess={() => setIsModalOpen(false)} />
       </Modal>
+    </>
+  );
+}
+
+export default function SearchPage() {
+  const loadingUI = (
+    <div className="flex items-center justify-center min-h-screen">
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+    </div>
+  );
+  
+  return (
+    <main className="bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 min-h-screen">
+      <Suspense fallback={loadingUI}>
+        <SearchComponent />
+      </Suspense>
     </main>
   );
 }
