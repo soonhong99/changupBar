@@ -54,12 +54,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     bootstrapAuth();
   }, [fetchUserAndLikes]); // ⬅️ 의존성 배열에 fetchUserAndLikes 추가
 
-  const login = useCallback((newToken: string) => {
+  const login = useCallback(async (newToken: string) => {
+    setIsLoading(true); // 1. 로그인 시작 시 로딩 상태로 변경
     setToken(newToken);
     localStorage.setItem('authToken', newToken);
     Cookies.set('authToken', newToken, { expires: 1 });
-    fetchUserAndLikes(newToken);
-  }, [fetchUserAndLikes]); // ⬅️ 의존성 배열에 fetchUserAndLikes 추가
+    await fetchUserAndLikes(newToken); // 2. 사용자 정보 로딩이 끝날 때까지 기다림
+    setIsLoading(false); // 3. 모든 작업이 끝난 후 로딩 상태 해제
+  }, [fetchUserAndLikes]);
 
   const logout = useCallback(() => {
     setToken(null);
