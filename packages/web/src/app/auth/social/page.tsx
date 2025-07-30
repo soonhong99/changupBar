@@ -2,7 +2,7 @@
 
 "use client";
 
-import { useEffect, Suspense } from 'react'; // ⬅️ Suspense 추가
+import { useEffect, Suspense, useState } from 'react'; // ⬅️ Suspense 추가
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 
@@ -11,28 +11,31 @@ function SocialCallbackComponent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { login } = useAuth();
+  const [isProcessing, setIsProcessing] = useState(false); // ⬅️ 추가: 처리 중 상태
 
   useEffect(() => {
+    // 1. 이미 처리 중이면, 다시 실행하지 않고 즉시 종료합니다.
+    if (isProcessing) return;
+
     const token = searchParams.get('token');
-    const action = searchParams.get('action'); // ⬅️ action 파라미터를 가져옵니다.
+    const action = searchParams.get('action');
 
     if (token) {
-      login(token);
-      // ⬇️ action 값에 따라 다른 경로로 보냅니다.
-      if (action === 'verify_phone') {
-        // 핸드폰 인증이 필요하면, /verify-phone 페이지로 이동
-        console.log('[SocialCallback] Redirecting to /verify-phone');
-        // router.replace 대신 router.push 사용
-        router.push('/verify-phone');
-        // router.replace('/verify-phone');
-      } else {
-        // 핸드폰 인증이 필요 없으면, 메인 페이지로 이동
-        router.replace('/');
-      }
+      // 2. 작업을 시작하기 전에 "처리 중"으로 상태를 변경합니다.
+      setIsProcessing(true);
+
+      // 3. login 함수가 완전히 끝난 후(.then)에 페이지를 이동합니다.
+      login(token).then(() => {
+        if (action === 'verify_phone') {
+          router.replace('/verify-phone');
+        } else {
+          router.replace('/');
+        }
+      });
     } else {
       router.replace('/login?error=social-login-failed');
     }
-  }, [searchParams, login, router]);
+  }, [searchParams, login, router, isProcessing]); // ⬅️ isProcessing 추가
 
   return null; // 로직 처리 중에는 아무것도 표시하지 않음
 }

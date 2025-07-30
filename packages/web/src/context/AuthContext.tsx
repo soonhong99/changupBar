@@ -9,7 +9,7 @@ import { getMyLikedListings, getMe } from '@/lib/api'; // ⬅️ 추가
 
 interface AuthContextType {
   token: string | null;
-  login: (token: string) => void;
+  login: (token: string) => Promise<void>;
   logout: () => void;
   isLoggedIn: boolean;
   likedIds: Set<string>; // ⬅️ 추가: 찜한 ID 목록 (Set으로 중복 방지 및 빠른 조회)
