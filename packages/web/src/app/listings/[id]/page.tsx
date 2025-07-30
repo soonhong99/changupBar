@@ -480,7 +480,7 @@ export default async function ListingDetailPage({ params }: Props) {
             </div>
 
             {/* CTA 버튼 */}
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-100 dark:border-gray-700 sticky top-4">
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-100 dark:border-gray-700 sticky top-26">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
                 관심있으신가요?
               </h3>

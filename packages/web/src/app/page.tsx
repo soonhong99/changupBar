@@ -298,7 +298,7 @@ export default async function HomePage() {
         </div>
         
         {/* --- 찜하기 기능 가이드 섹션 --- */}
-        <div className="mb-12 bg-gradient-to-r from-pink-50 to-purple-50 dark:from-gray-800 dark:to-gray-700 rounded-2xl p-8 border border-pink-200 dark:border-pink-800">
+        <div className="mt-12 mb-12 bg-gradient-to-r from-pink-50 to-purple-50 dark:from-gray-800 dark:to-gray-700 rounded-2xl p-8 border border-pink-200 dark:border-pink-800">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-6">
               <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-pink-500 to-red-500 rounded-full mb-4 shadow-lg">
@@ -347,21 +347,42 @@ export default async function HomePage() {
                   <h4 className="font-semibold text-gray-900 dark:text-gray-100">즉시 알림</h4>
                 </div>
                 <p className="text-gray-600 dark:text-gray-400 text-sm">
-                  변동사항 발생 시 <span className="font-semibold text-blue-600">문자</span> 또는 <span className="font-semibold text-yellow-600">카카오톡</span>으로 즉시 알려드립니다
+                  변동사항 발생 시 <span className="font-semibold text-blue-600">문자 메세지</span>로 즉시 알려드립니다
                 </p>
               </div>
             </div>
 
-            <div className="mt-6 bg-gradient-to-r from-yellow-100 to-orange-100 dark:from-yellow-900/20 dark:to-orange-900/20 rounded-lg p-4 border border-yellow-300 dark:border-yellow-700">
-              <div className="flex items-start">
-                <svg className="w-5 h-5 text-yellow-600 dark:text-yellow-400 mt-0.5 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
-                </svg>
-                <div className="text-sm">
-                  <p className="text-yellow-800 dark:text-yellow-200 font-semibold mb-1">💡 알고 계셨나요?</p>
-                  <p className="text-yellow-700 dark:text-yellow-300">
-                    찜한 매물의 권리금이 <span className="font-bold">10% 이상 낮아지면</span> 즉시 알림을 받을 수 있어, 최적의 타이밍에 계약할 수 있습니다!
-                  </p>
+            {/* 수정된 섹션 */}
+            <div className="mt-6 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-lg p-6 border border-blue-200 dark:border-blue-700">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="flex items-start">
+                  <div className="text-2xl mr-3">💡</div>
+                  <div className="text-sm">
+                    <p className="text-blue-800 dark:text-blue-200 font-semibold mb-1">나만의 창업 스토리</p>
+                    <p className="text-blue-700 dark:text-blue-300">
+                      수익성도 중요하지만, 내가 정말 하고 싶은 일인지, 나의 가치관과 맞는지가 더 중요합니다
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start">
+                  <div className="text-2xl mr-3">🎯</div>
+                  <div className="text-sm">
+                    <p className="text-blue-800 dark:text-blue-200 font-semibold mb-1">창업 유형 매칭</p>
+                    <p className="text-blue-700 dark:text-blue-300">
+                      카페, 음식점, 소매점 등 다양한 업종 중 나의 성향과 꿈에 맞는 창업 유형을 찾아보세요
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start">
+                  <div className="text-2xl mr-3">🌟</div>
+                  <div className="text-sm">
+                    <p className="text-blue-800 dark:text-blue-200 font-semibold mb-1">지속가능한 성공</p>
+                    <p className="text-blue-700 dark:text-blue-300">
+                      열정과 비전이 있을 때 어려움도 극복하고 진정한 성공을 이룰 수 있습니다
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -392,8 +413,8 @@ export default async function HomePage() {
                 </div>
                 
                 <h3 className="text-3xl font-bold mb-4">
-                  지금 바로 스마트창업과 상담하고<br />
-                  <span className="text-yellow-300">실질적인 혜택</span>을 받아보세요!
+                  꿈과 소망을 공유하고<br />
+                  <span className="text-yellow-300">실질적인 발판</span>을 만들어보세요
                 </h3>
               </div>
 
@@ -401,20 +422,20 @@ export default async function HomePage() {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
                 <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
                   <div className="text-3xl mb-2">📊</div>
-                  <h4 className="font-semibold mb-1">상권 분석 보고서</h4>
-                  <p className="text-sm text-blue-100">희망 지역의 유동인구, 매출 데이터 무료 제공</p>
+                  <h4 className="font-semibold mb-1">성공을 위한 데이터 나침반</h4>
+                  <p className="text-sm text-blue-100">뜬구름 잡는 예측이 아닌, 객관적인 데이터 제공</p>
                 </div>
                 
                 <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
                   <div className="text-3xl mb-2">💼</div>
-                  <h4 className="font-semibold mb-1">권리금 협상 대행</h4>
-                  <p className="text-sm text-blue-100">전문가가 최대 20% 권리금 절감 협상</p>
+                  <h4 className="font-semibold mb-1">가장 현실적인 성공의 시작점</h4>
+                  <p className="text-sm text-blue-100">무리한 투자가 아닌 가장 안전하고 확실한 길 안내</p>
                 </div>
                 
                 <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
                   <div className="text-3xl mb-2">📋</div>
-                  <h4 className="font-semibold mb-1">계약서 검토 서비스</h4>
-                  <p className="text-sm text-blue-100">변호사 자문 계약서 무료 검토 (3만원 상당)</p>
+                  <h4 className="font-semibold mb-1">든든한 동행, 성공적인 시작</h4>
+                  <p className="text-sm text-blue-100">상담부터 계약까지, 곁에서 함께 걷겠습니다</p>
                 </div>
               </div>
 
@@ -437,7 +458,7 @@ export default async function HomePage() {
                   <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                   </svg>
-                  <span>상담 후 계약 시 적용</span>
+                  <span>남녀노소 누구나</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
