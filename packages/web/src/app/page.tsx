@@ -51,7 +51,7 @@ export default async function HomePage() {
               <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl">
                 {/* <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent drop-shadow-lg"> */}
                 <span className="text-white drop-shadow-lg">
-                  언제나 함께하는
+                  함께 성장하는
                 </span>
                 <br />
                 <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent drop-shadow-lg">
@@ -59,7 +59,7 @@ export default async function HomePage() {
                 </span>
               </h1>
               <p className="mt-4 max-w-2xl mx-auto text-xl text-white drop-shadow-lg">
-                <strong className="text-yellow-300 drop-shadow-sm">국내 유일 AI 분석 리포트</strong>로 스마트하게 창업하세요
+                여러분의 <strong className="text-yellow-300 drop-shadow-sm">꿈을 현실로</strong> 만들어 드리겠습니다.
               </p>
             </div>
           </div>
@@ -78,9 +78,9 @@ export default async function HomePage() {
                 <svg className="w-8 h-8 mr-3" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                 </svg>
-                <h3 className="text-lg font-semibold">100% 실매물 보장</h3>
+                <h3 className="text-lg font-semibold">100% 맞춤형 사업 추천</h3>
               </div>
-              <p className="text-blue-100">매출 증빙 및 AI 매출 예측까지</p>
+              <p className="text-blue-100">지속가능한 수익성인지 철저히 검증합니다</p>
             </div>
 
             {/* 데스크톱용 UI - md 이상에서만 보임 */}
@@ -103,8 +103,8 @@ export default async function HomePage() {
               </div>
               {/* 텍스트 영역 */}
               <div className="p-6">
-                <h3 className="text-lg font-semibold mb-2">100% 실매물 보장</h3>
-                <p className="text-blue-100">매출 증빙 및 AI 매출 예측까지</p>
+                <h3 className="text-lg font-semibold mb-2">100% 맞춤형 사업 추천</h3>
+                <p className="text-blue-100">지속가능한 수익성인지 철저히 검증합니다</p>
               </div>
             </div>
           </div>
@@ -117,9 +117,9 @@ export default async function HomePage() {
                 <svg className="w-8 h-8 mr-3" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z" clipRule="evenodd" />
                 </svg>
-                <h3 className="text-lg font-semibold">전담 컨설턴트</h3>
+                <h3 className="text-lg font-semibold">당신만을 위한 컨설팅</h3>
               </div>
-              <p className="text-purple-100">창업 전문가 1:1 맞춤 컨설팅 제공</p>
+              <p className="text-purple-100">미래 계획까지 함께 고민합니다</p>
             </div>
 
             {/* 데스크톱용 UI - md 이상에서만 보임 */}
@@ -142,8 +142,8 @@ export default async function HomePage() {
               </div>
               {/* 텍스트 영역 */}
               <div className="p-6">
-                <h3 className="text-lg font-semibold mb-2">전담 컨설턴트</h3>
-                <p className="text-purple-100">창업 전문가 1:1 맞춤 컨설팅 제공</p>
+                <h3 className="text-lg font-semibold mb-2">당신만을 위한 컨설팅</h3>
+                <p className="text-purple-100">미래 계획까지 함께 고민합니다</p>
               </div>
             </div>
           </div>
@@ -158,7 +158,7 @@ export default async function HomePage() {
                 </svg>
                 <h3 className="text-lg font-semibold">완벽한 후처리</h3>
               </div>
-              <p className="text-green-100">명품 애프터서비스 제공</p>
+              <p className="text-green-100">계약 후에도 3개월간 함께합니다</p>
             </div>
 
             {/* 데스크톱용 UI - md 이상에서만 보임 */}
@@ -182,7 +182,7 @@ export default async function HomePage() {
               {/* 텍스트 영역 */}
               <div className="p-6">
                 <h3 className="text-lg font-semibold mb-2">완벽한 후처리</h3>
-                <p className="text-green-100">명품 애프터서비스 제공</p>
+                <p className="text-green-100">계약 후에도 3개월간 함께합니다</p>
               </div>
             </div>
           </div>
