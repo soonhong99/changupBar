@@ -1,123 +1,143 @@
 // packages/web/src/app/process/page.tsx
-import { MessageSquare, Search, Handshake, FileText, Key, Award, ArrowRight, CheckCircle, Clock, Shield, Users, TrendingUp, HeartHandshake } from 'lucide-react';
+import { MessageSquare, Search, Handshake, FileText, Key, Award, ArrowRight, CheckCircle, Clock, Shield, Users, TrendingUp, HeartHandshake, Phone, Store, Calculator, Calendar, Building, Briefcase, DollarSign, Star, MapPin, Coffee } from 'lucide-react';
 import Link from 'next/link';
-import ProcessCTA from '@/components/process/ProcessCTA'; // ⬅️ 새로 만든 컴포넌트 import
+import ProcessCTA from '@/components/process/ProcessCTA';
+import FAQSection from '@/components/process/FAQSection'; // 분리된 클라이언트 컴포넌트
 
-// 각 단계를 위한 데이터 배열
+// 창업 절차 단계
 const processSteps = [
   {
     step: "01",
-    title: "1:1 맞춤 상담",
-    subtitle: "당신의 창업 꿈을 들어드립니다",
-    description: "전문 컨설턴트가 예산, 지역, 업종 등 창업 희망 조건을 상세하게 파악하고 최적의 방향을 제시합니다.",
-    icon: <MessageSquare className="w-8 h-8 text-white" />,
-    details: [
-      "투자 가능한 예산 범위 상담",
-      "희망 지역 및 상권 파악",
-      "선호 업종 및 운영 경험 체크",
-      "창업 목표 및 비전 설정"
-    ],
-    duration: "약 1-2시간",
-    tip: "💡 준비하면 좋은 것: 예산 계획, 희망 지역 리스트, 관심 업종"
+    title: "전화 및 문자상담",
+    description: "기본 상담을 통해 예산, 선호 업종, 지역 등 상담",
+    icon: <Phone className="w-6 h-6" />,
+    color: "from-blue-500 to-blue-600"
   },
   {
-    step: "02",
-    title: "상권 분석 및 매물 추천",
-    subtitle: "데이터로 검증된 명품 매물만 엄선",
-    description: "빅데이터 기반의 철저한 상권 분석을 통해, 조건에 맞는 최적의 매물을 선별하여 추천드립니다.",
-    icon: <Search className="w-8 h-8 text-white" />,
-    details: [
-      "유동인구, 매출 데이터 분석",
-      "경쟁업체 현황 파악",
-      "상권 성장성 예측",
-      "맞춤형 매물 3-5개 선별"
-    ],
-    duration: "약 3-5일",
-    tip: "💡 알아두세요: 모든 분석 자료는 투명하게 공개됩니다"
+    step: "02", 
+    title: "아이템 선정",
+    description: "창업자의 예산, 성향, 상권분석, 매출확인 등 디테일한 상황파악",
+    icon: <Search className="w-6 h-6" />,
+    color: "from-purple-500 to-purple-600"
   },
   {
     step: "03",
-    title: "현장 방문 및 권리 분석",
-    subtitle: "눈으로 직접 확인하고 검증합니다",
-    description: "추천 매물을 직접 방문하여 시설, 운영 상태를 확인하고, 권리금 및 계약 조건의 타당성을 검토합니다.",
-    icon: <Handshake className="w-8 h-8 text-white" />,
-    details: [
-      "매장 시설 및 인테리어 점검",
-      "실제 매출 및 수익성 검증",
-      "권리금 적정성 평가",
-      "임대 조건 및 특약사항 확인"
-    ],
-    duration: "매물당 2-3시간",
-    tip: "💡 체크포인트: 주방시설, 화장실, 환기시설, 주차장 등"
+    title: "내방상담 혹은 현장미팅",
+    description: "실시간 매출인증 매출 사업체 확인 (매출자료, 유동인원, 상권파악)",
+    icon: <Store className="w-6 h-6" />,
+    color: "from-green-500 to-green-600"
   },
   {
     step: "04",
-    title: "양도양수 계약 체결",
-    subtitle: "투명하고 안전한 계약을 보장합니다",
-    description: "양도인과 양수인 간의 권리금, 시설 집기 등 모든 조건을 조율하여 투명하고 안전한 계약을 체결합니다.",
-    icon: <FileText className="w-8 h-8 text-white" />,
-    details: [
-      "계약 조건 최종 협상",
-      "계약서 작성 및 검토",
-      "특약사항 명시",
-      "계약금 안전 거래"
-    ],
-    duration: "약 1-2일",
-    tip: "💡 안심하세요: 전문 법무팀이 계약서를 검토합니다"
-  },
-  {
-    step: "05",
-    title: "소유권 이전 및 잔금 처리",
-    subtitle: "복잡한 행정절차도 함께합니다",
-    description: "사업자 등록, 영업 허가 등 행정 절차를 지원하며, 계약 내용에 따라 안전하게 잔금을 처리합니다.",
-    icon: <Key className="w-8 h-8 text-white" />,
-    details: [
-      "사업자 등록 대행",
-      "영업 신고/허가 지원",
-      "세금계산서 발행",
-      "잔금 안전 거래 진행"
-    ],
-    duration: "약 7-10일",
-    tip: "💡 준비서류: 신분증, 도장, 통장사본, 임대차계약서"
-  },
-  {
-    step: "06",
-    title: "사후 관리 및 운영 지원",
-    subtitle: "오픈 후에도 든든한 파트너가 되어드립니다",
-    description: "성공적인 안착을 위해, 오픈 초기 마케팅 전략과 안정적인 매장 운영 노하우를 지속적으로 지원합니다.",
-    icon: <Award className="w-8 h-8 text-white" />,
-    details: [
-      "오픈 마케팅 전략 수립",
-      "메뉴 및 가격 컨설팅",
-      "직원 교육 지원",
-      "3개월 집중 관리"
-    ],
-    duration: "오픈 후 3개월",
-    tip: "💡 특별혜택: 첫 달 마케팅 비용 일부 지원"
+    title: "매장 계약",
+    description: "포괄 양도양수 계약진행 및 객관적 자료확인",
+    icon: <FileText className="w-6 h-6" />,
+    color: "from-orange-500 to-orange-600"
   }
 ];
 
-// 추가 혜택 데이터
-const benefits = [
+// 자금 집행 프로세스
+const fundingProcess = [
+  { step: "상담", description: "초기 상담 진행", percentage: "0%" },
+  { step: "양도양수계약", description: "객관적 자료 확인 후 계약", percentage: "권리금 10%" },
+  { step: "프랜차이즈 가맹계약", description: "본사 통보 및 계약 (2~6개월)", percentage: "가맹비" },
+  { step: "중간금", description: "중간 권리금 집행", percentage: "권리금 50%" },
+  { step: "오픈 전 잔금", description: "최종 잔금 정산", percentage: "권리금 40%" }
+];
+
+// 프랜차이즈별 소요 기간
+const franchiseTimeline = [
+  { name: "메가커피", period: "5~7개월", details: "담당 바이저미팅 2~3주 후 진행, 오픈일자 통보 및 기존 매장 하자요소는 메가본사직원이 체크 후 양도인이 올수리", icon: <Coffee className="w-5 h-5" /> },
+  { name: "파리바게트", period: "3~5개월", details: "고매출 및 지역별 좋은 매장의 경우 강도있는 면접을 통해 점주 선별과정", icon: <Store className="w-5 h-5" /> },
+  { name: "베스킨라빈스", period: "3~4개월", details: "SPC계열은 점주와의 디테일한 면접 진행", icon: <Store className="w-5 h-5" /> },
+  { name: "기타 브랜드", period: "3개월 내외", details: "롯데리아, 투썸플레이스, 설빙 등 - 비교적 빠른 진행", icon: <Building className="w-5 h-5" /> }
+];
+
+// 성공 사례
+const successCases = [
   {
-    icon: <Shield className="w-12 h-12 text-blue-600" />,
-    title: "안전거래 보장",
-    description: "계약금과 잔금은 에스크로를 통해 안전하게 거래됩니다"
+    type: "은퇴 후 창업",
+    title: "50대 은퇴자 A씨",
+    description: "은퇴 3개월 차, 교대역 파리바게트 클럽매장 인수",
+    result: "월매출 8,500만원, 안정적 수익 실현 중",
+    icon: <Briefcase className="w-8 h-8" />
   },
   {
-    icon: <Users className="w-12 h-12 text-blue-600" />,
-    title: "전문가 네트워크",
-    description: "세무사, 노무사, 인테리어 전문가와의 연계 서비스"
+    type: "투잡 창업",
+    title: "30대 직장인 B씨",
+    description: "IT기업 재직 중 강남 메가커피 2개 매장 동시 운영",
+    result: "자동화 시스템으로 본업 병행 가능",
+    icon: <Users className="w-8 h-8" />
   },
   {
-    icon: <TrendingUp className="w-12 h-12 text-blue-600" />,
-    title: "성공률 95%",
-    description: "체계적인 프로세스로 검증된 높은 창업 성공률"
+    type: "다점포 운영",
+    title: "40대 자영업자 C씨",
+    description: "써브웨이 운영 중 메가커피, 포케올데이 추가 창업",
+    result: "브랜드 포트폴리오 다각화로 리스크 분산",
+    icon: <Building className="w-8 h-8" />
   },
   {
-    icon: <HeartHandshake className="w-12 h-12 text-blue-600" />,
-    title: "평생 파트너십",
-    description: "창업 후에도 지속적인 경영 컨설팅 제공"
+    type: "가족 창업",
+    title: "30대 부부 D씨",
+    description: "1억 내외로 떡볶이 프랜차이즈 창업",
+    result: "월 순수익 800만원 이상 달성",
+    icon: <HeartHandshake className="w-8 h-8" />
+  }
+];
+
+// FAQ 데이터
+export const faqData = [
+  {
+    category: "창업 절차",
+    questions: [
+      {
+        q: "창업절차는 어떻게 되나요?",
+        a: "1. 전화 및 문자상담 → 2. 아이템 선정 → 3. 내방상담 혹은 현장미팅 → 4. 매장 계약의 순서로 진행됩니다. 각 단계별로 전문 컨설턴트가 함께합니다."
+      },
+      {
+        q: "첫 상담 이후 매장 인수완료까지의 기간이 어느 정도일까요?",
+        a: "각 프랜차이즈별 면접일정 교육일정에 따라 다르지만, 보통 첫 계약 후 3~4개월 정도 소요됩니다."
+      }
+    ]
+  },
+  {
+    category: "자금 및 계약",
+    questions: [
+      {
+        q: "계약 후 창업자금 집행은 어떤식으로 되나요?",
+        a: "계약금 10% → 가맹비 → 중간금 50% → 잔금 40% 순으로 단계별 집행됩니다. 모든 거래는 에스크로를 통해 안전하게 진행됩니다."
+      },
+      {
+        q: "임대차보호법이 어떤건가요?",
+        a: "상가 임대차에서 약자인 임차인의 권리를 보호하는 법입니다. 월비용 인상 시 기존 금액의 5%를 초과할 수 없으며, 10년간 해당 입지에서의 사업을 보장합니다."
+      }
+    ]
+  },
+  {
+    category: "창업 방식",
+    questions: [
+      {
+        q: "신규오픈과 양도양수로 고민하는데 어떤 장단점이 있을까요?",
+        a: "현재 1등 프랜차이즈는 대부분 포화 상태로, 신규 오픈은 수개월~몇년 대기가 필요합니다. 양도양수는 6개월~수년간 매출이 검증된 매장을 인수하여 리스크를 최소화할 수 있습니다."
+      },
+      {
+        q: "프랜차이즈 창업의 장점은 무엇인가요?",
+        a: "검증된 브랜드와 아이템 활용, 본사의 마케팅/지원/교육 시스템, 지속적인 신메뉴 개발 등이 장점입니다. 또한 메뉴 가치 상승으로 적정 수익 유지가 가능합니다."
+      }
+    ]
+  },
+  {
+    category: "매출 검증",
+    questions: [
+      {
+        q: "창업에 있어 수익성과 안정성이 중요한데 제공한 매출은 정확한건가요?",
+        a: "국세청 부가세 과세표준증명원, POS 월별 매출자료, 매입내역, 공과금 등을 정확히 체크합니다. 허위 시 민형사상 책임을 계약서에 명시하여 신뢰성을 보장합니다."
+      },
+      {
+        q: "운영중인 매장을 양도하고 싶은데 문의가 가능한가요?",
+        a: "가능합니다. 담당자를 배정하여 안전하고 빠른 거래를 도와드립니다. 정확한 매출자료 및 경쟁력 있는 권리금 산정이 우선됩니다."
+      }
+    ]
   }
 ];
 
@@ -129,211 +149,242 @@ export default function ProcessPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="inline-flex items-center px-4 py-2 bg-blue-100 dark:bg-blue-900 rounded-full mb-6">
             <CheckCircle className="w-5 h-5 text-blue-600 dark:text-blue-400 mr-2" />
-            <span className="text-sm font-medium text-blue-800 dark:text-blue-200">검증된 창업 프로세스</span>
+            <span className="text-sm font-medium text-blue-800 dark:text-blue-200">매일 수많은 상담을 통한 검증된 프로세스</span>
           </div>
           <h1 className="text-4xl font-extrabold tracking-tight text-gray-900 dark:text-gray-100 sm:text-5xl md:text-6xl">
-            처음이어도 걱정 없는<br />
+            믿고 따를 수 있는<br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
-              스마트창업 6단계 가이드
+              스마트한 창업 가이드
             </span>
           </h1>
           <p className="mt-6 max-w-3xl mx-auto text-xl text-gray-600 dark:text-gray-400">
-            복잡하고 어려운 가게 매매, 이제는 전문가와 함께 안전하고 똑똑하게!<br />
-            상담부터 오픈 후 관리까지, 모든 과정을 함께합니다.
+            평소 자주 물어오시는 내용을 정리했습니다.<br />
+            궁금증 해소와 함께, 꿈을 향해 나아가는 창업의 길을 제시합니다.
           </p>
-          <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <div className="flex items-center text-gray-600 dark:text-gray-400">
-              <Clock className="w-5 h-5 mr-2" />
-              <span>평균 소요기간: 3-4주</span>
-            </div>
-            <div className="flex items-center text-gray-600 dark:text-gray-400">
-              <Shield className="w-5 h-5 mr-2" />
-              <span>수수료: 권리금의 3-5%</span>
-            </div>
-          </div>
         </div>
       </section>
 
-      {/* 프로세스 타임라인 섹션 */}
-      <section className="py-24">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
-              한 눈에 보는 창업 과정
-            </h2>
-            <p className="text-lg text-gray-600 dark:text-gray-400">
-              각 단계를 클릭하면 더 자세한 정보를 확인할 수 있습니다
-            </p>
-          </div>
-
-          <div className="relative">
-            {/* 중앙 라인 */}
-            <div className="absolute left-1/2 -translate-x-1/2 h-full w-0.5 bg-gradient-to-b from-blue-200 via-purple-200 to-transparent dark:from-blue-700 dark:via-purple-700"></div>
-
-            <div className="space-y-16">
-              {processSteps.map((item, index) => (
-                <div key={item.step} className="relative">
-                  {/* 모바일 레이아웃 */}
-                  <div className="lg:hidden">
-                    <div className="flex items-start space-x-4">
-                      {/* 아이콘 */}
-                      <div className="flex-shrink-0">
-                        <div className="relative">
-                          <div className="absolute -inset-2 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full blur-sm opacity-60"></div>
-                          <div className="relative w-16 h-16 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-xl shadow-lg">
-                            {item.icon}
-                          </div>
-                          <div className="absolute -bottom-2 -right-2 bg-white text-blue-600 dark:bg-gray-800 dark:text-blue-400 text-xs font-bold w-8 h-8 rounded-full flex items-center justify-center border-2 border-blue-200 dark:border-blue-700">
-                            {item.step}
-                          </div>
-                        </div>
-                      </div>
-                      {/* 내용 */}
-                      <div className="flex-1">
-                        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6">
-                          <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">
-                            {item.title}
-                          </h3>
-                          <p className="text-sm font-medium text-blue-600 dark:text-blue-400 mb-3">
-                            {item.subtitle}
-                          </p>
-                          <p className="text-gray-600 dark:text-gray-300 mb-4">
-                            {item.description}
-                          </p>
-                          <div className="space-y-2 mb-4">
-                            {item.details.map((detail, idx) => (
-                              <div key={idx} className="flex items-start">
-                                <CheckCircle className="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
-                                <span className="text-sm text-gray-600 dark:text-gray-400">{detail}</span>
-                              </div>
-                            ))}
-                          </div>
-                          <div className="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-3">
-                            <Clock className="w-4 h-4 mr-1" />
-                            <span>{item.duration}</span>
-                          </div>
-                          <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-3">
-                            <p className="text-sm text-blue-800 dark:text-blue-300">{item.tip}</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* 데스크톱 레이아웃 */}
-                  <div className="hidden lg:flex items-center">
-                    {/* 아이콘 및 스텝 번호 */}
-                    <div className={`flex-shrink-0 w-24 flex justify-center ${index % 2 === 1 ? 'lg:order-3 lg:ml-auto' : ''}`}>
-                      <div className="relative">
-                        <div className="absolute -inset-2 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full blur-sm opacity-60"></div>
-                        <div className="relative w-16 h-16 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-xl shadow-lg">
-                          {item.icon}
-                        </div>
-                        <div className="absolute -bottom-2 -right-2 bg-white text-blue-600 dark:bg-gray-800 dark:text-blue-400 text-xs font-bold w-8 h-8 rounded-full flex items-center justify-center border-2 border-blue-200 dark:border-blue-700">
-                          {item.step}
-                        </div>
-                      </div>
-                    </div>
-                    
-                    {/* 컨텐츠 박스 */}
-                    <div className={`w-full lg:w-2/5 p-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-shadow duration-300
-                                   ${index % 2 === 1 ? 'lg:order-1 lg:text-right' : 'lg:ml-auto'}`}>
-                      <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">
-                        {item.title}
-                      </h3>
-                      <p className="text-sm font-medium text-blue-600 dark:text-blue-400 mb-3">
-                        {item.subtitle}
-                      </p>
-                      <p className="text-gray-600 dark:text-gray-300 mb-4">
-                        {item.description}
-                      </p>
-                      <div className={`space-y-2 mb-4 ${index % 2 === 1 ? 'lg:text-right' : ''}`}>
-                        {item.details.map((detail, idx) => (
-                          <div key={idx} className={`flex items-start ${index % 2 === 1 ? 'lg:flex-row-reverse' : ''}`}>
-                            <CheckCircle className={`w-5 h-5 text-green-500 ${index % 2 === 1 ? 'ml-2' : 'mr-2'} mt-0.5 flex-shrink-0`} />
-                            <span className="text-sm text-gray-600 dark:text-gray-400">{detail}</span>
-                          </div>
-                        ))}
-                      </div>
-                      <div className={`flex items-center text-sm text-gray-500 dark:text-gray-400 mb-3 ${index % 2 === 1 ? 'lg:justify-end' : ''}`}>
-                        <Clock className="w-4 h-4 mr-1" />
-                        <span>{item.duration}</span>
-                      </div>
-                      <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-3">
-                        <p className="text-sm text-blue-800 dark:text-blue-300">{item.tip}</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 추가 혜택 섹션 */}
-      <section className="bg-gray-50 dark:bg-gray-800 py-20">
+      {/* 창업 절차 섹션 */}
+      <section className="py-20 bg-gray-50 dark:bg-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
-              스마트창업만의 특별한 혜택
+              창업 절차 4단계
             </h2>
             <p className="text-lg text-gray-600 dark:text-gray-400">
-              단순한 중개가 아닌, 성공 창업을 위한 토탈 솔루션
+              스마트창업과 함께하는 체계적인 창업 프로세스
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {benefits.map((benefit, index) => (
-              <div key={index} className="bg-white dark:bg-gray-700 rounded-xl p-6 text-center hover:shadow-lg transition-shadow duration-300">
-                <div className="flex justify-center mb-4">
-                  {benefit.icon}
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {processSteps.map((step, index) => (
+              <div key={index} className="relative">
+                {index < processSteps.length - 1 && (
+                  <div className="hidden lg:block absolute top-12 left-full w-full h-0.5 bg-gray-300 dark:bg-gray-600 z-0">
+                    <ArrowRight className="absolute -right-3 -top-3 w-6 h-6 text-gray-400" />
+                  </div>
+                )}
+                <div className="relative bg-white dark:bg-gray-700 rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 z-10">
+                  <div className={`w-12 h-12 bg-gradient-to-r ${step.color} rounded-lg flex items-center justify-center text-white mb-4`}>
+                    {step.icon}
+                  </div>
+                  <div className="text-5xl font-bold text-gray-100 dark:text-gray-800 absolute top-4 right-4">
+                    {step.step}
+                  </div>
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                    {step.title}
+                  </h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-300">
+                    {step.description}
+                  </p>
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-                  {benefit.title}
-                </h3>
-                <p className="text-gray-600 dark:text-gray-300">
-                  {benefit.description}
-                </p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* FAQ 섹션 */}
+      {/* 자금 집행 프로세스 */}
       <section className="py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+              창업자금 집행 프로세스
+            </h2>
+            <p className="text-lg text-gray-600 dark:text-gray-400">
+              투명하고 안전한 단계별 자금 집행
+            </p>
+          </div>
+
+          <div className="max-w-4xl mx-auto">
+            <div className="relative">
+              {/* Progress Bar */}
+              <div className="absolute top-8 left-0 right-0 h-1 bg-gray-200 dark:bg-gray-700"></div>
+              <div className="absolute top-8 left-0 w-full h-1 bg-gradient-to-r from-blue-500 to-purple-500"></div>
+              
+              <div className="relative grid grid-cols-1 md:grid-cols-5 gap-4">
+                {fundingProcess.map((item, index) => (
+                  <div key={index} className="text-center">
+                    <div className="relative">
+                      <div className="w-16 h-16 bg-white dark:bg-gray-800 border-4 border-blue-500 rounded-full mx-auto flex items-center justify-center">
+                        <span className="text-sm font-bold text-blue-600 dark:text-blue-400">{index + 1}</span>
+                      </div>
+                    </div>
+                    <h4 className="mt-4 font-semibold text-gray-900 dark:text-white">{item.step}</h4>
+                    <p className="mt-1 text-xs text-gray-600 dark:text-gray-400">{item.description}</p>
+                    <p className="mt-2 text-sm font-bold text-blue-600 dark:text-blue-400">{item.percentage}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 프랜차이즈별 소요 기간 */}
+      <section className="py-20 bg-gray-50 dark:bg-gray-800">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+              프랜차이즈별 소요 기간
+            </h2>
+            <p className="text-lg text-gray-600 dark:text-gray-400">
+              브랜드별 상세 진행 일정
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+            {franchiseTimeline.map((franchise, index) => (
+              <div key={index} className="bg-white dark:bg-gray-700 rounded-xl p-6 shadow-lg">
+                <div className="flex items-start space-x-4">
+                  <div className="flex-shrink-0">
+                    <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg flex items-center justify-center text-white">
+                      {franchise.icon}
+                    </div>
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-1">
+                      {franchise.name}
+                    </h3>
+                    <p className="text-2xl font-bold text-blue-600 dark:text-blue-400 mb-2">
+                      {franchise.period}
+                    </p>
+                    <p className="text-sm text-gray-600 dark:text-gray-300">
+                      {franchise.details}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 성공 사례 섹션 */}
+      <section className="py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+              실제 창업 성공 사례
+            </h2>
+            <p className="text-lg text-gray-600 dark:text-gray-400">
+              다양한 창업 형태별 성공 스토리
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {successCases.map((item, index) => (
+              <div key={index} className="bg-gradient-to-br from-blue-50 to-purple-50 dark:from-gray-800 dark:to-gray-700 rounded-xl p-8 relative overflow-hidden">
+                <div className="absolute top-4 right-4 opacity-10">
+                  <Star className="w-24 h-24" />
+                </div>
+                <div className="relative">
+                  <div className="flex items-center space-x-4 mb-4">
+                    <div className="w-16 h-16 bg-white dark:bg-gray-800 rounded-full flex items-center justify-center shadow-lg">
+                      {item.icon}
+                    </div>
+                    <div>
+                      <span className="text-sm font-medium text-blue-600 dark:text-blue-400">{item.type}</span>
+                      <h3 className="text-xl font-bold text-gray-900 dark:text-white">{item.title}</h3>
+                    </div>
+                  </div>
+                  <p className="text-gray-600 dark:text-gray-300 mb-4">{item.description}</p>
+                  <div className="bg-white dark:bg-gray-800 rounded-lg p-4">
+                    <p className="text-sm font-semibold text-green-600 dark:text-green-400">
+                      ✓ {item.result}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-12 text-center">
+            <p className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+              고수익도 좋지만, 안전하고 검증된 아이템을 통해<br />
+              장기적으로 꾸준한 수익이 나오는 창업을 추천드립니다.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ 섹션 - 클라이언트 컴포넌트로 분리 */}
+      <FAQSection faqData={faqData} />
+
+      {/* 추가 정보 섹션 */}
+      <section className="py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-12 text-white text-center">
+            <h2 className="text-3xl font-bold mb-6">
+              계약에서 오픈까지의 상세 과정
+            </h2>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
+              {[
+                "1. 상담",
+                "2. 양도양수 계약", 
+                "3. 본사 미팅 및 인터뷰",
+                "4. 본사 가맹계약",
+                "5. 사업자등록증 발급",
+                "6. 본사교육",
+                "7. 물품 및 공과금 정산",
+                "8. 오픈"
+              ].map((step, index) => (
+                <div key={index} className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
+                  <p className="font-medium">{step}</p>
+                </div>
+              ))}
+            </div>
+            <p className="mt-8 text-lg">
+              전체적인 과정을 컨설팅을 통해 안내해드립니다.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* 확인 사항 체크리스트 */}
+      <section className="py-20 bg-gray-50 dark:bg-gray-800">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-center text-gray-900 dark:text-white mb-12">
-            자주 묻는 질문
-          </h2>
-          <div className="space-y-6">
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                Q. 창업 경험이 전혀 없는데도 가능한가요?
-              </h3>
-              <p className="text-gray-600 dark:text-gray-300">
-                A. 네, 물론입니다! 스마트창업의 고객 중 70% 이상이 창업이 처음이신 분들입니다. 
-                전문 컨설턴트가 처음부터 끝까지 모든 과정을 함께하며, 창업 교육부터 운영 노하우까지 전수해드립니다.
-              </p>
-            </div>
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                Q. 중개 수수료는 얼마인가요?
-              </h3>
-              <p className="text-gray-600 dark:text-gray-300">
-                A. 일반적으로 권리금의 3-5% 수준입니다. 단순 중개가 아닌 상권분석, 계약서 검토, 
-                행정처리 대행, 사후관리까지 포함된 합리적인 비용입니다. 상담 시 정확한 견적을 안내해드립니다.
-              </p>
-            </div>
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                Q. 계약이 파기되면 어떻게 되나요?
-              </h3>
-              <p className="text-gray-600 dark:text-gray-300">
-                A. 에스크로 시스템을 통해 계약금이 안전하게 보호됩니다. 
-                정당한 사유로 계약이 파기될 경우, 계약서에 명시된 조건에 따라 계약금이 반환됩니다.
-              </p>
-            </div>
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+              매장 인수 시 확인 사항
+            </h2>
+          </div>
+          <div className="bg-white dark:bg-gray-700 rounded-xl p-8 shadow-lg">
+            <ul className="space-y-4">
+              {[
+                "매출자료, 매입자료, 홀/배달 매출",
+                "부가세 과세표준증명원",
+                "공과금 내역서",
+                "사업자등록증",
+                "영업신고증",
+                "최소 12개월 이상의 데이터 확보"
+              ].map((item, index) => (
+                <li key={index} className="flex items-center">
+                  <CheckCircle className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" />
+                  <span className="text-gray-700 dark:text-gray-300">{item}</span>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
       </section>

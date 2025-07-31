@@ -4,6 +4,8 @@ import ListingCard from "@/components/ui/ListingCard";
 import CountdownTimer from "@/components/ui/CountdownTimer";
 import Link from 'next/link'; // ⬅️ Link 추가
 import { ArrowRight } from "lucide-react"; // ⬅️ ArrowRight 아이콘 추가
+import ExpandableContent from "@/components/ui/ExpandableContent";
+import ConsultantMessage from "@/components/content/ConsultantMessage";
 
 export const revalidate = 0;
 
@@ -186,6 +188,12 @@ export default async function HomePage() {
               </div>
             </div>
           </div>
+        </div>
+
+        <div className="mb-12">
+          <ExpandableContent title="스마트창업이 궁금하시다면 눌러주세요!">
+            <ConsultantMessage />
+          </ExpandableContent>
         </div>
 
         {/* --- 긴급성 강조 배너 --- */}

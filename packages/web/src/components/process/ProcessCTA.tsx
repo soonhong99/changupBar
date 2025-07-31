@@ -17,11 +17,11 @@ export default function ProcessCTA() {
       <section className="bg-gradient-to-r from-blue-600 to-purple-600 py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold text-white mb-4">
-            이제 망설이지 마세요!
+            저도 항상 망설입니다.
           </h2>
           <p className="text-xl text-blue-100 mb-8">
-            5,000명이 넘는 창업자가 스마트창업과 함께 성공의 길을 걸었습니다.<br />
-            다음 주인공은 바로 당신입니다.
+            하지만 망설이기만 하면 인생은 바뀌지 않습니다.<br />
+            1분 1초 젊은 지금, 미래를 위해 나아가세요.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link 

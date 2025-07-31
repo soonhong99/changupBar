@@ -10,6 +10,7 @@ import { administrativeDistricts } from '@/data/districts'; // ⬅️ 여기서 
 import Modal from "@/components/ui/Modal"; // ⬅️ Modal import
 import ConsultationForm from "@/components/forms/ConsultationForm";
 import { categories, mainCategories } from '@/data/categories'; // ⬅️ 카테고리 데이터 import
+import InfoToggle from "@/components/ui/InfoToggle"; // ⬅️ 1. InfoToggle 컴포넌트를 import 합니다.
 
 // 1. 실제 로직을 수행하는 부분을 별도의 컴포넌트로 분리합니다.
 function SearchComponent() {
@@ -116,54 +117,56 @@ function SearchComponent() {
             스마트 매물 검색
           </div>
           <h1 className="text-4xl font-extrabold tracking-tight text-gray-900 dark:text-gray-100 sm:text-5xl">
-            <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              나만의 완벽한 매물
-            </span>
+          <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              완벽한 매물</span>은 없습니다
+            
             <br />
-            지금 바로 찾아보세요
+            대신 <span className="bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">맞춤 매물</span>을 소개합니다
           </h1>
-          <p className="mt-4 max-w-2xl mx-auto text-xl text-gray-600 dark:text-gray-400">
-           검증된 <strong className="text-blue-600 dark:text-blue-400">스마트창업</strong> 매물 중에서 
-            나에게 딱 맞는 <strong className="text-purple-600 dark:text-purple-400">황금 매물</strong>을 찾아보세요
-          </p>
+          
         </div>
 
-        {/* --- 검색 통계 --- */}
-        <div className="mb-8 grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md text-center">
-            <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
-              {stats.totalCount.toLocaleString()}
+        <div className="max-w-4xl mx-auto mb-12">
+          <InfoToggle title="매물을 보시기 전에 꼭 확인해주세요!">
+            <p className="text-base">
+              해당 매물들을 보시고, '내가 가진 투자금으로 이 업종에서 이 정도의 수익을 낼 수 있구나' 정도로 가볍게 파악만 해주세요.<br />
+              가장 중요한 것은 자신의 <strong className="text-blue-500 dark:text-blue-400">창업 유형</strong>을 아는 것입니다.
+            </p>
+            스마트창업에서는 크게 <strong className="text-blue-500 dark:text-blue-400">세 가지</strong>유형으로 나누고 있습니다.
+            <div className="mt-4 space-y-5">
+              <div className="p-4 bg-gray-100 dark:bg-gray-700/50 rounded-lg">
+                <h4 className="font-semibold text-gray-900 dark:text-gray-100 flex items-center">
+                  <span className="text-2xl mr-3">🧘</span> 워라밸 추구형 (안정)
+                </h4>
+                <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                  안정적인 시스템 속에서 편안하게, 삶의 질을 높이며 가게를 운영하고 싶어 하는 분.
+                </p>
+              </div>
+              <div className="p-4 bg-gray-100 dark:bg-gray-700/50 rounded-lg">
+                <h4 className="font-semibold text-gray-900 dark:text-gray-100 flex items-center">
+                  <span className="text-2xl mr-3">🚀</span> 성장 발판 추구형 (성공)
+                </h4>
+                <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                  현재의 투자를 발판 삼아 더 큰 성공과 확장을 꿈꾸는 야심가.
+                </p>
+              </div>
+              <div className="p-4 bg-gray-100 dark:bg-gray-700/50 rounded-lg">
+                <h4 className="font-semibold text-gray-900 dark:text-gray-100 flex items-center">
+                  <span className="text-2xl mr-3">💼</span> 탈(脫)직장인 추구형 (도전)
+                </h4>
+                <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                  직장인 월급 이상의 꾸준한 수익을 통해 경제적 자유와 여유로운 삶, 두 마리 토끼를 잡고 싶어 하는 분.
+                </p>
+              </div>
             </div>
-            <div className="text-sm text-gray-600 dark:text-gray-400">전체 매물</div>
-          </div>
-          <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md text-center">
-            <div className="text-2xl font-bold text-green-600 dark:text-green-400">
-              {stats.newThisWeekCount.toLocaleString()}
-            </div>
-            <div className="text-sm text-gray-600 dark:text-gray-400">이번 주 신규</div>
-          </div>
-          <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md text-center">
-            {mostViewed ? (
-              <>
-                <div className="text-2xl font-bold text-purple-600 dark:text-purple-400 truncate">
-                  {mostViewed.name}
-                </div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">
-                  가장 인기 있는 매물
-                </div>
-              </>
-            ) : (
-              <>
-                <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">-</div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">가장 많이 본 매물</div>
-              </>
-            )}
-          </div>
-
-          <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md text-center">
-            <div className="text-2xl font-bold text-orange-600 dark:text-orange-400">97%</div>
-            <div className="text-sm text-gray-600 dark:text-gray-400">고객 만족도</div>
-          </div>
+            <p className="mt-5 pt-4 border-t border-gray-200 dark:border-gray-700">
+              안타깝게도 <strong className="text-amber-600 dark:text-amber-400">여유로운 삶과 고수익은 한꺼번에 잡기 어렵습니다.</strong> 고수익을 원하시면 '성공' 유형을, 여유로운 삶을 원하시면 '안정' 유형을, 일과 수익의 균형을 찾고 싶다면 '도전' 유형을 고려해보세요.
+              이 유형만 파악하고 매물을 보시면 훨씬 쉽게 감이 잡히실 겁니다.
+            </p>
+            <p className="mt-4 font-semibold text-center text-blue-600 dark:text-blue-400">
+              당신의 도전을 간절히 응원합니다.
+            </p>
+          </InfoToggle>
         </div>
 
         {/* --- 지역 안내 섹션 --- */}
@@ -181,7 +184,7 @@ function SearchComponent() {
                   📍 현재 서비스 지역 안내
                 </h3>
                 <p className="text-amber-700 dark:text-amber-300 mb-3">
-                  현재 <span className="font-semibold">서울특별시, 인천광역시, 대전광역시, 경기도</span> 지역의 검증된 매물을 
+                  현재 <span className="font-semibold">서울특별시, 인천광역시, 대전광역시, 경기도</span> 지역의 상위 1% 매물을 
                   집중적으로 소개해드리고 있습니다.
                 </p>
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
@@ -192,7 +195,7 @@ function SearchComponent() {
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
-                    <span>매주 새로운 특급매물 추가 중</span>
+                    <span>매주 새로운 명품 추가 중</span>
                   </div>
                 </div>
               </div>
