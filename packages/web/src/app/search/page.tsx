@@ -132,7 +132,7 @@ function SearchComponent() {
               해당 매물들을 보시고, '내가 가진 투자금으로 이 업종에서 이 정도의 수익을 낼 수 있구나' 정도로 가볍게 파악만 해주세요.<br />
               가장 중요한 것은 자신의 <strong className="text-blue-500 dark:text-blue-400">창업 유형</strong>을 아는 것입니다.
             </p>
-            스마트창업에서는 크게 <strong className="text-blue-500 dark:text-blue-400">세 가지</strong>유형으로 나누고 있습니다.
+            스마트창업에서는 크게 <strong className="text-blue-500 dark:text-blue-400">세 가지</strong> 유형으로 나누고 있습니다.
             <div className="mt-4 space-y-5">
               <div className="p-4 bg-gray-100 dark:bg-gray-700/50 rounded-lg">
                 <h4 className="font-semibold text-gray-900 dark:text-gray-100 flex items-center">

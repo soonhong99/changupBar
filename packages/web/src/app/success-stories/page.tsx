@@ -49,7 +49,7 @@ const successStories: SuccessStory[] = [
       satisfaction: "고객 재방문율 78%",
       special: "오픈 6개월 만에 손익분기점 돌파"
     },
-    testimonial: "하이브창업은 단순히 가게를 여는 것이 아니라, 제가 꿈꾸던 카페를 현실로 만들어주었습니다. 특히 박수진 팀장님이 새벽에도 전화를 받아주시며 고민을 들어주신 것이 큰 힘이 되었어요.",
+    testimonial: "스마트창업은 단순히 가게를 여는 것이 아니라, 제가 꿈꾸던 카페를 현실로 만들어주었습니다. 특히 *** 팀장님이 새벽에도 전화를 받아주시며 고민을 들어주신 것이 큰 힘이 되었어요.",
     tags: ["카페", "강남", "초보창업"]
   },
   {
@@ -76,7 +76,7 @@ const successStories: SuccessStory[] = [
       satisfaction: "배달앱 평점 4.9점",
       special: "수원시 김밥천국 매출 TOP 5"
     },
-    testimonial: "처음엔 '내가 할 수 있을까' 걱정뿐이었는데, 하이브창업에서 정말 A부터 Z까지 다 알려주셨어요. 지금은 직원 5명과 함께 일하는 당당한 사장님이 되었습니다.",
+    testimonial: "처음엔 '내가 할 수 있을까' 걱정뿐이었는데, 스마트창업에서 정말 A부터 Z까지 다 알려주셨어요. 지금은 직원 5명과 함께 일하는 당당한 사장님이 되었습니다.",
     tags: ["김밥천국", "프랜차이즈", "주부창업"]
   },
   {
@@ -103,7 +103,7 @@ const successStories: SuccessStory[] = [
       satisfaction: "인스타그램 팔로워 8,000명",
       special: "송도 맛집 피자 1위 선정"
     },
-    testimonial: "부부가 함께 일하는 것이 쉽지 않다고 들었는데, 하이브창업에서 저희 부부의 강점을 살려주셨어요. 서로의 역할을 명확히 나누니 시너지가 났고, 지금은 2호점 준비 중입니다.",
+    testimonial: "부부가 함께 일하는 것이 쉽지 않다고 들었는데, 스마트창업에서 저희 부부의 강점을 살려주셨어요. 서로의 역할을 명확히 나누니 시너지가 났고, 지금은 2호점 준비 중입니다.",
     tags: ["피자", "부부창업", "송도"]
   }
 ];
@@ -134,7 +134,7 @@ export default function SuccessStoriesPage() {
             진짜 창업 성공 이야기
           </h1>
           <p className="text-xl md:text-2xl text-green-100 mb-8">
-            하이브창업과 함께 꿈을 현실로 만든 사장님들
+            스마트창업과 함께 꿈을 현실로 만든 사장님들
           </p>
           <div className="inline-flex items-center bg-white/20 backdrop-blur-sm rounded-full px-6 py-3">
             <span className="text-lg font-semibold">
@@ -311,10 +311,10 @@ export default function SuccessStoriesPage() {
                 </ul>
               </div>
 
-              {/* 하이브창업의 지원 */}
+              {/* 스마트창업의 지원 */}
               <div className="bg-blue-50 dark:bg-blue-900/20 rounded-xl p-6">
                 <h5 className="font-bold text-gray-900 dark:text-white mb-3">
-                  💙 하이브창업이 함께한 과정
+                  💙 스마트창업이 함께한 과정
                 </h5>
                 <ul className="space-y-3">
                   {selectedStory.supportProvided.map((support, index) => (
@@ -370,7 +370,7 @@ export default function SuccessStoriesPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
-              하이브창업만의 체계적인 창업 프로세스
+              스마트창업만의 체계적인 창업 프로세스
             </h2>
             <p className="text-lg text-gray-600 dark:text-gray-300">
               상담부터 성공까지, 모든 단계에서 함께합니다
@@ -442,14 +442,14 @@ export default function SuccessStoriesPage() {
             다음 성공 스토리의 주인공은 당신입니다
           </h2>
           <p className="text-xl text-purple-100 mb-8">
-            지금 시작하세요. 하이브창업이 끝까지 함께합니다.
+            지금 시작하세요. 스마틏창업이 끝까지 함께합니다.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href="/consulting"
               className="bg-white text-purple-600 px-8 py-4 rounded-full font-semibold text-lg hover:bg-purple-50 transition-all duration-200 transform hover:scale-105 shadow-xl"
             >
-              📞 박수진 팀장 상담 신청
+              📞 *** 팀장 상담 신청
             </Link>
             <Link
               href="/register"

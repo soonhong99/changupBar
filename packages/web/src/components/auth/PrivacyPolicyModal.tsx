@@ -219,7 +219,7 @@ export default function PrivacyPolicyModal({ isOpen, onClose, onAgree }: Props) 
                   개인정보 보호책임자
                 </h4>
                 <ul className="text-gray-700 dark:text-gray-300 space-y-1 text-sm">
-                  <li><strong>성명:</strong> 박수진</li>
+                  <li><strong>성명:</strong> ***</li>
                   <li><strong>직책:</strong> 대표</li>
                   <li><strong>연락처:</strong> {companyPhone}</li>
                   <li><strong>이메일:</strong> {companyEmail}</li>

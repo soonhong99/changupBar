@@ -19,7 +19,6 @@ export default function InfoToggle({ title, children }: InfoToggleProps) {
         className="w-full flex justify-between items-center p-5 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-opacity-75 rounded-xl"
       >
         <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200">
-          <span className="mr-3">💡</span>
           {title}
         </h3>
         <svg

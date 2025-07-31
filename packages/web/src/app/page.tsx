@@ -191,8 +191,8 @@ export default async function HomePage() {
         </div>
 
         <div className="mb-12">
-          <ExpandableContent title="스마트창업이 궁금하시다면 눌러주세요!">
-            <ConsultantMessage />
+          <ExpandableContent title="확신이 서지 않을 때마다 눌러주세요!">
+            <ConsultantMessage/>
           </ExpandableContent>
         </div>
 

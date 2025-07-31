@@ -2,7 +2,7 @@
 
 const Emphasize = ({ children }: { children: React.ReactNode }) => (
     <strong className="text-blue-600 dark:text-blue-400 font-semibold">
-      "{children}"
+      '{children}'
     </strong>
   );
 
@@ -20,18 +20,20 @@ const Emphasize = ({ children }: { children: React.ReactNode }) => (
     return (
       <div className="space-y-3 text-base">
         <p>안녕하세요! 스마트창업 권순홍 컨설턴트입니다.</p>
-        <p>여러분이 왜 이 사이트에 들어왔고, 많고 많은 길 중 왜 사업을 하시려는지 곰곰히 생각해보았습니다.</p>
-        <p>역시 목적은 <Emphasize>돈</Emphasize>이더군요.</p>
+        <p>어쩌다가 스마트창업까지 오시게 되었을까요?</p>
+        <p>역시 목적은 <Emphasize>돈</Emphasize>이겠죠?</p>
         <p>목돈을 가지고 어떻게 하면 더 많이 불릴 수 있을까, 혹은 좀 편하게 벌 수 있을까, 혹은 새로운 도전을 할 수 있을까와 같은 <Emphasize>고민</Emphasize>을 저보다 깊게하신 분이라 확신합니다.</p>
-        <p>그렇다면 왜 아직까지 고민하고 계실까요?</p>
+        <p>그렇다면 아직까지 왜 고민하고 계실까요?</p>
         <p><Emphasize>너무 소중한 돈</Emphasize>이기 때문에.</p>
         <p><Emphasize>내 피와 땀을 갈아서 만들어낸 돈</Emphasize>이기 때문에.</p>
         <p><Emphasize>내 청춘을 녹여낸 돈</Emphasize>이기 때문에.</p>
         <p>믿고 맡기기 어렵습니다.</p>
+        <p>그렇다면 수많은 사장님들께서는 <Emphasize>왜</Emphasize> 스마트창업을 선택하실까요?</p>
+        <p>바로 자기 자신의 돈을 대하는 <Emphasize>태도</Emphasize>를 보았기 때문입니다.</p>
         <p>저는 항상 만나뵙는 사장님들이 <Emphasize>존경</Emphasize>스럽습니다.</p>
         <p>과연 나라면 이렇게 큰 도전을 할 수 있었을까?</p>
         <p>불확실한 미래를 위해 이만큼의 돈을 투자할 수 있을까?</p>
-        <p>한 사람의 인생이 찰나의 결정으로 바뀌는구나 생각이 들었습니다.</p>
+        <p>한 사람의 인생이 <Emphasize>찰나의 결정</Emphasize>으로 바뀌는구나 생각이 들었습니다.</p>
         <p>저도 가진 것이 없고, 제 꿈을 향해 나아가는 일개 소시민에 불과합니다.</p>
         <p><RedText>그럼에도 불구하고</RedText> 한번 뿐인 인생, <Emphasize>성공의 표본</Emphasize>이 되고 싶지 않으신가요?</p>
         <p>혹은, <Emphasize>안정적인 삶</Emphasize>을 꾸려 경제적 자유를 누리고 싶지 않으신가요?</p>
