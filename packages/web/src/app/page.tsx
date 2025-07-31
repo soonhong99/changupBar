@@ -229,7 +229,6 @@ export default async function HomePage() {
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
               주간 특급 매물 
-              <span className="text-red-500 text-2xl ml-2">🔥</span>
             </h2>
             <div className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
               <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>

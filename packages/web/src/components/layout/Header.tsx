@@ -204,9 +204,7 @@ export default function Header() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <div className="flex items-center justify-center">
             <div className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-red-500 to-orange-500 text-white text-sm font-medium rounded-full shadow-lg">
-              <span>🔥</span>
               <span>8월 한정! 상담시 원하는 매물 AI 분석 리포트 1건 무료 제공</span>
-              <span>🔥</span>
             </div>
           </div>
         </div>

@@ -181,7 +181,7 @@ function SearchComponent() {
               </div>
               <div className="flex-1">
                 <h3 className="text-lg font-semibold text-amber-800 dark:text-amber-200 mb-2">
-                  📍 현재 서비스 지역 안내
+                  현재 운용중인 서비스 지역 안내
                 </h3>
                 <p className="text-amber-700 dark:text-amber-300 mb-3">
                   현재 <span className="font-semibold">서울특별시, 인천광역시, 대전광역시, 경기도</span> 지역의 상위 1% 매물을 
@@ -189,7 +189,7 @@ function SearchComponent() {
                 </p>
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
                   <p className="text-sm text-amber-600 dark:text-amber-400 mb-2 sm:mb-0">
-                    전국 매물 확대를 위해 열심히 준비하고 있으니, 조금만 기다려 주세요! 🙏
+                    전국 매물 확대를 위해 열심히 준비하고 있으니, 조금만 기다려 주세요!
                   </p>
                   <div className="flex items-center space-x-2 text-sm text-amber-600 dark:text-amber-400">
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
