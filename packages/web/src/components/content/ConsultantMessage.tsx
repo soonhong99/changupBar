@@ -20,7 +20,7 @@ const Emphasize = ({ children }: { children: React.ReactNode }) => (
     return (
       <div className="space-y-3 text-base">
         <p>안녕하세요! 스마트창업 권순홍 컨설턴트입니다.</p>
-        <p>어쩌다가 스마트창업까지 오시게 되었을까요?</p>
+        <p>어쩌다 스마트창업까지 오시게 되셨을까요?</p>
         <p>역시 목적은 <Emphasize>돈</Emphasize>이겠죠?</p>
         <p>목돈을 가지고 어떻게 하면 더 많이 불릴 수 있을까, 혹은 좀 편하게 벌 수 있을까, 혹은 새로운 도전을 할 수 있을까와 같은 <Emphasize>고민</Emphasize>을 저보다 깊게하신 분이라 확신합니다.</p>
         <p>그렇다면 아직까지 왜 고민하고 계실까요?</p>
@@ -44,8 +44,8 @@ const Emphasize = ({ children }: { children: React.ReactNode }) => (
         <p>수년 이상 <Emphasize>지속</Emphasize>할 수 있는 <Emphasize>현실적인</Emphasize> 맞춤형 사업을 소개해드리고, 이후 미래 방향성까지 함께 고민하겠습니다.</p>
         <p>뿐만 아니라 <Emphasize>스마트모임</Emphasize>을 만들어 부동산, 주식, 창업, 사업, 마케팅 등 정통한 전문가를 모시고 좋은 자리를 공유하겠습니다.</p>
         <p>한번의 창업으로 끝나는 인연이 아닌 5년, 10년을 뛰어넘어선 <Emphasize>인생 동반자</Emphasize>가 되어주세요.</p>
-        <p>여기까지 읽으신 것 만으로도 감사드립니다.</p>
-        <p>다시 한번 스마트창업에 방문해주신 모든 분들께 존경을 표하며, 많은 것을 얻고 가셨으면 좋겠습니다.</p>
+        <p>여기까지 읽어주신 것 만으로도 감사드립니다.</p>
+        <p>다시 한번 스마트창업에 방문해주신 모든 분들께 존경을 표하며, 많은 동기부여를 받고 가셨으면 좋겠습니다.</p>
         <p>저는 <Emphasize>고민이 끝나신</Emphasize> 여러분들의 문의를 기다리고 있겠습니다.</p>
         <div className="pt-4 mt-4 border-t border-gray-200 dark:border-gray-700 text-right">
           <p className="font-semibold"><BlueText>함께 나아가는 스마트창업</BlueText></p>
