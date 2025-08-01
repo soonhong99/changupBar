@@ -8,6 +8,7 @@ export const createConsultationSchema = z.object({
     desiredCategory: z.string().min(1, '원하는 업종을 입력해주세요.'),
     desiredLocation: z.string().min(1, '원하는 지역을 입력해주세요.'),
     investmentAmount: z.number().int().min(0),
-    details: z.string().max(200, '상세사항은 200자 이내로 입력해주세요.').optional(), // ⬅️ 추가
+    details: z.string().max(200, '200자 이내로 입력해주세요.').optional(), // ⬅️ 추가
+    desiredTime: z.string().datetime({ offset: true }).optional().nullable(),
 });
 //# sourceMappingURL=consultation.schema.js.map

@@ -159,6 +159,7 @@ model ConsultationRequest {
   desiredLocation    String   // 원하는 지역
   investmentAmount   Int      // 투자 가능 금액 (만원 단위)
   details            String?  // ⬅️ 추가: 상세 요청사항 (선택적)
+  desiredTime        DateTime? // ⬇️ 추가: 상담 희망 시간 (선택적)
   
   status             ConsultationStatus @default(PENDING)
 }

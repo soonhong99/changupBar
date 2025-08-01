@@ -8,7 +8,8 @@ export declare const createListingSchema: z.ZodObject<{
     roadAddress: z.ZodOptional<z.ZodString>;
     detailAddress: z.ZodOptional<z.ZodString>;
     region: z.ZodEnum<["METROPOLITAN", "NON_METROPOLITAN"]>;
-    category: z.ZodEnum<["CAFE_BAKERY", "RESTAURANT_BAR", "RETAIL_ETC"]>;
+    mainCategory: z.ZodOptional<z.ZodString>;
+    subCategory: z.ZodOptional<z.ZodString>;
     deposit: z.ZodNumber;
     monthlyRent: z.ZodNumber;
     keyMoney: z.ZodNumber;
@@ -20,8 +21,8 @@ export declare const createListingSchema: z.ZodObject<{
     deliveryPercent: z.ZodOptional<z.ZodNumber>;
     netProfit: z.ZodNumber;
     isAutomated: z.ZodDefault<z.ZodBoolean>;
-    hasParking: z.ZodDefault<z.ZodBoolean>;
-    isFirstFloor: z.ZodDefault<z.ZodBoolean>;
+    isGoodDeal: z.ZodOptional<z.ZodDefault<z.ZodBoolean>>;
+    isSpecialDistrict: z.ZodOptional<z.ZodDefault<z.ZodBoolean>>;
     isNearStation: z.ZodDefault<z.ZodBoolean>;
     isBeginnerFriendly: z.ZodOptional<z.ZodDefault<z.ZodBoolean>>;
     isWomanFriendly: z.ZodOptional<z.ZodDefault<z.ZodBoolean>>;
@@ -36,11 +37,10 @@ export declare const createListingSchema: z.ZodObject<{
     featuredStart: z.ZodNullable<z.ZodOptional<z.ZodString>>;
     featuredEnd: z.ZodNullable<z.ZodOptional<z.ZodString>>;
 }, "strip", z.ZodTypeAny, {
-    name: string;
     status: "DRAFT" | "PUBLISHED" | "ARCHIVED";
+    name: string;
     summary: string;
     region: "METROPOLITAN" | "NON_METROPOLITAN";
-    category: "CAFE_BAKERY" | "RESTAURANT_BAR" | "RETAIL_ETC";
     deposit: number;
     monthlyRent: number;
     keyMoney: number;
@@ -49,8 +49,6 @@ export declare const createListingSchema: z.ZodObject<{
     personnelCost: number;
     netProfit: number;
     isAutomated: boolean;
-    hasParking: boolean;
-    isFirstFloor: boolean;
     isNearStation: boolean;
     description: string;
     coverImage: string;
@@ -61,9 +59,13 @@ export declare const createListingSchema: z.ZodObject<{
     eupmyeondong?: string | undefined;
     roadAddress?: string | undefined;
     detailAddress?: string | undefined;
+    mainCategory?: string | undefined;
+    subCategory?: string | undefined;
     utilityCost?: number | undefined;
     otherCost?: number | undefined;
     deliveryPercent?: number | undefined;
+    isGoodDeal?: boolean | undefined;
+    isSpecialDistrict?: boolean | undefined;
     isBeginnerFriendly?: boolean | undefined;
     isWomanFriendly?: boolean | undefined;
     contractStatus?: "AVAILABLE" | "PENDING" | "SOLD" | undefined;
@@ -75,7 +77,6 @@ export declare const createListingSchema: z.ZodObject<{
     name: string;
     summary: string;
     region: "METROPOLITAN" | "NON_METROPOLITAN";
-    category: "CAFE_BAKERY" | "RESTAURANT_BAR" | "RETAIL_ETC";
     deposit: number;
     monthlyRent: number;
     keyMoney: number;
@@ -92,12 +93,14 @@ export declare const createListingSchema: z.ZodObject<{
     eupmyeondong?: string | undefined;
     roadAddress?: string | undefined;
     detailAddress?: string | undefined;
+    mainCategory?: string | undefined;
+    subCategory?: string | undefined;
     utilityCost?: number | undefined;
     otherCost?: number | undefined;
     deliveryPercent?: number | undefined;
     isAutomated?: boolean | undefined;
-    hasParking?: boolean | undefined;
-    isFirstFloor?: boolean | undefined;
+    isGoodDeal?: boolean | undefined;
+    isSpecialDistrict?: boolean | undefined;
     isNearStation?: boolean | undefined;
     isBeginnerFriendly?: boolean | undefined;
     isWomanFriendly?: boolean | undefined;
@@ -118,7 +121,8 @@ export declare const updateListingSchema: z.ZodObject<{
     roadAddress: z.ZodOptional<z.ZodOptional<z.ZodString>>;
     detailAddress: z.ZodOptional<z.ZodOptional<z.ZodString>>;
     region: z.ZodOptional<z.ZodEnum<["METROPOLITAN", "NON_METROPOLITAN"]>>;
-    category: z.ZodOptional<z.ZodEnum<["CAFE_BAKERY", "RESTAURANT_BAR", "RETAIL_ETC"]>>;
+    mainCategory: z.ZodOptional<z.ZodOptional<z.ZodString>>;
+    subCategory: z.ZodOptional<z.ZodOptional<z.ZodString>>;
     deposit: z.ZodOptional<z.ZodNumber>;
     monthlyRent: z.ZodOptional<z.ZodNumber>;
     keyMoney: z.ZodOptional<z.ZodNumber>;
@@ -130,8 +134,8 @@ export declare const updateListingSchema: z.ZodObject<{
     deliveryPercent: z.ZodOptional<z.ZodOptional<z.ZodNumber>>;
     netProfit: z.ZodOptional<z.ZodNumber>;
     isAutomated: z.ZodOptional<z.ZodDefault<z.ZodBoolean>>;
-    hasParking: z.ZodOptional<z.ZodDefault<z.ZodBoolean>>;
-    isFirstFloor: z.ZodOptional<z.ZodDefault<z.ZodBoolean>>;
+    isGoodDeal: z.ZodOptional<z.ZodOptional<z.ZodDefault<z.ZodBoolean>>>;
+    isSpecialDistrict: z.ZodOptional<z.ZodOptional<z.ZodDefault<z.ZodBoolean>>>;
     isNearStation: z.ZodOptional<z.ZodDefault<z.ZodBoolean>>;
     isBeginnerFriendly: z.ZodOptional<z.ZodOptional<z.ZodDefault<z.ZodBoolean>>>;
     isWomanFriendly: z.ZodOptional<z.ZodOptional<z.ZodDefault<z.ZodBoolean>>>;
@@ -146,8 +150,8 @@ export declare const updateListingSchema: z.ZodObject<{
     featuredStart: z.ZodOptional<z.ZodNullable<z.ZodOptional<z.ZodString>>>;
     featuredEnd: z.ZodOptional<z.ZodNullable<z.ZodOptional<z.ZodString>>>;
 }, "strip", z.ZodTypeAny, {
-    name?: string | undefined;
     status?: "DRAFT" | "PUBLISHED" | "ARCHIVED" | undefined;
+    name?: string | undefined;
     summary?: string | undefined;
     sido?: string | undefined;
     sigungu?: string | undefined;
@@ -155,7 +159,8 @@ export declare const updateListingSchema: z.ZodObject<{
     roadAddress?: string | undefined;
     detailAddress?: string | undefined;
     region?: "METROPOLITAN" | "NON_METROPOLITAN" | undefined;
-    category?: "CAFE_BAKERY" | "RESTAURANT_BAR" | "RETAIL_ETC" | undefined;
+    mainCategory?: string | undefined;
+    subCategory?: string | undefined;
     deposit?: number | undefined;
     monthlyRent?: number | undefined;
     keyMoney?: number | undefined;
@@ -167,8 +172,8 @@ export declare const updateListingSchema: z.ZodObject<{
     deliveryPercent?: number | undefined;
     netProfit?: number | undefined;
     isAutomated?: boolean | undefined;
-    hasParking?: boolean | undefined;
-    isFirstFloor?: boolean | undefined;
+    isGoodDeal?: boolean | undefined;
+    isSpecialDistrict?: boolean | undefined;
     isNearStation?: boolean | undefined;
     isBeginnerFriendly?: boolean | undefined;
     isWomanFriendly?: boolean | undefined;
@@ -182,8 +187,8 @@ export declare const updateListingSchema: z.ZodObject<{
     featuredStart?: string | null | undefined;
     featuredEnd?: string | null | undefined;
 }, {
-    name?: string | undefined;
     status?: "DRAFT" | "PUBLISHED" | "ARCHIVED" | undefined;
+    name?: string | undefined;
     summary?: string | undefined;
     sido?: string | undefined;
     sigungu?: string | undefined;
@@ -191,7 +196,8 @@ export declare const updateListingSchema: z.ZodObject<{
     roadAddress?: string | undefined;
     detailAddress?: string | undefined;
     region?: "METROPOLITAN" | "NON_METROPOLITAN" | undefined;
-    category?: "CAFE_BAKERY" | "RESTAURANT_BAR" | "RETAIL_ETC" | undefined;
+    mainCategory?: string | undefined;
+    subCategory?: string | undefined;
     deposit?: number | undefined;
     monthlyRent?: number | undefined;
     keyMoney?: number | undefined;
@@ -203,8 +209,8 @@ export declare const updateListingSchema: z.ZodObject<{
     deliveryPercent?: number | undefined;
     netProfit?: number | undefined;
     isAutomated?: boolean | undefined;
-    hasParking?: boolean | undefined;
-    isFirstFloor?: boolean | undefined;
+    isGoodDeal?: boolean | undefined;
+    isSpecialDistrict?: boolean | undefined;
     isNearStation?: boolean | undefined;
     isBeginnerFriendly?: boolean | undefined;
     isWomanFriendly?: boolean | undefined;

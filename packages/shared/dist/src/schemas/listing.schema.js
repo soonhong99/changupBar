@@ -9,8 +9,8 @@ export const createListingSchema = z.object({
     roadAddress: z.string().optional(),
     detailAddress: z.string().optional(),
     region: z.enum(['METROPOLITAN', 'NON_METROPOLITAN']),
-    mainCategory: z.string().optional(), // 이 줄 추가
-    subCategory: z.string().optional(),  // 이 줄 추가
+    mainCategory: z.string().optional(),
+    subCategory: z.string().optional(),
     deposit: z.number().int().min(0),
     monthlyRent: z.number().int().min(0),
     keyMoney: z.number().int().min(0),
@@ -22,8 +22,8 @@ export const createListingSchema = z.object({
     deliveryPercent: z.number().int().min(0).max(100).optional(), // ⬅️ 추가
     netProfit: z.number().int().min(0),
     isAutomated: z.boolean().default(false),
-    isGoodDeal: z.boolean().default(false).optional(),         // ⬇️ 추가
-    isSpecialDistrict: z.boolean().default(false).optional(),  // ⬇️ 추가
+    isGoodDeal: z.boolean().default(false).optional(), // ⬇️ 추가
+    isSpecialDistrict: z.boolean().default(false).optional(), // ⬇️ 추가
     isNearStation: z.boolean().default(false),
     isBeginnerFriendly: z.boolean().default(false).optional(), // ⬇️ 추가
     isWomanFriendly: z.boolean().default(false).optional(), // ⬇️ 추가

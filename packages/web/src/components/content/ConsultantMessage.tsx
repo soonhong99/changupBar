@@ -46,7 +46,7 @@ const Emphasize = ({ children }: { children: React.ReactNode }) => (
         <p>한번의 창업으로 끝나는 인연이 아닌 5년, 10년을 뛰어넘어선 <Emphasize>인생 동반자</Emphasize>가 되어주세요.</p>
         <p>여기까지 읽어주신 것 만으로도 감사드립니다.</p>
         <p>다시 한번 스마트창업에 방문해주신 모든 분들께 존경을 표하며, 많은 동기부여를 받고 가셨으면 좋겠습니다.</p>
-        <p>저는 <Emphasize>고민이 끝나신</Emphasize> 여러분들의 문의를 기다리고 있겠습니다.</p>
+        <p>저는 <Emphasize>고민이 끝난</Emphasize> 여러분들의 문의를 기다리고 있겠습니다.</p>
         <div className="pt-4 mt-4 border-t border-gray-200 dark:border-gray-700 text-right">
           <p className="font-semibold"><BlueText>함께 나아가는 스마트창업</BlueText></p>
           <p>권순홍 올림</p>

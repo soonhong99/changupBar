@@ -5,13 +5,13 @@ export declare const registerUserSchema: z.ZodObject<{
     password: z.ZodString;
     phone: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
-    email: string;
     name: string;
+    email: string;
     password: string;
     phone?: string | undefined;
 }, {
-    email: string;
     name: string;
+    email: string;
     password: string;
     phone?: string | undefined;
 }>;

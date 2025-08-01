@@ -4,8 +4,16 @@ import prisma from '../config/prisma.js';
 import { CreateConsultationInput } from 'shared/schemas/consultation.schema';
 
 async function create(data: CreateConsultationInput) {
+  console.log(`API desired time: ${data.desiredTime}`)
+  // ⬇️ Prisma에 저장하기 전에 데이터를 변환하는 단계를 추가합니다.
+  const dataForDb = {
+    ...data,
+    // desiredTime이 문자열이면 new Date()로 Date 객체로 변환, 없으면 null
+    desiredTime: data.desiredTime ? new Date(data.desiredTime) : null,
+  };
+
   const newRequest = await prisma.consultationRequest.create({
-    data,
+    data: dataForDb, // 변환된 데이터를 사용합니다.
   });
   return newRequest;
 }

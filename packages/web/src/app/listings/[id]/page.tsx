@@ -1,9 +1,12 @@
 // packages/web/src/app/listings/[id]/page.tsx
 
+// "use client";
+
 import { getListingById, getRelatedListings } from '@/lib/api';
 import { notFound } from 'next/navigation';
 import ListingCard from '@/components/ui/ListingCard'; // ⬅️ ListingCard 추가
 import Link from 'next/link'; // ⬅️ Link 추가
+import ListingDetailCTA from '@/components/listings/ListingDetailCTA'; // ⬅️ 새로 만든 컴포넌트 import
 import { 
   MapPin, 
   TrendingUp, 
@@ -496,31 +499,13 @@ export default async function ListingDetailPage({ params }: Props) {
                 </li>
                 <li className="flex items-start gap-2">
                   <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400 mt-0.5 flex-shrink-0" />
-                  <span className="text-sm text-gray-700 dark:text-gray-300">전문 상담사 1:1 지원</span>
+                  <span className="text-sm text-gray-700 dark:text-gray-300">전국 상위 1% 매물</span>
                 </li>
               </ul>
             </div>
 
             {/* CTA 버튼 */}
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-100 dark:border-gray-700 sticky top-26">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                관심있으신가요?
-              </h3>
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
-                전문 상담사가 자세한 정보와 함께 창업 성공을 도와드립니다.
-              </p>
-              <a 
-                href="tel:010-2536-1178"
-                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-4 px-6 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 group shadow-lg hover:shadow-xl"
-              >
-                <Phone className="w-5 h-5" />
-                상담 신청하기
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </a>
-              <p className="text-xs text-gray-500 dark:text-gray-400 mt-3 text-center">
-                평일 09:00-18:00 | 주말 10:00-17:00
-              </p>
-            </div>
+            <ListingDetailCTA listing={listing} />
 
             {/* 추가 정보 */}
             <div className="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
@@ -556,22 +541,17 @@ export default async function ListingDetailPage({ params }: Props) {
 
       <div className="max-w-6xl mx-auto px-4 py-12 space-y-12">
         <RelatedListingsSection 
-          title="비슷한 권리금의 다른 매물"
+          title="해당 투자 금액 엄선 매물"
           listings={relatedListings.byKeyMoney}
           viewMoreLink={`/search?keyMoneyLte=${listing.keyMoney}`}
         />
         <RelatedListingsSection 
-          title="비슷한 수익성의 다른 매물"
-          listings={relatedListings.byNetProfit}
-          viewMoreLink={`/search`} // 수익성 필터는 아직 없으므로 전체 검색으로 연결
-        />
-        <RelatedListingsSection 
-          title="같은 업종의 다른 매물"
+          title="해당 업종 엄선 매물"
           listings={relatedListings.byMainCategory}
           viewMoreLink={`/search?mainCategory=${encodeURIComponent(listing.mainCategory || '')}`}
         />
         <RelatedListingsSection 
-          title="이 지역의 다른 추천 매물"
+          title="해당 지역 엄선 매물"
           listings={relatedListings.byRegion}
           viewMoreLink={`/search?sido=${encodeURIComponent(listing.sido || '')}&sigungu=${encodeURIComponent(listing.sigungu || '')}`}
         />

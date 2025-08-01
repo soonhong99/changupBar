@@ -201,7 +201,7 @@ export default function MyPage() {
     <Modal 
         isOpen={isModalOpen} 
         onClose={() => setIsModalOpen(false)}
-        title="맞춤 매물 상담 신청"
+        title="매물 상담 신청"
       >
         <ConsultationForm 
           onSuccess={() => {

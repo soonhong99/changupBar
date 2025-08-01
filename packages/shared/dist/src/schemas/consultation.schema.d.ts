@@ -8,23 +8,26 @@ export declare const createConsultationSchema: z.ZodObject<{
     desiredLocation: z.ZodString;
     investmentAmount: z.ZodNumber;
     details: z.ZodOptional<z.ZodString>;
+    desiredTime: z.ZodNullable<z.ZodOptional<z.ZodString>>;
 }, "strip", z.ZodTypeAny, {
-    name: string;
     phone: string;
+    name: string;
     age: number;
     gender: string;
     desiredCategory: string;
     desiredLocation: string;
     investmentAmount: number;
     details?: string | undefined;
+    desiredTime?: string | null | undefined;
 }, {
-    name: string;
     phone: string;
+    name: string;
     age: number;
     gender: string;
     desiredCategory: string;
     desiredLocation: string;
     investmentAmount: number;
     details?: string | undefined;
+    desiredTime?: string | null | undefined;
 }>;
 export type CreateConsultationInput = z.infer<typeof createConsultationSchema>;

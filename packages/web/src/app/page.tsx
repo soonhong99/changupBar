@@ -442,7 +442,7 @@ export default async function HomePage() {
                 <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
                   <div className="text-3xl mb-2">📋</div>
                   <h4 className="font-semibold mb-1">든든한 동행, 성공적인 시작</h4>
-                  <p className="text-sm text-blue-100">상담부터 계약까지, 곁에서 함께 걷겠습니다</p>
+                  <p className="text-sm text-blue-100">상담부터 계약까지 모든 절차를 책임집니다</p>
                 </div>
               </div>
 

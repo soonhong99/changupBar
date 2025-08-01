@@ -1,48 +1,122 @@
 // packages/web/src/components/forms/ConsultationForm.tsx
-"use client";
 
-import { useState, FormEvent } from 'react';
+import { useState, FormEvent, useEffect, useRef } from 'react';
 import { createConsultation } from '@/lib/api';
+import DateTimePicker from '@/components/ui/DateTimePicker';
+import { CreateConsultationInput } from '@shared/schemas/consultation.schema';
 
 interface ConsultationFormProps {
   onSuccess: () => void;
+  initialData?: Partial<CreateConsultationInput>;
 }
 
-export default function ConsultationForm({ onSuccess }: ConsultationFormProps) {
+interface FormDataState {
+  name: string;
+  phone: string;
+  age: number;
+  gender: string;
+  desiredCategory: string;
+  desiredLocation: string;
+  investmentAmount: number;
+  details: string;
+  desiredTime?: Date; 
+}
+
+export default function ConsultationForm({ initialData = {}, onSuccess }: ConsultationFormProps) {
   const [currentStep, setCurrentStep] = useState(1);
-  const [formData, setFormData] = useState({
-    name: '', // ⬅️ 추가
-    phone: '', 
-    age: 25, 
-    gender: '남성',
-    desiredCategory: 'CAFE_BAKERY', 
-    desiredLocation: '',
-    investmentAmount: 5000, 
-    details: ''
+  
+  // investmentAmount를 적절한 범위로 매핑하는 함수
+  const getMatchingRangeValue = (amount: number) => {
+    if (amount <= 5000) return 5000;
+    if (amount <= 10000) return 10000;
+    if (amount <= 20000) return 20000;
+    return 20001; // 20000 초과는 2억원 이상
+  };
+
+  // 초기 상태를 함수로 설정하여 initialData를 반영
+  const [formData, setFormData] = useState<FormDataState>(() => {
+    // investmentAmount가 있는 경우 적절한 범위로 매핑
+    const mappedInvestmentAmount = initialData.investmentAmount !== undefined
+      ? getMatchingRangeValue(initialData.investmentAmount)
+      : 5000;
+
+    return {
+      name: initialData.name || '',
+      phone: initialData.phone || '', 
+      age: initialData.age || 25, 
+      gender: initialData.gender || '남성',
+      desiredCategory: initialData.desiredCategory || '', 
+      desiredLocation: initialData.desiredLocation || '',
+      investmentAmount: mappedInvestmentAmount, 
+      details: initialData.details || '',
+    };
   });
+
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [selectedMainCategory, setSelectedMainCategory] = useState<string>('');
+  const [selectedSubCategory, setSelectedSubCategory] = useState<string>(
+    initialData?.desiredCategory || ''
+  );
+  const [isCategoryOpen, setIsCategoryOpen] = useState(false);
 
-  const categories = [
-    { value: 'CAFE_BAKERY', label: '☕ 카페/베이커리' },
-    { value: 'FOOD', label: '🍽️ 음식점' },
-    { value: 'RETAIL', label: '🛍️ 소매점' },
-    { value: 'SERVICE', label: '💼 서비스업' },
-    { value: 'EDUCATION', label: '📚 교육' },
-    { value: 'FITNESS', label: '💪 피트니스' },
-    { value: 'BEAUTY', label: '💅 뷰티' },
-    { value: 'OTHER', label: '🔧 기타' }
-  ];
+  // initialData의 이전 값을 추적하기 위한 ref
+  const prevInitialDataRef = useRef(initialData);
 
   const investmentRanges = [
-    { value: 1000, label: '1천만원 이하' },
-    { value: 3000, label: '3천만원 이하' },
     { value: 5000, label: '5천만원 이하' },
     { value: 10000, label: '1억원 이하' },
     { value: 20000, label: '2억원 이하' },
-    { value: 30000, label: '3억원 이상' }
+    { value: 20001, label: '2억원 이상' }
   ];
 
+  // initialData가 실제로 변경되었을 때만 상태 업데이트
+  useEffect(() => {
+  const prevProps = prevInitialDataRef.current;
+  
+  const hasChanged = 
+    prevProps.desiredCategory !== initialData.desiredCategory ||
+    prevProps.desiredLocation !== initialData.desiredLocation ||
+    prevProps.investmentAmount !== initialData.investmentAmount ||
+    prevProps.name !== initialData.name ||
+    prevProps.phone !== initialData.phone ||
+    prevProps.age !== initialData.age ||
+    prevProps.gender !== initialData.gender ||
+    prevProps.details !== initialData.details;
+
+  if (hasChanged) {
+    // setFormData의 콜백 함수를 사용하여 안전하게 상태 업데이트
+    setFormData(prevState => {
+      const newInvestmentAmount = initialData.investmentAmount !== undefined
+        ? getMatchingRangeValue(initialData.investmentAmount)
+        : prevState.investmentAmount; // ★ 수정된 부분: 현재 상태 값을 fallback으로 사용
+
+      return {
+        ...prevState,
+        name: initialData.name || prevState.name,
+        phone: initialData.phone || prevState.phone,
+        age: initialData.age || prevState.age,
+        gender: initialData.gender || prevState.gender,
+        desiredCategory: initialData.desiredCategory || prevState.desiredCategory,
+        desiredLocation: initialData.desiredLocation || prevState.desiredLocation,
+        investmentAmount: newInvestmentAmount, // ★ 수정된 부분: 항상 number 타입을 보장
+        details: initialData.details || prevState.details,
+      };
+    });
+    
+    setSelectedSubCategory(initialData.desiredCategory || '');
+    prevInitialDataRef.current = initialData;
+  }
+}, [
+  initialData.desiredCategory,
+  initialData.desiredLocation,
+  initialData.investmentAmount,
+  initialData.name,
+  initialData.phone,
+  initialData.age,
+  initialData.gender,
+  initialData.details
+]);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
     setFormData(prev => ({ ...prev, [name]: type === 'number' ? Number(value) : value }));
@@ -53,8 +127,16 @@ export default function ConsultationForm({ onSuccess }: ConsultationFormProps) {
     setIsSubmitting(true);
     setError(null);
     try {
-      await createConsultation(formData);
-      alert('상담 신청이 성공적으로 접수되었습니다. 빠른 시일 내에 연락드리겠습니다.');
+      const submissionData = {
+        ...formData,
+        investmentAmount: Number(formData.investmentAmount),
+        age: Number(formData.age),
+        desiredTime: formData.desiredTime ? formData.desiredTime.toISOString() : null,
+      };
+      console.log('서버로 전송될 최종 데이터:', submissionData); 
+
+      await createConsultation(submissionData);
+      alert('상담 신청이 성공적으로 접수되었습니다.');
       onSuccess();
     } catch (err) {
       setError(err instanceof Error ? err.message : '오류가 발생했습니다.');
@@ -70,19 +152,19 @@ export default function ConsultationForm({ onSuccess }: ConsultationFormProps) {
     <form 
       onSubmit={handleSubmit} 
       onKeyDown={(e) => {
-        // Enter 키로 인한 자동 제출 방지 (3단계가 아닐 때)
         if (e.key === 'Enter' && currentStep < 3) {
           e.preventDefault();
         }
       }}
       className="max-h-[80vh] overflow-hidden flex flex-col">
+      {/* 나머지 JSX는 동일하게 유지 */}
       {/* 헤더 */}
       <div className="text-center mb-4 flex-shrink-0">
         <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-1">
-          무료 창업 상담 신청
+          창업 컨설팅 신청
         </h2>
         <p className="text-sm text-gray-600 dark:text-gray-400">
-          전문 컨설턴트가 24시간 내 연락드립니다
+          당신의 결심을 성공으로 이끌겠습니다.
         </p>
       </div>
 
@@ -226,23 +308,17 @@ export default function ConsultationForm({ onSuccess }: ConsultationFormProps) {
                   </svg>
                   희망 업종 <span className="text-red-500">*</span>
                 </label>
-                <div className="grid grid-cols-4 gap-2">
-                  {categories.map((category) => (
-                    <button
-                      key={category.value}
-                      type="button"
-                      onClick={() => setFormData(prev => ({ ...prev, desiredCategory: category.value }))}
-                      className={`p-2 rounded-lg text-center transition-all text-xs ${
-                        formData.desiredCategory === category.value
-                          ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-md'
-                          : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
-                      }`}
-                    >
-                      <div className="text-lg mb-0.5">{category.label.split(' ')[0]}</div>
-                      <div className="font-medium">{category.label.split(' ')[1]}</div>
-                    </button>
-                  ))}
-                </div>
+                <input
+                  type="text"
+                  value={formData.desiredCategory}
+                  onChange={(e) => setFormData(prev => ({ ...prev, desiredCategory: e.target.value }))}
+                  placeholder="예: 카페, 치킨집, 편의점 등 (특별히 원하는 업종이 없다면 '없음')"
+                  className="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-sm"
+                  required
+                />
+                <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                  원하시는 업종을 자유롭게 작성해주세요. 여러 개인 경우 쉼표로 구분해주세요.
+                </p>
               </div>
 
               {/* 예상 투자금 */}
@@ -286,7 +362,19 @@ export default function ConsultationForm({ onSuccess }: ConsultationFormProps) {
                   value={formData.desiredLocation}
                   onChange={handleChange}
                   placeholder="예: 서울 강남구, 경기도 성남시"
-                  className="w-full px-3 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                  className="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-sm"
+                />
+              </div>
+
+              <div>
+                <label className="flex items-center text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  <svg className="w-4 h-4 mr-1.5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                  상담 희망 시간
+                </label>
+                <DateTimePicker 
+                  onChange={(date) => setFormData(prev => ({ ...prev, desiredTime: date }))}
                 />
               </div>
             </div>
@@ -324,13 +412,41 @@ export default function ConsultationForm({ onSuccess }: ConsultationFormProps) {
                 </p>
               </div>
 
+              {/* 상담 안내 메시지 */}
+              <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-4">
+                <div className="flex items-start">
+                  <svg className="w-5 h-5 text-amber-600 dark:text-amber-400 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                  </svg>
+                  <div className="ml-3">
+                    <h3 className="text-sm font-semibold text-amber-800 dark:text-amber-200 mb-1">
+                      상담 전 안내사항
+                    </h3>
+                    <p className="text-sm text-amber-700 dark:text-amber-300 leading-relaxed space-y-1">
+                      <span className="block">
+                        <span className="font-bold text-amber-900 dark:text-amber-100">안정</span>적인 사업을 지속할 수 있도록,
+                      </span>
+                      <span className="block">
+                        <span className="font-bold text-amber-900 dark:text-amber-100">도전</span>을 계속해서 하실 수 있도록,
+                      </span>
+                      <span className="block">
+                        <span className="font-bold text-amber-900 dark:text-amber-100">성공</span>한 사업가가 될 수 있도록
+                      </span>
+                      <span className="block">
+                        수단과 방법을 가리지 않고 도와드리겠습니다.
+                      </span>
+                    </p>
+                  </div>
+                </div>
+              </div>
+
               {/* 개인정보 동의 */}
               <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-3">
                 <p className="text-xs text-gray-600 dark:text-gray-400">
                   <svg className="w-4 h-4 inline mr-1 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                   </svg>
-                  제출하시면 개인정보 수집 및 이용에 동의하는 것으로 간주됩니다.
+                  위 내용을 확인했으며, 개인정보 수집 및 이용에 동의합니다.
                 </p>
               </div>
             </div>
