@@ -29,6 +29,10 @@ router.get('/', optionalAuthMiddleware, asyncHandler(listingController.getAllLis
 // GET /api/v1/listings/:id - 특정 매물 조회
 router.get('/:id', asyncHandler(listingController.getListingById));
 
+// GET /api/v1/listings/:id/related - 관련 매물 조회
+// 조심
+router.get('/:id/related', asyncHandler(listingController.getRelatedListings));
+
 // --- POST, PATCH, DELETE 등 다른 메소드 라우트는 순서에 큰 영향을 받지 않습니다. ---
 
 // POST /api/v1/listings/:id/like - 특정 매물 '찜'하기 (로그인 필요)

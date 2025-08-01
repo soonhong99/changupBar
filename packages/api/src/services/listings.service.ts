@@ -5,12 +5,16 @@ import { CreateListingInput } from 'shared/schemas/listing.schema';
 import { Prisma, UserRole } from '@prisma/client'; // Prisma 타입을 가져옵니다.
 import { UpdateListingInput } from 'shared/schemas/listing.schema'; // ⬅️ 추가
 import notificationService from './notification.service.js'; // ⬅️ 추가
+import { regionGroups, findRegionGroup } from '../data/regionGroups.js'; // ⬅️ 추가
 
 let cachedMostViewed: { listing: any; timestamp: number } | null = null;
 const CACHE_DURATION = 5 * 60 * 1000; // 5분 (밀리초 단위)
 
 let cachedRandomByCategory: { data: any; timestamp: number } | null = null;
 const RANDOM_CACHE_DURATION = 12 * 60 * 60 * 1000; // 12시간
+
+let cachedRelatedListings = new Map<string, { data: any; timestamp: number }>();
+const RELATED_CACHE_DURATION = 5 * 60 * 1000; // 5분 캐시
 
 /**
  * 신규 매물을 데이터베이스에 생성합니다.
@@ -376,6 +380,69 @@ async function getRandomByCategory() {
   return results;
 }
 
+/**
+ * 특정 매물과 관련된 추천 매물 목록을 조회합니다. (5분 캐시)
+ * @param listingId 기준이 되는 매물의 ID
+ */
+async function getRelatedListings(listingId: string) {
+  const now = Date.now();
+  const cached = cachedRelatedListings.get(listingId);
+
+  if (cached && now - cached.timestamp < RELATED_CACHE_DURATION) {
+    console.log(`✅ Service: 캐시된 '관련 매물'(${listingId})을 반환합니다.`);
+    return cached.data;
+  }
+
+  const baseListing = await prisma.listing.findUnique({ where: { id: listingId } });
+  if (!baseListing) throw new Error('기준 매물을 찾을 수 없습니다.');
+
+  // 권리금
+  const getKeyMoneyRange = (km: number) => {
+    if (km < 10000) return { lt: 10000 };
+    if (km < 20000) return { gte: 10000, lt: 20000 };
+    if (km < 50000) return { gte: 20000, lt: 50000 };
+    return { gte: 50000 };
+  };
+  // 실수익
+  const getNetProfitRange = (np: number) => {
+    if (np < 500) return { lt: 500 };
+    if (np < 1000) return { gte: 500, lt: 1000 };
+    if (np < 2000) return { gte: 1000, lt: 2000 };
+    return { gte: 2000 };
+  };
+
+  const baseWhere = {
+    id: { not: listingId },
+    status: 'PUBLISHED',
+    contractStatus: 'AVAILABLE'
+  } as const;
+
+  // 랜덤 추출을 위한 함수
+  const getRandomListings = async (where: Prisma.ListingWhereInput, limit: number = 3) => {
+    const allIds = await prisma.listing.findMany({ where, select: { id: true } });
+    const shuffled = allIds.sort(() => 0.5 - Math.random());
+    const selectedIds = shuffled.slice(0, limit).map(l => l.id);
+
+    return prisma.listing.findMany({
+      where: { id: { in: selectedIds } },
+      include: { _count: { select: { likedBy: true } } },
+    });
+  };
+
+  // 4개의 쿼리를 병렬로 실행
+  const [byKeyMoney, byNetProfit, byMainCategory, byRegion] = await Promise.all([
+    getRandomListings({ ...baseWhere, keyMoney: getKeyMoneyRange(baseListing.keyMoney) }),
+    getRandomListings({ ...baseWhere, netProfit: getNetProfitRange(baseListing.netProfit) }),
+    getRandomListings({ ...baseWhere, mainCategory: baseListing.mainCategory }),
+    getRandomListings({ ...baseWhere, sigungu: { in: findRegionGroup(baseListing.sigungu || '') || [] } }),
+  ]);
+
+  const results = { byKeyMoney, byNetProfit, byMainCategory, byRegion };
+  cachedRelatedListings.set(listingId, { data: results, timestamp: now });
+
+  console.log(`✅ Service: 새로운 '관련 매물'(${listingId})을 조회했습니다.`);
+  return results;
+}
 
 // 서비스 객체로 내보내기
 export default {
@@ -389,4 +456,5 @@ export default {
   getStats,
   getMostViewed,
   getRandomByCategory,
+  getRelatedListings,
 };

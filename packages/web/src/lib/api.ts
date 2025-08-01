@@ -349,3 +349,23 @@ export async function getRandomListingsByCategory(): Promise<Record<string, List
     return {}; // 에러 발생 시 빈 객체 반환
   }
 }
+
+export interface RelatedListings {
+  byKeyMoney: ListingWithCounts[];
+  byNetProfit: ListingWithCounts[];
+  byMainCategory: ListingWithCounts[];
+  byRegion: ListingWithCounts[];
+}
+
+export async function getRelatedListings(listingId: string): Promise<RelatedListings> {
+  try {
+    const res = await fetch(`${API_URL}/listings/${listingId}/related`, { cache: 'no-store' });
+    if (!res.ok) {
+      throw new Error('관련 매물을 불러오는데 실패했습니다.');
+    }
+    return res.json();
+  } catch (error) {
+    console.error(error);
+    return { byKeyMoney: [], byNetProfit: [], byMainCategory: [], byRegion: [] };
+  }
+}

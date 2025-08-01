@@ -1,17 +1,15 @@
 // packages/web/src/app/listings/[id]/page.tsx
 
-import { getListingById } from '@/lib/api';
+import { getListingById, getRelatedListings } from '@/lib/api';
 import { notFound } from 'next/navigation';
+import ListingCard from '@/components/ui/ListingCard'; // ⬅️ ListingCard 추가
+import Link from 'next/link'; // ⬅️ Link 추가
 import { 
   MapPin, 
   TrendingUp, 
   Building, 
-  DollarSign, 
-  Calendar,
   CheckCircle,
   Star,
-  Clock,
-  Car,
   Zap,
   Phone,
   ArrowRight,
@@ -19,14 +17,11 @@ import {
   Users,
   BarChart3,
   Package,
-  Truck,
   Train,
   Receipt,
   Wallet,
   PiggyBank,
-  TrendingDown,
   Calculator,
-  Home,
   BikeIcon,
   Leaf,
   Smile,
@@ -40,10 +35,37 @@ type Props = {
   params: Promise<{ id: string }>;
 };
 
+// ⬇️ 추천 섹션을 위한 별도의 컴포넌트를 만듭니다.
+function RelatedListingsSection({ title, listings, viewMoreLink }: { title: string, listings: any[], viewMoreLink: string }) {
+  if (listings.length === 0) return null;
+
+  return (
+    <section className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 border border-gray-100 dark:border-gray-700">
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+          {title}
+        </h2>
+        <Link href={viewMoreLink} className="group flex items-center text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300">
+          <span>더보기</span>
+          <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
+        </Link>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {listings.map(listing => (
+          <ListingCard key={listing.id} listing={listing} />
+        ))}
+      </div>
+    </section>
+  );
+}
+
 export default async function ListingDetailPage({ params }: Props) {
   const { id } = await params;
-  const listing = await getListingById(id);
-
+  const [listing, relatedListings] = await Promise.all([
+    getListingById(id),
+    getRelatedListings(id),
+  ]);
+  
   if (!listing) {
     notFound();
   }
@@ -530,6 +552,29 @@ export default async function ListingDetailPage({ params }: Props) {
             </div>
           </div>
         </div>
+      </div>
+
+      <div className="max-w-6xl mx-auto px-4 py-12 space-y-12">
+        <RelatedListingsSection 
+          title="비슷한 권리금의 다른 매물"
+          listings={relatedListings.byKeyMoney}
+          viewMoreLink={`/search?keyMoneyLte=${listing.keyMoney}`}
+        />
+        <RelatedListingsSection 
+          title="비슷한 수익성의 다른 매물"
+          listings={relatedListings.byNetProfit}
+          viewMoreLink={`/search`} // 수익성 필터는 아직 없으므로 전체 검색으로 연결
+        />
+        <RelatedListingsSection 
+          title="같은 업종의 다른 매물"
+          listings={relatedListings.byMainCategory}
+          viewMoreLink={`/search?mainCategory=${encodeURIComponent(listing.mainCategory || '')}`}
+        />
+        <RelatedListingsSection 
+          title="이 지역의 다른 추천 매물"
+          listings={relatedListings.byRegion}
+          viewMoreLink={`/search?sido=${encodeURIComponent(listing.sido || '')}&sigungu=${encodeURIComponent(listing.sigungu || '')}`}
+        />
       </div>
     </div>
   );

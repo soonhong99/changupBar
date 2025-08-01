@@ -104,6 +104,12 @@ async function getRandomByCategory(req: Request, res: Response) {
   res.status(200).json(listings);
 }
 
+async function getRelatedListings(req: Request, res: Response) {
+  const { id } = req.params;
+  const listings = await listingService.getRelatedListings(id);
+  res.status(200).json(listings);
+}
+
 export default {
   createListing,
   getListingById,
@@ -115,4 +121,5 @@ export default {
   getStats,
   getMostViewedListing,
   getRandomByCategory,
+  getRelatedListings,
 };
