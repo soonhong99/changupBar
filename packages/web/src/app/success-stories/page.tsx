@@ -446,10 +446,10 @@ export default function SuccessStoriesPage() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
-              href="/consulting"
-              className="bg-white text-purple-600 px-8 py-4 rounded-full font-semibold text-lg hover:bg-purple-50 transition-all duration-200 transform hover:scale-105 shadow-xl"
+              href="/contact"
+              className="bg-purple-700 text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-purple-800 transition-all duration-200 transform hover:scale-105 shadow-xl"
             >
-              📞 *** 팀장 상담 신청
+              💬 온라인 문의하기
             </Link>
             <Link
               href="/register"

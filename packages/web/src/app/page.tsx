@@ -198,18 +198,18 @@ export default async function HomePage() {
         </div>
 
         {/* --- 긴급성 강조 배너 --- */}
-        <div className="mb-8 relative overflow-hidden">
+        {/* <div className="mb-8 relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-r from-red-500/10 to-orange-500/10 rounded-2xl"></div>
           <div className="relative bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-red-200 dark:border-red-800 p-6">
             <div className="flex items-center justify-center mb-4">
               <div className="flex items-center space-x-2">
                 <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
-                <span className="text-red-600 dark:text-red-400 font-semibold text-lg">실시간 마감 임박</span>
+                <span className="text-red-600 dark:text-red-400 font-semibold text-lg">주간 매물 마감</span>
               </div>
             </div>
             <CountdownTimer targetDate={countdownTarget} />
-            <div className="mt-4 flex items-center justify-center space-x-4 text-sm text-gray-600 dark:text-gray-400">
-              <span className="flex items-center">
+            <div className="mt-4 flex items-center justify-center space-x-4 text-red-600 dark:text-red-400 font-semibold text-lg"> */}
+              {/* <span className="flex items-center">
                 <svg className="w-4 h-4 mr-1 text-green-500" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                 </svg>
@@ -220,22 +220,25 @@ export default async function HomePage() {
                   <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
                 </svg>
                 비밀 보장
-              </span>
+              </span> */}
+              {/* 남았습니다.
             </div>
           </div>
-        </div>
+        </div> */}
 
         {/* --- 대표 매물 목록 --- */}
         <div className="mb-8">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
-              주간 특급 매물 
+            <h2 className="text-3xl font-bold"> 
+              <span className="bg-gradient-to-r from-orange-500 to-orange-300 bg-clip-text text-transparent">
+                주간 인기 매물
+              </span>
             </h2>
             <div className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
               <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
               <span>실시간 업데이트</span>
             </div>
-          </div>
+        </div>
 
           {featuredListings.length === 0 ? (
             <div className="text-center py-16 bg-white dark:bg-gray-800 rounded-2xl shadow-lg">
