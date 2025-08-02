@@ -73,45 +73,6 @@ export default async function HomePage() {
 
         {/* --- 혜택 강조 섹션 --- */}
         <div className="mb-12 grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* 100% 실매물 보장 카드 */}
-          <div className="bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-xl shadow-md transition transform hover:scale-105 hover:shadow-lg">
-            {/* 모바일용 UI - md 이하에서만 보임 */}
-            <div className="block md:hidden p-6">
-              <div className="flex items-center mb-3">
-                <svg className="w-8 h-8 mr-3" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                </svg>
-                <h3 className="text-lg font-semibold">100% 맞춤형 사업 추천</h3>
-              </div>
-              <p className="text-blue-100">지속가능한 수익성인지 철저히 검증합니다</p>
-            </div>
-
-            {/* 데스크톱용 UI - md 이상에서만 보임 */}
-            <div className="hidden md:block overflow-hidden">
-              {/* 이미지 영역 - 1:1 비율 */}
-              <div className="relative w-full aspect-square">
-                <img
-                  src="/images/main/real-property.png"
-                  alt="실매물 보장"
-                  className="w-full h-full object-cover"
-                />
-                {/* 이미지 위에 아이콘 */}
-                <div className="absolute top-4 left-4">
-                  <div className="bg-white/20 backdrop-blur-sm rounded-full p-3">
-                    <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                    </svg>
-                  </div>
-                </div>
-              </div>
-              {/* 텍스트 영역 */}
-              <div className="p-6">
-                <h3 className="text-lg font-semibold mb-2">100% 맞춤형 사업 추천</h3>
-                <p className="text-blue-100">지속가능한 수익성인지 철저히 검증합니다</p>
-              </div>
-            </div>
-          </div>
-
           {/* 전담 컨설턴트 카드 */}
           <div className="bg-gradient-to-br from-purple-500 to-purple-600 text-white rounded-xl shadow-md transition transform hover:scale-105 hover:shadow-lg">
             {/* 모바일용 UI - md 이하에서만 보임 */}
@@ -130,7 +91,7 @@ export default async function HomePage() {
               {/* 이미지 영역 - 1:1 비율 */}
               <div className="relative w-full aspect-square">
                 <img
-                  src="/images/main/consultant.png"
+                  src="https://images.unsplash.com/photo-1522973717924-b10fe4e185cc?q=80&w=580&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3Dg"
                   alt="전담 컨설턴트"
                   className="w-full h-full object-cover"
                 />
@@ -151,6 +112,45 @@ export default async function HomePage() {
             </div>
           </div>
 
+            {/* 100% 실매물 보장 카드 */}
+          <div className="bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-xl shadow-md transition transform hover:scale-105 hover:shadow-lg">
+            {/* 모바일용 UI - md 이하에서만 보임 */}
+            <div className="block md:hidden p-6">
+              <div className="flex items-center mb-3">
+                <svg className="w-8 h-8 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                </svg>
+                <h3 className="text-lg font-semibold">100% 맞춤형 사업 추천</h3>
+              </div>
+              <p className="text-blue-100">지속가능한 수익성인지 철저히 검증합니다</p>
+            </div>
+
+            {/* 데스크톱용 UI - md 이상에서만 보임 */}
+            <div className="hidden md:block overflow-hidden">
+              {/* 이미지 영역 - 1:1 비율 */}
+              <div className="relative w-full aspect-square">
+                <img
+                  src="https://images.unsplash.com/photo-1446214814726-e6074845b4ce?q=80&w=535&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                  alt="실매물 보장"
+                  className="w-full h-full object-cover"
+                />
+                {/* 이미지 위에 아이콘 */}
+                <div className="absolute top-4 left-4">
+                  <div className="bg-white/20 backdrop-blur-sm rounded-full p-3">
+                    <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+              {/* 텍스트 영역 */}
+              <div className="p-6">
+                <h3 className="text-lg font-semibold mb-2">100% 맞춤형 사업 추천</h3>
+                <p className="text-blue-100">지속가능한 수익성인지 철저히 검증합니다</p>
+              </div>
+            </div>
+          </div>
+
           {/* 완벽한 후처리 카드 */}
           <div className="bg-gradient-to-br from-green-500 to-green-600 text-white rounded-xl shadow-md transition transform hover:scale-105 hover:shadow-lg">
             {/* 모바일용 UI - md 이하에서만 보임 */}
@@ -161,7 +161,7 @@ export default async function HomePage() {
                 </svg>
                 <h3 className="text-lg font-semibold">완벽한 후처리</h3>
               </div>
-              <p className="text-green-100">계약 후에도 3개월간 함께합니다</p>
+              <p className="text-green-100">계약 후에도 원하시는 만큼 함께합니다</p>
             </div>
 
             {/* 데스크톱용 UI - md 이상에서만 보임 */}
@@ -169,7 +169,7 @@ export default async function HomePage() {
               {/* 이미지 영역 - 1:1 비율 */}
               <div className="relative w-full aspect-square">
                 <img
-                  src="/images/main/afterservice.png"
+                  src="https://images.unsplash.com/photo-1422061289586-1060c743ec13?q=80&w=580&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                   alt="애프터서비스"
                   className="w-full h-full object-cover"
                 />
@@ -185,7 +185,7 @@ export default async function HomePage() {
               {/* 텍스트 영역 */}
               <div className="p-6">
                 <h3 className="text-lg font-semibold mb-2">완벽한 후처리</h3>
-                <p className="text-green-100">계약 후에도 3개월간 함께합니다</p>
+                <p className="text-green-100">계약 후에도 원하시는 만큼 함께합니다</p>
               </div>
             </div>
           </div>

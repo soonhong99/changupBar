@@ -11,13 +11,110 @@ import Modal from "@/components/ui/Modal"; // ⬅️ Modal import
 import ConsultationForm from "@/components/forms/ConsultationForm";
 import { categories, mainCategories } from '@/data/categories'; // ⬅️ 카테고리 데이터 import
 import InfoToggle from "@/components/ui/InfoToggle"; // ⬅️ 1. InfoToggle 컴포넌트를 import 합니다.
+import Image from "next/image"; // Image 컴포넌트 import
+
+function SearchHeroSection() {
+  return (
+    <section className="relative overflow-hidden text-white">
+      {/* 배경 이미지 */}
+      <div className="absolute inset-0 z-0">
+        <Image
+          src="https://images.unsplash.com/photo-1484501085877-500786457c48?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop" // 추천 예시 이미지
+          alt="맞춤 매물 검색 배경"
+          fill
+          className="object-cover"
+          priority
+        />
+      </div>
+      {/* 가독성을 위한 오버레이 */}
+      {/* <div className="absolute inset-0 z-10 bg-gradient-to-b from-black/40 via-gray-900/50 to-gray-900/60"></div> */}
+      
+      {/* 콘텐츠 */}
+      <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        {/* 상단 헤더 및 소개 */}
+        <div className="text-center mb-12">
+          <div className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 text-white text-sm font-semibold mb-6 shadow-lg">
+            <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd" />
+            </svg>
+            스마트 매물 검색
+          </div>
+          <div className="relative">
+            {/* 1. 반투명 블러 배경 */}
+            <div className="absolute inset-0 bg-white/10 backdrop-blur-[2px] rounded-3xl border border-white/20 shadow-2xl"></div>
+
+              {/* 2. 텍스트 콘텐츠 (padding 추가) */}
+              <div className="relative py-12 px-8 text-center">
+              {/* 👇 여기에 text-white 와 drop-shadow-lg 추가 */}
+              <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl text-white drop-shadow-lg">
+                <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                  완벽한 매물
+                </span>은 없습니다
+                <br />
+                대신 <span className="bg-gradient-to-r from-orange-400 to-orange-500 bg-clip-text text-transparent">
+                  맞춤 매물
+                </span>을 소개합니다
+              </h1>
+            </div>
+            </div>
+          
+        </div>
+
+        <div className="max-w-4xl mx-auto mb-12">
+          <InfoToggle title="매물을 보시기 전에 꼭 확인해주세요!">
+            <p className="text-base">
+              해당 매물들을 보시고, '내가 가진 투자금으로 이 업종에서 이 정도의 수익을 낼 수 있구나' 정도로 가볍게 파악만 해주세요.<br />
+              가장 중요한 것은 자신의 <strong className="text-blue-500 dark:text-blue-400">창업 유형</strong>을 인지 하는 것입니다.
+            </p>
+            스마트창업에서는 크게 <strong className="text-blue-500 dark:text-blue-400">세 가지</strong> 유형으로 나누고 있습니다.
+            <div className="mt-4 space-y-5">
+              <div className="p-4 bg-gray-100 dark:bg-gray-700/50 rounded-lg">
+                <h4 className="font-semibold text-gray-900 dark:text-gray-100 flex items-center">
+                  <span className="text-2xl mr-3">🧘</span> 워라밸 추구형 (안정)
+                </h4>
+                <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                  안정적인 시스템 속에서 편안하게, 삶의 질을 높이며 가게를 운영하고 싶어 하는 분.
+                </p>
+              </div>
+              <div className="p-4 bg-gray-100 dark:bg-gray-700/50 rounded-lg">
+                <h4 className="font-semibold text-gray-900 dark:text-gray-100 flex items-center">
+                  <span className="text-2xl mr-3">🚀</span> 성장 발판 추구형 (성공)
+                </h4>
+                <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                  현재의 투자를 발판 삼아 더 큰 성공과 확장을 꿈꾸는 야심가.
+                </p>
+              </div>
+              <div className="p-4 bg-gray-100 dark:bg-gray-700/50 rounded-lg">
+                <h4 className="font-semibold text-gray-900 dark:text-gray-100 flex items-center">
+                  <span className="text-2xl mr-3">💼</span> 탈(脫)직장인 추구형 (도전)
+                </h4>
+                <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                  직장인 월급 이상의 꾸준한 수익을 통해 경제적 자유와 여유로운 삶, 두 마리 토끼를 잡고 싶어 하는 분.
+                </p>
+              </div>
+            </div>
+            <p className="mt-5 pt-4 border-t border-gray-200 dark:border-gray-700">
+              여유로운 삶을 원하시면 <strong className="text-orange-500 dark:text-orange-400">'안정'</strong> 매물을, 
+              고수익을 원하시면 <strong className="text-orange-500 dark:text-orange-400">'성공'</strong> 매물을, 
+              일과 수익의 균형을 찾고 싶다면 <strong className="text-orange-500 dark:text-orange-400">'도전'</strong> 매물을 살펴보세요.<br />
+              유형을 먼저 파악하고 매물을 보게 되시면 훨씬 쉽게 감이 잡히실 겁니다.
+            </p>
+            <p className="mt-4 font-semibold text-center text-blue-600 dark:text-blue-400">
+              당신의 도전을 간절히 응원합니다.
+            </p>
+          </InfoToggle>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 
 // 1. 실제 로직을 수행하는 부분을 별도의 컴포넌트로 분리합니다.
 function SearchComponent() {
   const searchParams = useSearchParams();
   const [listings, setListings] = useState<ListingWithCounts[]>([]);
   
-  // ⬇️ useState의 초기값을 searchParams에서 가져옵니다.
   const [filters, setFilters] = useState<ListingFilter>({
     mainCategory: searchParams.get('mainCategory') || '',
     subCategory: searchParams.get('subCategory') || '',
@@ -28,11 +125,11 @@ function SearchComponent() {
   });
 
   const [isLoading, setIsLoading] = useState(true);
-  const [stats, setStats] = useState({ totalCount: 0, newThisWeekCount: 0 }); // ⬅️ 통계 상태 추가
-  const [mostViewed, setMostViewed] = useState<ListingWithCounts | null>(null); // ⬅️ 추가
-  const [isModalOpen, setIsModalOpen] = useState(false); // ⬅️ 모달 상태 추가
+  const [stats, setStats] = useState({ totalCount: 0, newThisWeekCount: 0 });
+  const [mostViewed, setMostViewed] = useState<ListingWithCounts | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // useEffect 1: 페이지가 처음 로드될 때 한 번만 실행 (통계, 인기 매물)
+  // ... (기존 useEffect 및 핸들러 로직은 그대로 유지) ...
   useEffect(() => {
     // 통계 데이터 불러오기
     getListingStats().then(setStats);
@@ -98,79 +195,19 @@ function SearchComponent() {
       order: order as ListingFilter['order']     // ⬅️ 타입을 강제(assertion)합니다.
     }));
   };
+  
 
-  // --- 공통 스타일 클래스 ---
   const labelClasses = "block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2";
   const selectClasses = "w-full rounded-lg shadow-sm bg-white dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 text-gray-900 dark:text-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 px-4 py-3";
   const hasActiveFilters = Object.values(filters).some(value => value !== undefined && value !== '');
 
   return (
     <>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        
-        {/* --- 상단 헤더 및 소개 --- */}
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 text-white text-sm font-semibold mb-6 shadow-lg">
-            <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd" />
-            </svg>
-            스마트 매물 검색
-          </div>
-          <h1 className="text-4xl font-extrabold tracking-tight text-gray-900 dark:text-gray-100 sm:text-5xl">
-          <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              완벽한 매물</span>은 없습니다
-            
-            <br />
-            대신 <span className="bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">맞춤 매물</span>을 소개합니다
-          </h1>
-          
-        </div>
+      {/* 2. 새로운 히어로 섹션을 맨 위에 배치합니다. */}
+      <SearchHeroSection />
 
-        <div className="max-w-4xl mx-auto mb-12">
-          <InfoToggle title="매물을 보시기 전에 꼭 확인해주세요!">
-            <p className="text-base">
-              해당 매물들을 보시고, '내가 가진 투자금으로 이 업종에서 이 정도의 수익을 낼 수 있구나' 정도로 가볍게 파악만 해주세요.<br />
-              가장 중요한 것은 자신의 <strong className="text-blue-500 dark:text-blue-400">창업 유형</strong>을 인지 하는 것입니다.
-            </p>
-            스마트창업에서는 크게 <strong className="text-blue-500 dark:text-blue-400">세 가지</strong> 유형으로 나누고 있습니다.
-            <div className="mt-4 space-y-5">
-              <div className="p-4 bg-gray-100 dark:bg-gray-700/50 rounded-lg">
-                <h4 className="font-semibold text-gray-900 dark:text-gray-100 flex items-center">
-                  <span className="text-2xl mr-3">🧘</span> 워라밸 추구형 (안정)
-                </h4>
-                <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                  안정적인 시스템 속에서 편안하게, 삶의 질을 높이며 가게를 운영하고 싶어 하는 분.
-                </p>
-              </div>
-              <div className="p-4 bg-gray-100 dark:bg-gray-700/50 rounded-lg">
-                <h4 className="font-semibold text-gray-900 dark:text-gray-100 flex items-center">
-                  <span className="text-2xl mr-3">🚀</span> 성장 발판 추구형 (성공)
-                </h4>
-                <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                  현재의 투자를 발판 삼아 더 큰 성공과 확장을 꿈꾸는 야심가.
-                </p>
-              </div>
-              <div className="p-4 bg-gray-100 dark:bg-gray-700/50 rounded-lg">
-                <h4 className="font-semibold text-gray-900 dark:text-gray-100 flex items-center">
-                  <span className="text-2xl mr-3">💼</span> 탈(脫)직장인 추구형 (도전)
-                </h4>
-                <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                  직장인 월급 이상의 꾸준한 수익을 통해 경제적 자유와 여유로운 삶, 두 마리 토끼를 잡고 싶어 하는 분.
-                </p>
-              </div>
-            </div>
-            <p className="mt-5 pt-4 border-t border-gray-200 dark:border-gray-700">
-              여유로운 삶을 원하시면 <strong className="text-orange-500 dark:text-orange-400">'안정'</strong> 매물을, 
-              고수익을 원하시면 <strong className="text-orange-500 dark:text-orange-400">'성공'</strong> 매물을, 
-              일과 수익의 균형을 찾고 싶다면 <strong className="text-orange-500 dark:text-orange-400">'도전'</strong> 매물을 살펴보세요.<br />
-              유형을 먼저 파악하고 매물을 보게 되시면 훨씬 쉽게 감이 잡히실 겁니다.
-            </p>
-            <p className="mt-4 font-semibold text-center text-blue-600 dark:text-blue-400">
-              당신의 도전을 간절히 응원합니다.
-            </p>
-          </InfoToggle>
-        </div>
-
+      {/* 3. 나머지 콘텐츠는 중앙 정렬 컨테이너로 감쌉니다. */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* --- 지역 안내 섹션 --- */}
         <div className="mb-8">
           <div className="bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 border-l-4 border-amber-400 p-6 rounded-lg shadow-sm">
@@ -204,7 +241,7 @@ function SearchComponent() {
             </div>
           </div>
         </div>
-      
+
         {/* --- 필터 UI --- */}
         <div className="mb-10 relative">
           <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-2xl"></div>
@@ -215,7 +252,14 @@ function SearchComponent() {
               </h2>
               {hasActiveFilters && (
                 <button
-                  onClick={() => setFilters({})}
+                  onClick={() => setFilters({
+                    mainCategory: '',
+                    subCategory: '',
+                    sido: '',
+                    sigungu: '',
+                    sortBy: 'createdAt',
+                    order: 'desc',
+                  })}
                   className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium"
                 >
                   전체 초기화
@@ -267,6 +311,7 @@ function SearchComponent() {
                   id="keyMoney"
                   onChange={(e) => handleFilterChange('keyMoneyLte', e.target.value ? parseInt(e.target.value) : undefined)}
                   className={selectClasses}
+                  value={filters.keyMoneyLte}
                 >
                   <option value="">금액 제한 없음</option>
                   <option value="5000">💸 5천만원 이하</option>
@@ -335,7 +380,7 @@ function SearchComponent() {
             </div>
           </div>
         </div>
-
+        
         {/* --- 매물 목록 --- */}
         <div className="mb-8">
           <div className="flex items-center justify-between mb-6">
@@ -344,15 +389,12 @@ function SearchComponent() {
               <span className="ml-2 text-blue-500">🎯</span>
             </h2>
             <div className="flex items-center space-x-4">
-              {/* <div className="text-sm text-gray-600 dark:text-gray-400" style={{ writingMode: 'horizontal-tb' }}>
-                정렬:
-              </div> */}
               <select
                 id="sort"
                 onChange={handleSortChange}
                 value={`${filters.sortBy}-${filters.order}`}
                 className={selectClasses}
-                style={{ height: '48px', width: '150px' }} // 또는 '8rem' 같은 값
+                style={{ height: '48px', width: '150px' }}
               >
                 <option value="createdAt-desc">최신순</option>
                 <option value="keyMoney-asc">권리금 낮은순</option>
@@ -385,20 +427,27 @@ function SearchComponent() {
               </p>
               <div className="space-y-3">
                 <button
-                  onClick={() => setFilters({})}
+                  onClick={() => setFilters({
+                    mainCategory: '',
+                    subCategory: '',
+                    sido: '',
+                    sigungu: '',
+                    sortBy: 'createdAt',
+                    order: 'desc',
+                  })}
                   className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
                 >
                   🔄 전체 매물 보기
                 </button>
                 <div className="text-sm text-gray-500 dark:text-gray-400">
-                  또는 <span className="text-blue-600 dark:text-blue-400 cursor-pointer hover:underline">맞춤 매물 알림</span>을 설정해보세요
+                  또는 <span className="text-blue-600 dark:text-blue-400 cursor-pointer hover:underline" onClick={() => setIsModalOpen(true)}>맞춤 매물 알림</span>을 설정해보세요
                 </div>
               </div>
             </div>
           ) : (
             <>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {listings.map((listing, index) => (
+                {listings.map((listing) => (
                   <div key={listing.id} className="relative group">
                     <div className="relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 group-hover:scale-105">
                       <ListingCard listing={listing} />
@@ -406,13 +455,6 @@ function SearchComponent() {
                   </div>
                 ))}
               </div>
-              
-              {/* 더 많은 매물 보기 버튼 */}
-              {/* <div className="text-center mt-12">
-                <button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-4 rounded-xl font-semibold text-lg shadow-lg transition-all duration-300 transform hover:scale-105">
-                  더 많은 매물 보기 📈
-                </button>
-              </div> */}
             </>
           )}
         </div>
@@ -430,14 +472,11 @@ function SearchComponent() {
               <button onClick={() => setIsModalOpen(true)} className="bg-white text-green-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
                 💬 맞춤 매물 신청하기
               </button>
-              {/* <button className="bg-yellow-400 text-gray-900 px-6 py-3 rounded-lg font-semibold hover:bg-yellow-300 transition-colors">
-                🔔 매물 알림 설정
-              </button> */}
             </div>
           </div>
         </div>
-
       </div>
+
       <Modal 
         isOpen={isModalOpen} 
         onClose={() => setIsModalOpen(false)}
@@ -449,6 +488,7 @@ function SearchComponent() {
   );
 }
 
+// ... (SearchPage 컴포넌트는 그대로 유지)
 export default function SearchPage() {
   const loadingUI = (
     <div className="flex items-center justify-center min-h-screen">

@@ -3,6 +3,7 @@ import { MessageSquare, Search, Handshake, FileText, Key, Award, ArrowRight, Che
 import Link from 'next/link';
 import ProcessCTA from '@/components/process/ProcessCTA';
 import FAQSection from '@/components/process/FAQSection'; // 분리된 클라이언트 컴포넌트
+import Image from 'next/image';
 
 // 창업 절차 단계
 const processSteps = [
@@ -145,24 +146,41 @@ export default function ProcessPage() {
   return (
     <div className="bg-white dark:bg-gray-900">
       {/* 히어로 섹션 */}
-      <section className="bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="inline-flex items-center px-4 py-2 bg-blue-100 dark:bg-blue-900 rounded-full mb-6">
-            <CheckCircle className="w-5 h-5 text-blue-600 dark:text-blue-400 mr-2" />
-            <span className="text-sm font-medium text-blue-800 dark:text-blue-200">매일 수많은 상담을 통한 검증된 프로세스</span>
-          </div>
-          <h1 className="text-4xl font-extrabold tracking-tight text-gray-900 dark:text-gray-100 sm:text-5xl md:text-6xl">
-            믿고 따를 수 있는<br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
-              스마트한 창업 가이드
-            </span>
-          </h1>
-          <p className="mt-6 max-w-3xl mx-auto text-xl text-gray-600 dark:text-gray-400">
-            평소 자주 물어오시는 내용을 정리했습니다.<br />
-            궁금증 해소와 함께, 꿈을 향해 나아가는 창업의 길을 제시합니다.
-          </p>
-        </div>
-      </section>
+      {/* "스마트한 창업 가이드" 히어로 섹션 (이미지 배경 적용) */}
+<section className="relative overflow-hidden">
+  {/* 1. 배경 이미지 */}
+  <div className="absolute inset-0 z-0">
+    <Image
+      // 추천 예시 이미지 (잘 정돈된 서재)
+      src="https://images.unsplash.com/photo-1521587760476-6c12a4b040da?q=80&w=2070&auto=format&fit=crop" 
+      alt="창업 가이드 배경"
+      fill
+      className="object-cover"
+      priority
+    />
+  </div>
+
+  {/* 2. 가독성을 위한 그라데이션 오버레이 */}
+  <div className="absolute inset-0 z-10 bg-gradient-to-br from-gray-900/80 via-blue-900/60 to-purple-900/70"></div>
+
+  {/* 3. 텍스트 및 콘텐츠 (z-index를 높여 가장 위로) */}
+  <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 text-center">
+    <div className="inline-flex items-center px-4 py-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full mb-6">
+      <CheckCircle className="w-5 h-5 text-sky-300 mr-2" />
+      <span className="text-sm font-medium text-white">매일 수많은 상담을 통한 검증된 프로세스</span>
+    </div>
+    <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl md:text-6xl text-shadow-lg">
+      믿고 따를 수 있는<br />
+      <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-300 to-indigo-400">
+        스마트한 창업 가이드
+      </span>
+    </h1>
+    <p className="mt-6 max-w-3xl mx-auto text-xl text-gray-200 text-shadow">
+      평소 자주 물어오시는 내용을 정리했습니다.<br />
+      궁금증 해소와 함께, 꿈을 향해 나아가는 창업의 길을 제시합니다.
+    </p>
+  </div>
+</section>
 
       {/* 창업 절차 섹션 */}
       <section className="py-20 bg-gray-50 dark:bg-gray-800">

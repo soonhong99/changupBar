@@ -12,25 +12,40 @@ export default function ConsultingPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
       {/* 히어로 섹션 */}
-      <section className="relative overflow-hidden bg-gradient-to-r from-blue-600 to-purple-600 text-white">
-        <div className="absolute inset-0 bg-black/20"></div>
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+      {/* 히어로 섹션 (이미지 배경 적용) */}
+      <section className="relative overflow-hidden text-white">
+        {/* 1. 배경 이미지 */}
+        <div className="absolute inset-0 z-0">
+          <Image
+            src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" // 추천 예시 이미지
+            alt="전문적인 오피스 환경"
+            fill
+            className="object-cover" // 이미지가 컨테이너를 꽉 채우도록 설정
+            priority // LCP(가장 큰 콘텐츠 요소)일 가능성이 높으므로 priority 속성 추가
+          />
+        </div>
+        
+        {/* 2. 가독성을 위한 그라데이션 오버레이 */}
+        <div className="absolute inset-0 z-10 bg-gradient-to-r from-blue-900/70 via-purple-900/60 to-black/70"></div>
+
+        {/* 3. 텍스트 및 콘텐츠 (z-index를 높여 가장 위로) */}
+        <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-32">
           <div className="text-center">
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 animate-fade-in">
-              창업 컨설팅 전문가
+            <h1 className="text-4xl md:text-6xl font-bold mb-6 animate-fade-in text-shadow-lg">
+              순간의 선택을 확신으로
             </h1>
-            <p className="text-xl md:text-2xl text-blue-100 mb-8">
+            <p className="text-xl md:text-2xl mb-8 text-shadow">
               **년 경력의 창업 성공 파트너와 함께하세요
             </p>
-            <div className="flex flex-wrap justify-center gap-4">
-              <div className="bg-white/20 backdrop-blur-sm rounded-full px-6 py-3">
-                <span className="text-lg font-semibold">✨ 창업 만족도 1위</span>
+            <div className="flex flex-wrap justify-center items-center gap-4">
+              <div className="bg-white/10 backdrop-blur-md rounded-full px-6 py-3 border border-white/20">
+                <span className="text-lg font-semibold">창업 만족도 1위</span>
               </div>
-              <div className="bg-white/20 backdrop-blur-sm rounded-full px-6 py-3">
-                <span className="text-lg font-semibold">🔄 창업 재문의 1위</span>
+              <div className="bg-white/10 backdrop-blur-md rounded-full px-6 py-3 border border-white/20">
+                <span className="text-lg font-semibold">창업 재문의 1위</span>
               </div>
-              <div className="bg-white/20 backdrop-blur-sm rounded-full px-6 py-3">
-                <span className="text-lg font-semibold">📈 **년 창업 컨설팅</span>
+              <div className="bg-white/10 backdrop-blur-md rounded-full px-6 py-3 border border-white/20">
+                <span className="text-lg font-semibold">**년 창업 컨설팅</span>
               </div>
             </div>
           </div>
