@@ -193,7 +193,7 @@ export default function MyPage() {
               onClick={() => setIsModalOpen(true)}
               className="inline-flex items-center justify-center px-8 py-4 bg-white text-gray-700 font-semibold rounded-lg shadow-lg hover:bg-gray-100 transition-all duration-200 border border-gray-200"
             >
-              💬 온라인 상담 신청
+              💬 온라인 상담 예약
             </button>
           </div>
         </div>

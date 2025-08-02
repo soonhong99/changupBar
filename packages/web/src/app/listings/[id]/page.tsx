@@ -7,6 +7,7 @@ import { notFound } from 'next/navigation';
 import ListingCard from '@/components/ui/ListingCard'; // ⬅️ ListingCard 추가
 import Link from 'next/link'; // ⬅️ Link 추가
 import ListingDetailCTA from '@/components/listings/ListingDetailCTA'; // ⬅️ 새로 만든 컴포넌트 import
+import ListingLikeButton from '@/components/listings/ListingLikeButton'; // ⬅️ 새로 만든 컴포넌트 import
 import { 
   MapPin, 
   TrendingUp, 
@@ -478,6 +479,9 @@ export default async function ListingDetailPage({ params }: Props) {
                 * 인테리어 비용 및 운영자금은 별도
               </p>
             </div>
+
+            <ListingLikeButton listingId={listing.id} listingName={listing.name} />
+
           </div>
 
           {/* 오른쪽: 사이드바 정보 */}

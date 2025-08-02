@@ -38,7 +38,7 @@ export default function ListingDetailCTA({ listing }: Props) {
           className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2 group shadow-lg"
         >
           <Phone className="w-5 h-5" />
-          온라인 상담 신청
+          온라인 상담 예약
           <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
         </button>
          <p className="text-xs text-gray-500 dark:text-gray-400 mt-3 text-center">
