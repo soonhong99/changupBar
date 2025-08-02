@@ -130,7 +130,7 @@ function SearchComponent() {
           <InfoToggle title="매물을 보시기 전에 꼭 확인해주세요!">
             <p className="text-base">
               해당 매물들을 보시고, '내가 가진 투자금으로 이 업종에서 이 정도의 수익을 낼 수 있구나' 정도로 가볍게 파악만 해주세요.<br />
-              가장 중요한 것은 자신의 <strong className="text-blue-500 dark:text-blue-400">창업 유형</strong>을 아는 것입니다.
+              가장 중요한 것은 자신의 <strong className="text-blue-500 dark:text-blue-400">창업 유형</strong>을 인지 하는 것입니다.
             </p>
             스마트창업에서는 크게 <strong className="text-blue-500 dark:text-blue-400">세 가지</strong> 유형으로 나누고 있습니다.
             <div className="mt-4 space-y-5">
@@ -160,8 +160,10 @@ function SearchComponent() {
               </div>
             </div>
             <p className="mt-5 pt-4 border-t border-gray-200 dark:border-gray-700">
-              안타깝게도 <strong className="text-amber-600 dark:text-amber-400">여유로운 삶과 고수익은 한꺼번에 잡기 어렵습니다.</strong> 고수익을 원하시면 '성공' 유형을, 여유로운 삶을 원하시면 '안정' 유형을, 일과 수익의 균형을 찾고 싶다면 '도전' 유형을 고려해보세요.
-              이 유형만 파악하고 매물을 보시면 훨씬 쉽게 감이 잡히실 겁니다.
+              고수익을 원하시면 <strong className="text-orange-500 dark:text-orange-400">'성공'</strong> 매물을, 
+              여유로운 삶을 원하시면 <strong className="text-orange-500 dark:text-orange-400">'안정'</strong> 매물을, 
+              일과 수익의 균형을 찾고 싶다면 <strong className="text-orange-500 dark:text-orange-400">'도전'</strong> 매물을 살펴보세요.<br />
+              유형을 먼저 파악하고 매물을 보게 되시면 훨씬 쉽게 감이 잡히실 겁니다.
             </p>
             <p className="mt-4 font-semibold text-center text-blue-600 dark:text-blue-400">
               당신의 도전을 간절히 응원합니다.
