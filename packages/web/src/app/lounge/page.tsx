@@ -33,7 +33,7 @@ function LoungeHeader() {
             className="text-xl md:text-2xl text-gray-200 mb-8"
             style={{ textShadow: '0 1px 3px rgba(0,0,0,0.5)' }}
           >
-            핵심만 선별한 정보, 연대하는 스마터
+            핵심만 선별한 알짜 정보, 연대하는 스마터
           </p>
 
           <div className="flex flex-wrap justify-center items-center gap-4">

@@ -320,30 +320,6 @@ export default function EditListingPage() {
                 <option value="SOLD">계약완료</option>
               </select>
             </div>
-
-            <div className="space-y-4">
-              <label className="flex items-center space-x-3">
-                <input
-                  type="checkbox"
-                  name="isBest"
-                  checked={formData.isBest || false}
-                  onChange={handleChange}
-                  className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                />
-                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">BEST 매물로 설정</span>
-              </label>
-
-              <label className="flex items-center space-x-3">
-                <input
-                  type="checkbox"
-                  name="isWeeklyBest"
-                  checked={formData.isWeeklyBest || false}
-                  onChange={handleChange}
-                  className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                />
-                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">주간 대표 매물로 설정</span>
-              </label>
-            </div>
           </div>
 
           {/* 대표 매물 설정 컴포넌트 */}

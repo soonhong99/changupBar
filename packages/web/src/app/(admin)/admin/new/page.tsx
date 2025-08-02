@@ -9,13 +9,22 @@ import { useAuth } from '@/context/AuthContext';
 import { CreateListingInput } from '@shared/schemas/listing.schema';
 import { categories, mainCategories } from '@/data/categories'; // ⬅️ 카테고리 데이터 import
 
-// 초기 폼 데이터 - optional 필드들을 명시적으로 초기화
-const initialFormData: Omit<CreateListingInput, 'bestUntil' | 'coverImage' | 'featuredStart' | 'featuredEnd'> & {
-  utilityCost: number;
-  otherCost: number;
-  deliveryPercent: number;
-} = {
-  name: '',
+// 폼 상태를 위한 별도 타입 정의 (숫자 필드들을 문자열로 허용)
+type FormData = Omit<CreateListingInput, 'bestUntil' | 'coverImage' | 'featuredStart' | 'featuredEnd' | 'deposit' | 'monthlyRent' | 'keyMoney' | 'monthlyRevenue' | 'materialCost' | 'personnelCost' | 'utilityCost' | 'otherCost' | 'deliveryPercent'> & {
+  deposit: number | string;
+  monthlyRent: number | string;
+  keyMoney: number | string;
+  monthlyRevenue: number | string;
+  materialCost: number | string;
+  personnelCost: number | string;
+  utilityCost: number | string;
+  otherCost: number | string;
+  deliveryPercent: number | string;
+};
+
+// 초기 폼 데이터
+const initialFormData: FormData = {
+  name: '[도전] ', // 기본값 설정
   summary: '',
   sido: '',
   sigungu: '',
@@ -25,15 +34,15 @@ const initialFormData: Omit<CreateListingInput, 'bestUntil' | 'coverImage' | 'fe
   region: 'METROPOLITAN',
   mainCategory: mainCategories[0], // 기본값으로 첫 번째 대분류 선택
   subCategory: categories[mainCategories[0]][0], // 첫 번째 대분류의 첫 번째 소분류 선택
-  deposit: 0,
-  monthlyRent: 0,
-  keyMoney: 0,
-  monthlyRevenue: 0,
-  materialCost: 0,
-  personnelCost: 0,
-  utilityCost: 0,
-  otherCost: 0,
-  deliveryPercent: 0,
+  deposit: '',
+  monthlyRent: '',
+  keyMoney: '',
+  monthlyRevenue: '',
+  materialCost: '',
+  personnelCost: '',
+  utilityCost: '',
+  otherCost: '',
+  deliveryPercent: '',
   netProfit: 0,
   isAutomated: false,
   isGoodDeal: false, // ⬇️ 추가
@@ -53,24 +62,31 @@ declare global {
   }
 }
 
+// ⬇️ 추가: 타입 정의 및 배열
+type NameType = '도전' | '성공' | '안정';
+const nameTypes: NameType[] = ['도전', '성공', '안정'];
+
 export default function NewListingPage() {
-  const [formData, setFormData] = useState(initialFormData);
+  const [formData, setFormData] = useState<FormData>(initialFormData);
   const [coverImageFile, setCoverImageFile] = useState<File | null>(null);
   const [coverImagePreview, setCoverImagePreview] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [selectedType, setSelectedType] = useState<NameType | null>('도전');
   
   const router = useRouter();
   const { token, isLoading: isAuthLoading } = useAuth();
 
   // 실수익 자동 계산
   useEffect(() => {
-    const netProfit = formData.monthlyRevenue 
-      - formData.materialCost 
-      - formData.personnelCost 
-      - (formData.utilityCost || 0)  // undefined 처리
-      - (formData.otherCost || 0)     // undefined 처리
-      - formData.monthlyRent;
+    const monthlyRevenue = Number(formData.monthlyRevenue) || 0;
+    const materialCost = Number(formData.materialCost) || 0;
+    const personnelCost = Number(formData.personnelCost) || 0;
+    const utilityCost = Number(formData.utilityCost) || 0;
+    const otherCost = Number(formData.otherCost) || 0;
+    const monthlyRent = Number(formData.monthlyRent) || 0;
+    
+    const netProfit = monthlyRevenue - materialCost - personnelCost - utilityCost - otherCost - monthlyRent;
     
     setFormData(prev => ({ ...prev, netProfit }));
   }, [
@@ -97,7 +113,7 @@ export default function NewListingPage() {
     }
   };
 
-  // 입력 변경 핸들러
+  // ✨ 수정: name 필드 변경 시 타입 동기화 로직 추가
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
     
@@ -109,7 +125,32 @@ export default function NewListingPage() {
     } else {
       setFormData(prev => ({ ...prev, [name]: value }));
     }
+
+    // ✨ 수정: 사용자가 직접 이름 입력 시 타입 버튼 상태 동기화
+    if (name === 'name') {
+      if (value.startsWith('[도전]')) {
+        setSelectedType('도전');
+      } else if (value.startsWith('[성공]')) {
+        setSelectedType('성공');
+      } else if (value.startsWith('[안정]')) {
+        setSelectedType('안정');
+      } else {
+        setSelectedType(null); // 어떤 접두사도 없으면 선택 해제
+      }
+    }
   };
+
+  // ⬇️ 추가: 타입 변경 핸들러
+  const handleTypeChange = (type: NameType) => {
+    setSelectedType(type);
+    const currentName = formData.name;
+    // 기존 접두사를 제거 (정규식 사용)
+    const nameWithoutPrefix = currentName.replace(/^\[(도전|성공|안정)\]\s*/, '');
+    // 새 접두사를 추가
+    const newName = `[${type}] ${nameWithoutPrefix}`;
+    setFormData(prev => ({ ...prev, name: newName }));
+  };
+
 
   // 폼 제출 핸들러
   const handleSubmit = async (e: FormEvent) => {
@@ -142,11 +183,22 @@ export default function NewListingPage() {
         },
       });
 
-      // 3. 매물 생성
-      await createListing({ 
-        ...formData, 
+      // 3. 매물 생성 - 빈 문자열을 숫자로 변환
+      const processedFormData = {
+        ...formData,
+        deposit: Number(formData.deposit) || 0,
+        monthlyRent: Number(formData.monthlyRent) || 0,
+        keyMoney: Number(formData.keyMoney) || 0,
+        monthlyRevenue: Number(formData.monthlyRevenue) || 0,
+        materialCost: Number(formData.materialCost) || 0,
+        personnelCost: Number(formData.personnelCost) || 0,
+        utilityCost: Number(formData.utilityCost) || 0,
+        otherCost: Number(formData.otherCost) || 0,
+        deliveryPercent: Number(formData.deliveryPercent) || 0,
         coverImage: publicUrl,
-      }, token);
+      };
+      
+      await createListing(processedFormData, token);
       
       router.push('/admin');
       router.refresh();
@@ -186,25 +238,66 @@ export default function NewListingPage() {
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-8">
-        {/* 기본 정보 섹션 */}
+        {/* 매물 이름 섹션 */}
         <div className="bg-white dark:bg-gray-800 shadow-sm rounded-lg p-6 border border-gray-200 dark:border-gray-700">
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">기본 정보</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-gray-300">
-                매물 이름 <span className="text-red-500">*</span>
-              </label>
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-6">매물 이름</h2>
+          <div>
+            <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+              매물 이름 <span className="text-red-500">*</span>
+            </label>
+            
+            {/* 버튼과 입력 필드를 감싸는 flex 컨테이너 */}
+            <div className="flex items-center gap-3 mb-3">
+              {/* 버튼 그룹 */}
+              <div className="flex-shrink-0 flex items-center gap-2">
+                {nameTypes.map(type => (
+                  <button
+                    key={type}
+                    type="button"
+                    onClick={() => handleTypeChange(type)}
+                    className={`px-3 py-2 text-sm font-medium rounded-md transition-colors ${
+                      selectedType === type
+                        ? 'bg-blue-600 text-white'
+                        : 'bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600'
+                    }`}
+                  >
+                    {type}
+                  </button>
+                ))}
+              </div>
+              
+              {/* 입력 필드 */}
               <input
                 type="text"
                 name="name"
                 id="name"
                 value={formData.name}
                 onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="예: 릴렉스 커피 강남점"
+                className="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-300"
+                placeholder="예: [도전] 릴렉스 커피 강남점"
                 required
               />
             </div>
+
+            {/* 글자 수 표시 및 안내 */}
+            <div className="flex items-center justify-between text-xs">
+              <div className="flex items-center gap-1 text-gray-500 dark:text-gray-400">
+                <svg className="w-3.5 h-3.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                </svg>
+                <span>접두사 태그를 포함하여 20자 이내 권장</span>
+              </div>
+              <div className={`font-mono ${formData.name.length > 20 ? 'text-red-500' : 'text-gray-500 dark:text-gray-400'}`}>
+                {formData.name.length}/20
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* 기본 정보 섹션 */}
+        <div className="bg-white dark:bg-gray-800 shadow-sm rounded-lg p-6 border border-gray-200 dark:border-gray-700">
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-6">기본 정보</h2>
+          <div className="space-y-6">
 
             <div className="md:col-span-2 space-y-3">
   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -455,7 +548,7 @@ export default function NewListingPage() {
                 type="number"
                 name="utilityCost"
                 id="utilityCost"
-                value={formData.utilityCost || 0}
+                value={formData.utilityCost}
                 onChange={handleChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="0"
@@ -470,7 +563,7 @@ export default function NewListingPage() {
                 type="number"
                 name="otherCost"
                 id="otherCost"
-                value={formData.otherCost || 0}
+                value={formData.otherCost}
                 onChange={handleChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="0"
@@ -485,7 +578,7 @@ export default function NewListingPage() {
                 type="number"
                 name="deliveryPercent"
                 id="deliveryPercent"
-                value={formData.deliveryPercent || 0}
+                value={formData.deliveryPercent}
                 onChange={handleChange}
                 min="0"
                 max="100"
@@ -844,30 +937,6 @@ export default function NewListingPage() {
                 <option value="DRAFT">임시저장</option>
                 <option value="ARCHIVED">블라인드</option>
               </select>
-            </div>
-
-            <div className="space-y-4">
-              <label className="flex items-center space-x-3">
-                <input
-                  type="checkbox"
-                  name="isBest"
-                  checked={formData.isBest}
-                  onChange={handleChange}
-                  className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                />
-                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">BEST 매물로 설정</span>
-              </label>
-
-              <label className="flex items-center space-x-3">
-                <input
-                  type="checkbox"
-                  name="isWeeklyBest"
-                  checked={formData.isWeeklyBest}
-                  onChange={handleChange}
-                  className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                />
-                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">주간 대표 매물로 설정</span>
-              </label>
             </div>
           </div>
         </div>
