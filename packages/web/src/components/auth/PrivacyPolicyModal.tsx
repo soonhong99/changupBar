@@ -15,7 +15,7 @@ export default function PrivacyPolicyModal({ isOpen, onClose, onAgree }: Props) 
     const contentRef = useRef<HTMLDivElement>(null);
     const companyName = "스마트창업";
     const companyEmail = "changupsmart@gmail.com";
-    const companyPhone = "010-2536-1178";
+    const companyPhone = "010-****-****";
     const effectiveDate = "2025년 7월 26일";
   
     const handleScroll = () => {

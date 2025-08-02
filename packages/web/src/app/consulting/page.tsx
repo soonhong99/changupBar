@@ -7,7 +7,7 @@ import { useState } from 'react';
 
 export default function ConsultingPage() {
   const [showPhoneNumber, setShowPhoneNumber] = useState(false);
-  const phoneNumber = "010-2536-1178"; // 실제 전화번호로 변경해주세요
+  const phoneNumber = "010-****-****"; // 실제 전화번호로 변경해주세요
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">

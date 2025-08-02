@@ -42,7 +42,7 @@ export default function ListingDetailCTA({ listing }: Props) {
           <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
         </button>
          <p className="text-xs text-gray-500 dark:text-gray-400 mt-3 text-center">
-            전화 문의: 010-2536-1178
+            전화 문의: 010-****-****
           </p>
       </div>
 

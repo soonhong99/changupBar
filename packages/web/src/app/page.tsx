@@ -449,7 +449,7 @@ export default async function HomePage() {
               {/* CTA 버튼들 */}
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                 <a 
-                  href="tel:01025361178" 
+                  href="tel:010********" 
                   className="group bg-white text-blue-600 px-8 py-4 rounded-full font-semibold hover:bg-yellow-400 hover:text-gray-900 transition-all duration-300 shadow-lg flex items-center gap-3"
                 >
                   <svg className="w-5 h-5 group-hover:animate-bounce" fill="currentColor" viewBox="0 0 20 20">
