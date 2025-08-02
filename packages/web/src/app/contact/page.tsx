@@ -24,16 +24,16 @@ export default function ContactPage() {
           <div className="text-center mb-16">
             <div className="inline-flex items-center gap-2 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 px-4 py-2 rounded-full text-sm font-medium mb-4">
               <Sparkles className="w-4 h-4" />
-              <span>언제든 편하게 문의하세요</span>
+              <span>언제든 편하게 문의 해주세요!</span>
             </div>
             
             <h1 className="text-5xl sm:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-gray-900 to-blue-600 dark:from-white dark:to-blue-400 mb-6">
-              함께 시작해요
+              함께 나아가겠습니다.
             </h1>
             
             <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto leading-relaxed">
-              여러분의 이야기를 듣고 싶어요. 작은 고민이라도 함께 나누면<br className="hidden sm:block" />
-              더 나은 해결책을 찾을 수 있습니다. 🌟
+              여러분의 이야기를 경청하겠습니다.<br/> 
+              진정으로 원하는 것이 무엇인지 찾아드리겠습니다.
             </p>
           </div>
 
@@ -41,7 +41,7 @@ export default function ContactPage() {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-12 max-w-3xl mx-auto">
             <div className="flex items-center justify-center gap-3 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm px-4 py-3 rounded-xl border border-gray-200/50 dark:border-gray-700/50">
               <Clock className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">24시간 이내 답변</span>
+              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">1분 1초 시간 엄수</span>
             </div>
             <div className="flex items-center justify-center gap-3 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm px-4 py-3 rounded-xl border border-gray-200/50 dark:border-gray-700/50">
               <Shield className="w-5 h-5 text-green-600 dark:text-green-400" />
@@ -49,7 +49,7 @@ export default function ContactPage() {
             </div>
             <div className="flex items-center justify-center gap-3 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm px-4 py-3 rounded-xl border border-gray-200/50 dark:border-gray-700/50">
               <HeartHandshake className="w-5 h-5 text-purple-600 dark:text-purple-400" />
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">진심을 담은 상담</span>
+              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">계약 보다 사람이 우선</span>
             </div>
           </div>
 
@@ -64,7 +64,7 @@ export default function ContactPage() {
                     맞춤 상담 신청하기 ✨
                   </h2>
                   <p className="text-white/90 text-lg">
-                    당신의 이야기를 들려주세요. 전문가가 최선의 답을 찾아드릴게요.
+                    당신의 이야기를 들려주세요. 나아가야할 방향을 제시해드리겠습니다.
                   </p>
                 </div>
                 
@@ -107,7 +107,7 @@ export default function ContactPage() {
                       카카오톡 상담
                     </h4>
                     <p className="text-gray-600 dark:text-gray-300 font-medium mb-2">
-                      @hoya110514
+                      @******
                     </p>
                     <p className="text-sm text-gray-500 dark:text-gray-400">
                       친구 추가하고 편하게 물어보세요!

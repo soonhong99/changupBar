@@ -25,87 +25,87 @@ interface SuccessStory {
 }
 
 const successStories: SuccessStory[] = [
-  {
-    id: 1,
-    name: "김민수 대표",
-    business: "카페 블루문",
-    location: "서울 강남구",
-    startDate: "2023년 3월",
-    image: "/images/success/cafe-bluemoon.jpg",
-    beforeSituation: "10년간 회사를 다니다가 퇴직 후 카페 창업을 결심했지만, 어디서부터 시작해야 할지 막막했습니다.",
-    challengesFaced: [
-      "카페 운영 경험 전무",
-      "상권 분석 능력 부족",
-      "초기 자금 관리 불안"
-    ],
-    supportProvided: [
-      "3개월간 카페 창업 전문 교육 프로그램 제공",
-      "강남 지역 50개 후보지 중 최적 입지 선정",
-      "인테리어부터 메뉴 개발까지 원스톱 지원",
-      "오픈 후 3개월간 매주 현장 방문 컨설팅"
-    ],
-    results: {
-      revenue: "월 매출 4,500만원 달성",
-      satisfaction: "고객 재방문율 78%",
-      special: "오픈 6개월 만에 손익분기점 돌파"
-    },
-    testimonial: "스마트창업은 단순히 가게를 여는 것이 아니라, 제가 꿈꾸던 카페를 현실로 만들어주었습니다. 특히 *** 팀장님이 새벽에도 전화를 받아주시며 고민을 들어주신 것이 큰 힘이 되었어요.",
-    tags: ["카페", "강남", "초보창업"]
-  },
-  {
-    id: 2,
-    name: "이정희 대표",
-    business: "정희네 김밥천국",
-    location: "경기도 수원시",
-    startDate: "2022년 11월",
-    image: "/images/success/kimbap-jeonghee.jpg",
-    beforeSituation: "주부로 15년을 보낸 후 경제활동을 시작하고 싶었지만, 나이와 경력 단절로 인한 두려움이 컸습니다.",
-    challengesFaced: [
-      "15년 경력 단절",
-      "프랜차이즈 시스템 이해 부족",
-      "가족들의 반대"
-    ],
-    supportProvided: [
-      "프랜차이즈 본사와의 협상 대행",
-      "최적의 권리금 조건으로 인수 중개",
-      "직원 채용 및 교육 시스템 구축",
-      "가족 설득을 위한 사업계획서 작성 지원"
-    ],
-    results: {
-      revenue: "월 매출 3,800만원 안정화",
-      satisfaction: "배달앱 평점 4.9점",
-      special: "수원시 김밥천국 매출 TOP 5"
-    },
-    testimonial: "처음엔 '내가 할 수 있을까' 걱정뿐이었는데, 스마트창업에서 정말 A부터 Z까지 다 알려주셨어요. 지금은 직원 5명과 함께 일하는 당당한 사장님이 되었습니다.",
-    tags: ["김밥천국", "프랜차이즈", "주부창업"]
-  },
-  {
-    id: 3,
-    name: "박준호·최서연 부부",
-    business: "준호서연 피자",
-    location: "인천 송도",
-    startDate: "2023년 7월",
-    image: "/images/success/pizza-couple.jpg",
-    beforeSituation: "신혼부부로 공동 창업을 꿈꿨지만, 서로 다른 의견으로 갈등이 있었고 자금도 부족했습니다.",
-    challengesFaced: [
-      "부부간 의견 충돌",
-      "한정된 창업 자금",
-      "피자 전문 기술 부재"
-    ],
-    supportProvided: [
-      "부부 창업자를 위한 특별 커뮤니케이션 워크숍",
-      "정부 지원금 및 대출 컨설팅으로 자금 확보",
-      "이탈리아 피자 전문가 초빙 교육",
-      "소셜미디어 마케팅 전략 수립 및 실행"
-    ],
-    results: {
-      revenue: "월 매출 5,200만원",
-      satisfaction: "인스타그램 팔로워 8,000명",
-      special: "송도 맛집 피자 1위 선정"
-    },
-    testimonial: "부부가 함께 일하는 것이 쉽지 않다고 들었는데, 스마트창업에서 저희 부부의 강점을 살려주셨어요. 서로의 역할을 명확히 나누니 시너지가 났고, 지금은 2호점 준비 중입니다.",
-    tags: ["피자", "부부창업", "송도"]
-  }
+  // {
+  //   id: 1,
+  //   name: "김민수 대표",
+  //   business: "카페 블루문",
+  //   location: "서울 강남구",
+  //   startDate: "2023년 3월",
+  //   image: "/images/success/cafe-bluemoon.jpg",
+  //   beforeSituation: "10년간 회사를 다니다가 퇴직 후 카페 창업을 결심했지만, 어디서부터 시작해야 할지 막막했습니다.",
+  //   challengesFaced: [
+  //     "카페 운영 경험 전무",
+  //     "상권 분석 능력 부족",
+  //     "초기 자금 관리 불안"
+  //   ],
+  //   supportProvided: [
+  //     "3개월간 카페 창업 전문 교육 프로그램 제공",
+  //     "강남 지역 50개 후보지 중 최적 입지 선정",
+  //     "인테리어부터 메뉴 개발까지 원스톱 지원",
+  //     "오픈 후 3개월간 매주 현장 방문 컨설팅"
+  //   ],
+  //   results: {
+  //     revenue: "월 매출 4,500만원 달성",
+  //     satisfaction: "고객 재방문율 78%",
+  //     special: "오픈 6개월 만에 손익분기점 돌파"
+  //   },
+  //   testimonial: "스마트창업은 단순히 가게를 여는 것이 아니라, 제가 꿈꾸던 카페를 현실로 만들어주었습니다. 특히 *** 팀장님이 새벽에도 전화를 받아주시며 고민을 들어주신 것이 큰 힘이 되었어요.",
+  //   tags: ["카페", "강남", "초보창업"]
+  // },
+  // {
+  //   id: 2,
+  //   name: "이정희 대표",
+  //   business: "정희네 김밥천국",
+  //   location: "경기도 수원시",
+  //   startDate: "2022년 11월",
+  //   image: "/images/success/kimbap-jeonghee.jpg",
+  //   beforeSituation: "주부로 15년을 보낸 후 경제활동을 시작하고 싶었지만, 나이와 경력 단절로 인한 두려움이 컸습니다.",
+  //   challengesFaced: [
+  //     "15년 경력 단절",
+  //     "프랜차이즈 시스템 이해 부족",
+  //     "가족들의 반대"
+  //   ],
+  //   supportProvided: [
+  //     "프랜차이즈 본사와의 협상 대행",
+  //     "최적의 권리금 조건으로 인수 중개",
+  //     "직원 채용 및 교육 시스템 구축",
+  //     "가족 설득을 위한 사업계획서 작성 지원"
+  //   ],
+  //   results: {
+  //     revenue: "월 매출 3,800만원 안정화",
+  //     satisfaction: "배달앱 평점 4.9점",
+  //     special: "수원시 김밥천국 매출 TOP 5"
+  //   },
+  //   testimonial: "처음엔 '내가 할 수 있을까' 걱정뿐이었는데, 스마트창업에서 정말 A부터 Z까지 다 알려주셨어요. 지금은 직원 5명과 함께 일하는 당당한 사장님이 되었습니다.",
+  //   tags: ["김밥천국", "프랜차이즈", "주부창업"]
+  // },
+  // {
+  //   id: 3,
+  //   name: "박준호·최서연 부부",
+  //   business: "준호서연 피자",
+  //   location: "인천 송도",
+  //   startDate: "2023년 7월",
+  //   image: "/images/success/pizza-couple.jpg",
+  //   beforeSituation: "신혼부부로 공동 창업을 꿈꿨지만, 서로 다른 의견으로 갈등이 있었고 자금도 부족했습니다.",
+  //   challengesFaced: [
+  //     "부부간 의견 충돌",
+  //     "한정된 창업 자금",
+  //     "피자 전문 기술 부재"
+  //   ],
+  //   supportProvided: [
+  //     "부부 창업자를 위한 특별 커뮤니케이션 워크숍",
+  //     "정부 지원금 및 대출 컨설팅으로 자금 확보",
+  //     "이탈리아 피자 전문가 초빙 교육",
+  //     "소셜미디어 마케팅 전략 수립 및 실행"
+  //   ],
+  //   results: {
+  //     revenue: "월 매출 5,200만원",
+  //     satisfaction: "인스타그램 팔로워 8,000명",
+  //     special: "송도 맛집 피자 1위 선정"
+  //   },
+  //   testimonial: "부부가 함께 일하는 것이 쉽지 않다고 들었는데, 스마트창업에서 저희 부부의 강점을 살려주셨어요. 서로의 역할을 명확히 나누니 시너지가 났고, 지금은 2호점 준비 중입니다.",
+  //   tags: ["피자", "부부창업", "송도"]
+  // }
 ];
 
 // 이미지 프리로딩 함수
@@ -131,14 +131,14 @@ export default function SuccessStoriesPage() {
         <div className="absolute inset-0 bg-black/20"></div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl md:text-6xl font-bold mb-6">
-            진짜 창업 성공 이야기
+            '진짜' 창업 성공 이야기
           </h1>
           <p className="text-xl md:text-2xl text-green-100 mb-8">
             스마트창업과 함께 꿈을 현실로 만든 사장님들
           </p>
           <div className="inline-flex items-center bg-white/20 backdrop-blur-sm rounded-full px-6 py-3">
             <span className="text-lg font-semibold">
-              🎯 2024년 기준 창업 성공률 94.3%
+              🎯 2024년 기준 창업 성공률 N%
             </span>
           </div>
         </div>
@@ -149,19 +149,19 @@ export default function SuccessStoriesPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             <div>
-              <div className="text-3xl font-bold text-green-600 dark:text-green-400">523명</div>
+              <div className="text-3xl font-bold text-green-600 dark:text-green-400">N명</div>
               <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">누적 창업 성공</p>
             </div>
             <div>
-              <div className="text-3xl font-bold text-blue-600 dark:text-blue-400">18개월</div>
+              <div className="text-3xl font-bold text-blue-600 dark:text-blue-400">N개월</div>
               <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">평균 회수 기간</p>
             </div>
             <div>
-              <div className="text-3xl font-bold text-purple-600 dark:text-purple-400">4.8/5.0</div>
+              <div className="text-3xl font-bold text-purple-600 dark:text-purple-400">N/5.0</div>
               <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">고객 만족도</p>
             </div>
             <div>
-              <div className="text-3xl font-bold text-orange-600 dark:text-orange-400">365일</div>
+              <div className="text-3xl font-bold text-orange-600 dark:text-orange-400">믿음이 사라질때까지</div>
               <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">사후 관리 지원</p>
             </div>
           </div>
@@ -366,7 +366,7 @@ export default function SuccessStoriesPage() {
       )}
 
       {/* 프로세스 섹션 */}
-      <section className="py-20 bg-gray-50 dark:bg-gray-900">
+      {/* <section className="py-20 bg-gray-50 dark:bg-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
@@ -433,7 +433,7 @@ export default function SuccessStoriesPage() {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* CTA 섹션 */}
       <section className="py-20 bg-gradient-to-r from-purple-600 to-blue-600 text-white">
@@ -442,7 +442,7 @@ export default function SuccessStoriesPage() {
             다음 성공 스토리의 주인공은 당신입니다
           </h2>
           <p className="text-xl text-purple-100 mb-8">
-            지금 시작하세요. 스마틏창업이 끝까지 함께합니다.
+            지금 시작하세요. 스마트창업이 끝까지 함께합니다.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link

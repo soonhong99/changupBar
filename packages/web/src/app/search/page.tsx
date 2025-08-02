@@ -424,7 +424,7 @@ function SearchComponent() {
               🎯 원하는 매물이 없으신가요?
             </h3>
             <p className="text-green-100 mb-6">
-              전문 컨설턴트가 직접 맞춤 매물을 찾아드립니다
+              스마트창업이 직접 매물을 맞춰드리겠습니다.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button onClick={() => setIsModalOpen(true)} className="bg-white text-green-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">

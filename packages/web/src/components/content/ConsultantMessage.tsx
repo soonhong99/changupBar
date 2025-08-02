@@ -31,8 +31,8 @@ const Emphasize = ({ children }: { children: React.ReactNode }) => (
         <p>그렇다면 수많은 사장님들께서는 <Emphasize>왜</Emphasize> 스마트창업을 선택하실까요?</p>
         <p>바로 자기 자신의 돈을 대하는 <Emphasize>태도</Emphasize>를 보았기 때문입니다.</p>
         <p>저는 항상 만나뵙는 사장님들이 <Emphasize>존경</Emphasize>스럽습니다.</p>
-        <p>과연 나라면 이렇게 큰 도전을 할 수 있었을까?</p>
-        <p>불확실한 미래를 위해 이만큼의 돈을 투자할 수 있을까?</p>
+        <p>과연 나라면 이렇게 큰 도전을 할 수 있을까?</p>
+        <p>더 나은 미래를 위해 나의 인생이 담긴 모든 것을 투자할 수 있을까?</p>
         <p>한 사람의 인생이 <Emphasize>찰나의 결정</Emphasize>으로 바뀌는구나 생각이 들었습니다.</p>
         <p>저도 가진 것이 없고, 제 꿈을 향해 나아가는 일개 소시민에 불과합니다.</p>
         <p><RedText>그럼에도 불구하고</RedText> 한번 뿐인 인생, <Emphasize>성공의 표본</Emphasize>이 되고 싶지 않으신가요?</p>

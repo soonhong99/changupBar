@@ -20,7 +20,7 @@ export default function ProcessCTA() {
             인생은 선택의 연속입니다.
           </h2>
           <p className="text-xl text-blue-100 mb-8">
-            하지만 망설이기만 하면 인생은 바뀌지 않습니다.<br />
+            당신의 선택을 확신으로 만들어드리겠습니다.<br />
             1분 1초 젊은 지금, 미래를 위해 주도적으로 선택해서 나아가세요.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -36,12 +36,12 @@ export default function ProcessCTA() {
               onClick={() => setIsModalOpen(true)}
               className="inline-flex items-center px-8 py-4 bg-transparent border-2 border-white text-white font-semibold rounded-lg shadow-lg hover:bg-white hover:text-blue-600 transition-all duration-200"
             >
-              무료 상담 신청하기
+              무료 상담 예약하기
               <MessageSquare className="w-5 h-5 ml-2" />
             </button>
           </div>
           <p className="mt-6 text-sm text-blue-100">
-            ※ 상담 신청 후 24시간 이내에 전문 컨설턴트가 연락드립니다
+            ※ 예약하신 날짜, 시간대에 전문 컨설턴트가 연락드립니다
           </p>
         </div>
       </section>
