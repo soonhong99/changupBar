@@ -19,6 +19,7 @@ function SocialCallbackComponent() {
 
     const token = searchParams.get('token');
     const action = searchParams.get('action');
+    const redirectTo = searchParams.get('redirect');
 
     if (token) {
       // 2. 작업을 시작하기 전에 "처리 중"으로 상태를 변경합니다.
@@ -27,9 +28,16 @@ function SocialCallbackComponent() {
       // 3. login 함수가 완전히 끝난 후(.then)에 페이지를 이동합니다.
       login(token).then(() => {
         if (action === 'verify_phone') {
-          router.replace('/verify-phone');
+          // 전화번호 인증이 필요한 경우, redirect 파라미터를 함께 전달
+          if (redirectTo) {
+            const encodedRedirect = encodeURIComponent(redirectTo);
+            router.replace(`/verify-phone?redirect=${encodedRedirect}`);
+          } else {
+            router.replace('/verify-phone');
+          }
         } else {
-          router.replace('/');
+          // redirect 파라미터가 있으면 해당 페이지로, 없으면 홈으로 이동
+          router.replace(redirectTo || '/');
         }
       });
     } else {

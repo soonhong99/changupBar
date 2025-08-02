@@ -160,8 +160,8 @@ function SearchComponent() {
               </div>
             </div>
             <p className="mt-5 pt-4 border-t border-gray-200 dark:border-gray-700">
-              고수익을 원하시면 <strong className="text-orange-500 dark:text-orange-400">'성공'</strong> 매물을, 
               여유로운 삶을 원하시면 <strong className="text-orange-500 dark:text-orange-400">'안정'</strong> 매물을, 
+              고수익을 원하시면 <strong className="text-orange-500 dark:text-orange-400">'성공'</strong> 매물을, 
               일과 수익의 균형을 찾고 싶다면 <strong className="text-orange-500 dark:text-orange-400">'도전'</strong> 매물을 살펴보세요.<br />
               유형을 먼저 파악하고 매물을 보게 되시면 훨씬 쉽게 감이 잡히실 겁니다.
             </p>

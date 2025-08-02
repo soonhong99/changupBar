@@ -3,7 +3,7 @@
 "use client";
 
 import { useState, FormEvent, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { sendSmsVerification, checkSmsVerification, updateMyPhone } from '@/lib/api';
 import { FiSmartphone, FiKey, FiLoader, FiCheckCircle, FiRefreshCw } from 'react-icons/fi';
@@ -24,6 +24,7 @@ export default function VerifyPhonePage() {
 
   const { user, token, isLoading: isAuthLoading, refreshUser } = useAuth();
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const [isVerificationComplete, setIsVerificationComplete] = useState(false);
 
@@ -60,9 +61,12 @@ export default function VerifyPhonePage() {
     // isAuthLoading이 끝났고, 인증이 완료되었고, 유저 정보에 전화번호가 반영되었다면
     if (!isAuthLoading && isVerificationComplete && user?.phone) {
       alert('핸드폰 인증이 완료되었습니다. 서비스를 계속 이용하실 수 있습니다.');
-      router.push('/');
+      
+      // redirect 파라미터가 있으면 해당 페이지로, 없으면 홈으로 이동
+      const redirectTo = searchParams.get('redirect') || '/';
+      router.push(redirectTo);
     }
-  }, [isAuthLoading, isVerificationComplete, user, router]);
+  }, [isAuthLoading, isVerificationComplete, user, router, searchParams]);
 
   // ⬇️ 이 useEffect는 '잘못된 접근'을 막는 역할만 합니다.
   useEffect(() => {

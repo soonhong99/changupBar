@@ -22,15 +22,27 @@ function LoginForm() {
     setError(null);
     try {
       const { token } = await loginUser({ email, password });
-      login(token);
-      router.push('/');
+      await login(token);
+      
+      // redirect 파라미터가 있으면 해당 페이지로, 없으면 홈으로 이동
+      const redirectTo = searchParams.get('redirect') || '/';
+      router.push(redirectTo);
     } catch (err) {
       setError(err instanceof Error ? err.message : '알 수 없는 오류가 발생했습니다.');
     }
   };
 
   const handleKakaoLogin = () => {
-    window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/auth/kakao`;
+    const redirectTo = searchParams.get('redirect');
+    const kakaoUrl = `${process.env.NEXT_PUBLIC_API_URL}/auth/kakao`;
+    
+    // redirect 파라미터가 있으면 카카오 로그인 URL에도 포함
+    if (redirectTo) {
+      const encodedRedirect = encodeURIComponent(redirectTo);
+      window.location.href = `${kakaoUrl}?redirect=${encodedRedirect}`;
+    } else {
+      window.location.href = kakaoUrl;
+    }
   };
 
   return (

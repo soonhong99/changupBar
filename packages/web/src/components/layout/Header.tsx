@@ -47,8 +47,9 @@ export default function Header() {
                   컨설턴트 소개
                 </Link>
                 <div className="w-px h-4 bg-gray-300 dark:bg-gray-600 mx-2"></div>
-                <Link href="/success-stories" className={navLinkClasses}>
-                  성공 사례
+                {/* '성공 사례'를 '라운지'로 변경하고 링크를 /lounge로 수정 */}
+                <Link href="/lounge" className={navLinkClasses}>
+                  스마트 라운지
                 </Link>
                 <div className="w-px h-4 bg-gray-300 dark:bg-gray-600 mx-2"></div>
                 <Link href="/process" className={navLinkClasses}>
@@ -155,12 +156,13 @@ export default function Header() {
                 컨설턴트 소개
               </Link>
               <div className="mx-4 h-px bg-gray-200 dark:bg-gray-700"></div>
+              {/* '성공 사례'를 '라운지'로 변경하고 링크를 /lounge로 수정 */}
               <Link 
-                href="/success-stories" 
+                href="/lounge" 
                 onClick={() => setIsMenuOpen(false)}
                 className="block px-4 py-3 text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors"
               >
-                성공 사례
+                스마트 라운지
               </Link>
               <div className="mx-4 h-px bg-gray-200 dark:bg-gray-700"></div>
               <Link 

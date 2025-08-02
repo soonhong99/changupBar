@@ -1,7 +1,7 @@
 // packages/web/src/app/page.tsx
 import { getFeaturedListings, getRandomListingsByCategory } from "@/lib/api";
 import ListingCard from "@/components/ui/ListingCard";
-import CountdownTimer from "@/components/ui/CountdownTimer";
+// import CountdownTimer from "@/components/ui/CountdownTimer";
 import Link from 'next/link'; // ⬅️ Link 추가
 import { ArrowRight } from "lucide-react"; // ⬅️ ArrowRight 아이콘 추가
 import ExpandableContent from "@/components/ui/ExpandableContent";

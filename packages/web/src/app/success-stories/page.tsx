@@ -4,6 +4,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
+import AuthGuard from '@/components/auth/AuthGuard';
 
 interface SuccessStory {
   id: number;
@@ -125,7 +126,8 @@ export default function SuccessStoriesPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
+    <AuthGuard requireLogin={true}>
+      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
       {/* 히어로 섹션 */}
       <section className="relative bg-gradient-to-r from-green-600 to-emerald-600 text-white py-20">
         <div className="absolute inset-0 bg-black/20"></div>
@@ -460,6 +462,7 @@ export default function SuccessStoriesPage() {
           </div>
         </div>
       </section>
-    </div>
+      </div>
+    </AuthGuard>
   );
 }
