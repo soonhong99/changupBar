@@ -81,8 +81,13 @@ async function getById(id: string) {
 async function getAll(query: GetAllListingsQuery, role?: UserRole) {
   console.log(`✅ Service: 매물 조회 시작.`);
 
-  const { region, mainCategory, subCategory, status, keyMoneyLte, sido, sigungu, sortBy = 'createdAt', order = 'desc' } = query;
+  const { region, mainCategory, subCategory, status, keyMoneyLte, sido, sigungu, sortBy = 'createdAt', order = 'desc', page = '1', limit = '12' } = query;
   const where: Prisma.ListingWhereInput = {};
+  
+  // 페이지네이션 계산
+  const pageNum = parseInt(page, 10);
+  const limitNum = parseInt(limit, 10);
+  const skip = (pageNum - 1) * limitNum;
 
   // --- 조건부 필터링 ---
   // 1. 역할 기반 상태 필터링
@@ -111,18 +116,38 @@ async function getAll(query: GetAllListingsQuery, role?: UserRole) {
 
   orderBy.push({ [sortBy]: order }); // 기본 정렬 조건 추가
 
-  const listings = await prisma.listing.findMany({
-    where,
-    orderBy,
-    include: {
-      _count: {
-        select: { likedBy: true },
+  // 전체 개수와 페이지네이션된 결과를 병렬로 조회
+  const [totalCount, listings] = await Promise.all([
+    prisma.listing.count({ where }),
+    prisma.listing.findMany({
+      where,
+      orderBy,
+      skip,
+      take: limitNum,
+      include: {
+        _count: {
+          select: { likedBy: true },
+        },
       },
-    },
-  });
+    })
+  ]);
 
-  console.log(`✅ Service: 총 ${listings.length}개의 매물 조회 완료!`);
-  return listings;
+  const totalPages = Math.ceil(totalCount / limitNum);
+  const hasNext = pageNum < totalPages;
+  const hasPrev = pageNum > 1;
+
+  console.log(`✅ Service: 총 ${listings.length}개의 매물 조회 완료! (페이지 ${pageNum}/${totalPages})`);
+  return {
+    listings,
+    pagination: {
+      currentPage: pageNum,
+      totalPages,
+      totalCount,
+      hasNext,
+      hasPrev,
+      limit: limitNum
+    }
+  };
 }
 
 
@@ -267,6 +292,8 @@ interface GetAllListingsQuery {
   order?: 'asc' | 'desc'; // 정렬 순서
   sido?: string;
   sigungu?: string;
+  page?: string; // 페이지 번호
+  limit?: string; // 페이지당 아이템 수
 }
 
 async function remove(id: string) {

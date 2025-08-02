@@ -53,8 +53,8 @@ async function getListingById(req: Request, res: Response) {
  */
 async function getAllListings(req: Request, res: Response) {
   // req.user가 존재하면 role을, 없으면 undefined를 전달
-  const listings = await listingService.getAll(req.query, req.user?.role);
-  res.status(200).json(listings);
+  const result = await listingService.getAll(req.query, req.user?.role);
+  res.status(200).json(result);
 }
 
 /**

@@ -4,8 +4,9 @@
 
 import { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from 'next/navigation'; // ⬅️ useSearchParams 추가
-import { getAllListings, ListingFilter, getListingStats, ListingWithCounts, getMostViewedListing } from "@/lib/api";
+import { getAllListings, ListingFilter, getListingStats, ListingWithCounts, getMostViewedListing, PaginatedResponse } from "@/lib/api";
 import ListingCard from "@/components/ui/ListingCard";
+import Pagination from "@/components/ui/Pagination";
 import { administrativeDistricts } from '@/data/districts'; // ⬅️ 여기서 import
 import Modal from "@/components/ui/Modal"; // ⬅️ Modal import
 import ConsultationForm from "@/components/forms/ConsultationForm";
@@ -113,7 +114,18 @@ function SearchHeroSection() {
 // 1. 실제 로직을 수행하는 부분을 별도의 컴포넌트로 분리합니다.
 function SearchComponent() {
   const searchParams = useSearchParams();
-  const [listings, setListings] = useState<ListingWithCounts[]>([]);
+  const [paginatedData, setPaginatedData] = useState<PaginatedResponse<ListingWithCounts>>({
+    listings: [],
+    pagination: {
+      currentPage: 1,
+      totalPages: 0,
+      totalCount: 0,
+      hasNext: false,
+      hasPrev: false,
+      limit: 12
+    }
+  });
+  const [currentPage, setCurrentPage] = useState(1);
   
   const [filters, setFilters] = useState<ListingFilter>({
     mainCategory: searchParams.get('mainCategory') || '',
@@ -122,6 +134,8 @@ function SearchComponent() {
     sigungu: searchParams.get('sigungu') || '',
     sortBy: (searchParams.get('sortBy') as ListingFilter['sortBy']) || 'createdAt',
     order: (searchParams.get('order') as ListingFilter['order']) || 'desc',
+    page: currentPage,
+    limit: 12,
   });
 
   const [isLoading, setIsLoading] = useState(true);
@@ -152,7 +166,7 @@ function SearchComponent() {
       
       // 실제 데이터 로딩과 최소 로딩 시간(500ms)을 동시에 시작
       const startTime = Date.now();
-      const activeFilters = Object.fromEntries(Object.entries(filters).filter(([_, v]) => v));
+      const activeFilters = Object.fromEntries(Object.entries(filters).filter(([_, v]) => v !== undefined && v !== ''));
       const data = await getAllListings(activeFilters);
       
       // 최소 500ms를 보장
@@ -163,7 +177,7 @@ function SearchComponent() {
         await new Promise(resolve => setTimeout(resolve, remainingTime));
       }
       
-      setListings(data);
+      setPaginatedData(data);
       setIsLoading(false);
     };
 
@@ -173,8 +187,9 @@ function SearchComponent() {
   }, [filters]); // ⬅️ filters가 변경될 때만 실행됨
   
   const handleFilterChange = (key: keyof ListingFilter, value: string | number | undefined) => {
+    setCurrentPage(1); // 필터 변경 시 페이지를 1로 리셋
     setFilters(prev => {
-      const newFilters = { ...prev, [key]: value };
+      const newFilters = { ...prev, [key]: value, page: 1 };
       // 시/도가 바뀌면, 시/군/구 선택을 초기화합니다.
       if (key === 'sido') {
         newFilters.sigungu = '';
@@ -189,10 +204,12 @@ function SearchComponent() {
   // ⬇️ 정렬 select를 위한 핸들러 추가
   const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const [sortBy, order] = e.target.value.split('-');
+    setCurrentPage(1); // 정렬 변경 시 페이지를 1로 리셋
     setFilters(prev => ({ 
       ...prev, 
       sortBy: sortBy as ListingFilter['sortBy'], // ⬅️ 타입을 강제(assertion)합니다.
-      order: order as ListingFilter['order']     // ⬅️ 타입을 강제(assertion)합니다.
+      order: order as ListingFilter['order'],     // ⬅️ 타입을 강제(assertion)합니다.
+      page: 1
     }));
   };
   
@@ -252,14 +269,19 @@ function SearchComponent() {
               </h2>
               {hasActiveFilters && (
                 <button
-                  onClick={() => setFilters({
-                    mainCategory: '',
-                    subCategory: '',
-                    sido: '',
-                    sigungu: '',
-                    sortBy: 'createdAt',
-                    order: 'desc',
-                  })}
+                  onClick={() => {
+                    setCurrentPage(1);
+                    setFilters({
+                      mainCategory: '',
+                      subCategory: '',
+                      sido: '',
+                      sigungu: '',
+                      sortBy: 'createdAt',
+                      order: 'desc',
+                      page: 1,
+                      limit: 12,
+                    });
+                  }}
                   className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium"
                 >
                   전체 초기화
@@ -369,7 +391,7 @@ function SearchComponent() {
                     </span>
                   ) : (
                     <span>
-                      📊 검색 결과: <strong className="text-blue-600 dark:text-blue-400">{listings.length}개</strong> 매물 발견
+                      📊 검색 결과: <strong className="text-blue-600 dark:text-blue-400">{paginatedData.pagination.totalCount}개</strong> 매물 발견 (현재 페이지: {paginatedData.listings.length}개)
                     </span>
                   )}
                 </div>
@@ -416,7 +438,7 @@ function SearchComponent() {
                 최고의 매물을 찾고 있습니다. 잠시만 기다려주세요! 🔍
               </p>
             </div>
-          ) : listings.length === 0 ? (
+          ) : paginatedData.listings.length === 0 ? (
             <div className="text-center py-16 bg-white dark:bg-gray-800 rounded-2xl shadow-lg">
               <div className="text-6xl mb-4">🤔</div>
               <p className="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-4">
@@ -427,14 +449,19 @@ function SearchComponent() {
               </p>
               <div className="space-y-3">
                 <button
-                  onClick={() => setFilters({
-                    mainCategory: '',
-                    subCategory: '',
-                    sido: '',
-                    sigungu: '',
-                    sortBy: 'createdAt',
-                    order: 'desc',
-                  })}
+                  onClick={() => {
+                    setCurrentPage(1);
+                    setFilters({
+                      mainCategory: '',
+                      subCategory: '',
+                      sido: '',
+                      sigungu: '',
+                      sortBy: 'createdAt',
+                      order: 'desc',
+                      page: 1,
+                      limit: 12,
+                    });
+                  }}
                   className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
                 >
                   🔄 전체 매물 보기
@@ -446,15 +473,31 @@ function SearchComponent() {
             </div>
           ) : (
             <>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {listings.map((listing) => (
-                  <div key={listing.id} className="relative group">
-                    <div className="relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 group-hover:scale-105">
-                      <ListingCard listing={listing} />
+              <>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                  {paginatedData.listings.map((listing) => (
+                    <div key={listing.id} className="relative group">
+                      <div className="relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 group-hover:scale-105">
+                        <ListingCard listing={listing} />
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+                
+                {/* 페이지네이션 */}
+                {paginatedData.pagination.totalPages > 1 && (
+                  <Pagination
+                    currentPage={paginatedData.pagination.currentPage}
+                    totalPages={paginatedData.pagination.totalPages}
+                    hasNext={paginatedData.pagination.hasNext}
+                    hasPrev={paginatedData.pagination.hasPrev}
+                    onPageChange={(page) => {
+                      setCurrentPage(page);
+                      setFilters(prev => ({ ...prev, page }));
+                    }}
+                  />
+                )}
+              </>
             </>
           )}
         </div>

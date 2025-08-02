@@ -18,6 +18,20 @@ export interface ListingFilter {
   status?: string; // ⬅️ 이 줄을 추가합니다.
   sido?: string;
   sigungu?: string;
+  page?: number;
+  limit?: number;
+}
+
+export interface PaginatedResponse<T> {
+  listings: T[];
+  pagination: {
+    currentPage: number;
+    totalPages: number;
+    totalCount: number;
+    hasNext: boolean;
+    hasPrev: boolean;
+    limit: number;
+  };
 }
 
 export async function getListingById(id: string): Promise<ListingWithCounts | null> {
@@ -40,7 +54,7 @@ export async function getListingById(id: string): Promise<ListingWithCounts | nu
 
 
 
-export async function getAllListings(filter: ListingFilter = {}, token?: string | null): Promise<ListingWithCounts[]> {
+export async function getAllListings(filter: ListingFilter = {}, token?: string | null): Promise<PaginatedResponse<ListingWithCounts>> {
     // 쿼리 스트링을 생성합니다.
     const query = new URLSearchParams();
     if (filter.region) query.append('region', filter.region);
@@ -50,6 +64,8 @@ export async function getAllListings(filter: ListingFilter = {}, token?: string 
     if (filter.order) query.append('order', filter.order); // 추가
     if (filter.sido) query.append('sido', filter.sido);
     if (filter.sigungu) query.append('sigungu', filter.sigungu);
+    if (filter.page) query.append('page', filter.page.toString());
+    if (filter.limit) query.append('limit', filter.limit.toString());
   
     const queryString = query.toString();
     const url = queryString ? `${API_URL}/listings?${queryString}` : `${API_URL}/listings`;
@@ -65,7 +81,17 @@ export async function getAllListings(filter: ListingFilter = {}, token?: string 
       return res.json();
     } catch (error) {
       console.error(error);
-      return [];
+      return {
+        listings: [],
+        pagination: {
+          currentPage: 1,
+          totalPages: 0,
+          totalCount: 0,
+          hasNext: false,
+          hasPrev: false,
+          limit: 12
+        }
+      };
     }
 }
 
