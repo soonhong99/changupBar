@@ -18,6 +18,27 @@ interface FAQSectionProps {
   faqData: FAQCategory[];
 }
 
+// 온점 뒤에 줄바꿈을 추가하는 함수 (숫자 목록 제외)
+function formatAnswer(text: string) {
+  // 정규식을 사용해서 온점 뒤에 공백과 숫자가 오지 않는 경우만 분할
+  const sentences = text.split(/\.\s+(?!\d)/);
+  
+  return sentences.map((sentence, index) => {
+    // 마지막 문장이 아니라면 온점과 함께 줄바꿈 추가
+    if (index < sentences.length - 1) {
+      return (
+        <span key={index}>
+          {sentence}.
+          <br />
+          <br />
+        </span>
+      );
+    }
+    // 마지막 문장은 그대로 반환 (온점이 이미 포함되어 있을 수 있음)
+    return <span key={index}>{sentence}</span>;
+  });
+}
+
 // FAQ 아코디언 컴포넌트
 function FAQAccordion({ category, questions }: { category: string; questions: FAQItem[] }) {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
@@ -44,7 +65,9 @@ function FAQAccordion({ category, questions }: { category: string; questions: FA
             </button>
             {openIndex === index && (
               <div className="px-6 py-4 bg-gray-50 dark:bg-gray-700/50 border-t border-gray-200 dark:border-gray-600">
-                <p className="text-gray-600 dark:text-gray-300 leading-relaxed">{item.a}</p>
+                <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
+                  {formatAnswer(item.a)}
+                </p>
               </div>
             )}
           </div>
