@@ -13,10 +13,10 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: {
-    default: '스마트창업 | 똑똑한 창업을 위한 당신의 파트너',
+    default: '스마트창업 | 상위 1% 매물, 상위 1% 사업가의 만남',
     template: '%s | 스마트창업',
   },
-  description: '검증된 실매물 정보부터, 전문 컨설턴트의 1:1 맞춤 상담까지. 스마트창업과 함께 성공 창업의 꿈을 이루세요!',
+  description: '불확실함을 확신으로 바꾸는 단 한가지 방법',
 };
 
 export default function RootLayout({
