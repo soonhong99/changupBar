@@ -2,13 +2,16 @@
 
 "use client";
 
-import { useState, FormEvent, useEffect } from 'react';
+// Suspense를 react에서 가져옵니다.
+import { useState, FormEvent, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { sendSmsVerification, checkSmsVerification, updateMyPhone } from '@/lib/api';
 import { FiSmartphone, FiKey, FiLoader, FiCheckCircle, FiRefreshCw } from 'react-icons/fi';
 
-export default function VerifyPhonePage() {
+// 1. 핵심 로직을 담당하는 클라이언트 컴포넌트를 분리합니다.
+// 이 컴포넌트는 useSearchParams를 사용하므로 Suspense 내에서 렌더링되어야 합니다.
+function VerifyPhoneForm() {
   const [step, setStep] = useState(1);
   const [phone, setPhone] = useState('');
   const [verificationCode, setVerificationCode] = useState('');
@@ -18,12 +21,12 @@ export default function VerifyPhonePage() {
   
   const [error, setError] = useState<string | null>(null);
   
-  // 타이머 상태 추가
-  const [timer, setTimer] = useState(180); // 3분 = 180초
+  const [timer, setTimer] = useState(180);
   const [isTimerRunning, setIsTimerRunning] = useState(false);
 
   const { user, token, isLoading: isAuthLoading, refreshUser } = useAuth();
   const router = useRouter();
+  // useSearchParams 훅은 Suspense로 감싸진 이 컴포넌트 안에서 안전하게 호출됩니다.
   const searchParams = useSearchParams();
 
   const [isVerificationComplete, setIsVerificationComplete] = useState(false);
@@ -38,37 +41,32 @@ export default function VerifyPhonePage() {
       }, 1000);
       return () => clearInterval(intervalId);
     } else {
-      // 타이머가 0이 되면
       setIsTimerRunning(false);
       setError("인증 시간이 만료되었습니다. 다시 요청해주세요.");
     }
   }, [isTimerRunning, timer, step]);
 
-  // MM:SS 형식으로 변환하는 함수
   const formatTime = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
     return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
   };
-
-  // ⬇️ 2. 이 useEffect는 오직 '인증이 완료된 후'에만 페이지 이동을 책임집니다.
+  
+  // 인증 완료 후 페이지 이동을 처리하는 useEffect
   useEffect(() => {
     console.log("useEffect 체크:", { 
       isAuthLoading, 
       isVerificationComplete, 
       user 
     });
-    // isAuthLoading이 끝났고, 인증이 완료되었고, 유저 정보에 전화번호가 반영되었다면
     if (!isAuthLoading && isVerificationComplete && user?.phone) {
       alert('핸드폰 인증이 완료되었습니다. 서비스를 계속 이용하실 수 있습니다.');
-      
-      // redirect 파라미터가 있으면 해당 페이지로, 없으면 홈으로 이동
       const redirectTo = searchParams.get('redirect') || '/';
       router.push(redirectTo);
     }
   }, [isAuthLoading, isVerificationComplete, user, router, searchParams]);
 
-  // ⬇️ 이 useEffect는 '잘못된 접근'을 막는 역할만 합니다.
+  // 잘못된 접근을 막는 useEffect
   useEffect(() => {
     if (!isAuthLoading) {
       if (!user || (user.phone && user.phone.length >= 10)) {
@@ -90,8 +88,8 @@ export default function VerifyPhonePage() {
       await new Promise(resolve => setTimeout(resolve, 1000));
       
       setStep(2);
-      setTimer(180); // 타이머 초기화
-      setIsTimerRunning(true); // 타이머 시작
+      setTimer(180);
+      setIsTimerRunning(true);
     } catch (err) {
       setError('인증번호 발송에 실패했습니다. 잠시 후 다시 시도해주세요.');
       console.error(err);
@@ -112,36 +110,25 @@ export default function VerifyPhonePage() {
         return;
     }
     setIsSubmitting(true);
-    // --- 1단계: 인증번호 확인 먼저 수행 ---
     try {
       console.log(`1단계: ${phone} / ${verificationCode} 인증번호 확인 시도`);
       await checkSmsVerification(phone, verificationCode);
     } catch (err) {
-      // 인증번호 확인 실패 시
       setError('인증번호가 올바르지 않습니다. 다시 확인해주세요.');
-      setIsSubmitting(false); // 로딩 상태 해제
+      setIsSubmitting(false);
       console.error('인증번호 확인 실패:', err);
-      return; // 여기서 함수를 완전히 종료
+      return;
     }
 
-    // --- 2단계: 인증번호 확인 성공 후, 핸드폰 번호 등록 시도 ---
     try {
       console.log('2단계: 핸드폰 번호 등록 시도');
       await updateMyPhone(phone, token);
       await refreshUser();
-      // 수동으로 alert를 띄우고 페이지를 이동시키는 대신,
-      // '인증 완료' 상태만 true로 변경해줍니다.
       setIsVerificationComplete(true);
-      // await new Promise(resolve => setTimeout(resolve, 1000));
-      // alert('핸드폰 인증이 완료되었습니다. 서비스를 계속 이용하실 수 있습니다.');
-      // router.push('/');
-
     } catch (err) {
-      // 핸드폰 번호 등록 실패 시 (이때 중복 에러가 발생할 수 있음)
       if (err instanceof Error && err.message.includes('이미 사용 중인')) {
         setError('이미 저장된 전화번호입니다. 다른 전화번호를 입력해주세요.');
       } else {
-        // 그 외 서버 문제 등
         setError('핸드폰 번호 등록에 실패했습니다. 잠시 후 다시 시도해주세요.');
       }
       console.error('핸드폰 번호 등록 실패:', err);
@@ -159,20 +146,20 @@ export default function VerifyPhonePage() {
     );
   }
 
+  // 기존의 JSX를 그대로 반환합니다.
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900 transition-colors duration-300">
-      <div className="w-full max-w-md mx-4 sm:mx-0">
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 transform hover:scale-[1.01] transition-transform duration-300">
-            <div className="text-center mb-8">
-                <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-white mb-2">
-                    추가 인증 필요
-                </h2>
-                <p className="text-gray-600 dark:text-gray-400">
-                    <span className="font-semibold text-indigo-500 dark:text-indigo-400">{user.name}</span>님, 원활한 서비스 이용을 위해<br/>핸드폰 인증을 완료해주세요.
-                </p>
-            </div>
+    <div className="w-full max-w-md mx-4 sm:mx-0">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 transform hover:scale-[1.01] transition-transform duration-300">
+          <div className="text-center mb-8">
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-white mb-2">
+                  추가 인증 필요
+              </h2>
+              <p className="text-gray-600 dark:text-gray-400">
+                  <span className="font-semibold text-indigo-500 dark:text-indigo-400">{user.name}</span>님, 원활한 서비스 이용을 위해<br/>핸드폰 인증을 완료해주세요.
+              </p>
+          </div>
 
-            <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-6">
             {/* --- 1단계: 핸드폰 번호 입력 --- */}
             <div className={`transition-all duration-500 ${step === 1 ? 'opacity-100' : 'opacity-50'}`}>
                 <label htmlFor="phone" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -208,7 +195,6 @@ export default function VerifyPhonePage() {
                     <label htmlFor="verificationCode" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                         인증번호
                     </label>
-                    {/* 타이머 UI */}
                     {isTimerRunning && (
                         <span className="text-sm font-mono text-indigo-500 dark:text-indigo-400">
                            유효 시간: {formatTime(timer)}
@@ -229,7 +215,6 @@ export default function VerifyPhonePage() {
             {/* --- 최종 제출 및 재전송 버튼 --- */}
             {step === 2 && (
                 <div className="flex gap-2">
-                    {/* 재전송 버튼 */}
                     <button
                         type="button" onClick={() => handleSendCode(true)}
                         disabled={isTimerRunning || isSending}
@@ -238,7 +223,6 @@ export default function VerifyPhonePage() {
                        {isSending ? <FiLoader className="animate-spin"/> : <FiRefreshCw />}
                        <span>재전송</span>
                     </button>
-                    {/* 인증하고 시작하기 버튼 */}
                     <button
                         type="submit"
                         disabled={isSubmitting || verificationCode.length < 6 || timer === 0}
@@ -251,9 +235,29 @@ export default function VerifyPhonePage() {
             )}
             
             {error && <p className="text-sm text-center text-red-500 dark:text-red-400 transition-opacity duration-300">{error}</p>}
-            </form>
-          </div>
-      </div>
+          </form>
+        </div>
     </div>
+  );
+}
+
+// 2. 페이지의 기본 export는 Suspense로 로직 컴포넌트를 감싸는 역할을 합니다.
+export default function VerifyPhonePage() {
+  // Suspense가 로딩되는 동안 보여줄 UI (fallback)
+  const loadingUI = (
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
+        <FiLoader className="animate-spin text-4xl mb-4 text-indigo-500" />
+        <p>페이지를 불러오는 중입니다...</p>
+    </div>
+  );
+
+  return (
+    // Suspense로 VerifyPhoneForm을 감싸서 useSearchParams 사용으로 인한
+    // 서버 렌더링 오류를 방지합니다.
+    <Suspense fallback={loadingUI}>
+      <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900 transition-colors duration-300">
+        <VerifyPhoneForm />
+      </div>
+    </Suspense>
   );
 }
