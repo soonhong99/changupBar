@@ -4,13 +4,12 @@
 
 import { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
-import { getAllListings, deleteListingById, ListingFilter, getPendingConsultationCount} from "@/lib/api";
-import { Listing } from "@prisma/client";
+import { getAllListings, deleteListingById, ListingFilter, getPendingConsultationCount, PaginatedResponse, ListingWithCounts} from "@/lib/api";
 import { useAuth } from "@/context/AuthContext";
 import { categories, mainCategories } from "@/data/categories"; // ⬅️ 카테고리 데이터 import
 
 export default function AdminDashboardPage() {
-  const [listings, setListings] = useState<Listing[]>([]);
+  const [listings, setListings] = useState<ListingWithCounts[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [filters, setFilters] = useState<ListingFilter>({
     sortBy: 'createdAt',
@@ -34,11 +33,17 @@ export default function AdminDashboardPage() {
     setIsLoading(true);
     try {
       // 두 API를 병렬로 호출하여 성능 최적화
-      const [listingsData, countData] = await Promise.all([
-        getAllListings(Object.fromEntries(Object.entries(filters).filter(([_, v]) => v)), token),
+      // admin에서는 전체 목록을 보여주므로 큰 limit 값 설정
+      const adminFilters = {
+        ...Object.fromEntries(Object.entries(filters).filter(([_, v]) => v)),
+        limit: 1000, // admin에서는 충분히 큰 값으로 설정
+        page: 1
+      };
+      const [listingsResponse, countData] = await Promise.all([
+        getAllListings(adminFilters, token),
         getPendingConsultationCount(token)
       ]);
-      setListings(listingsData);
+      setListings(listingsResponse.listings);
       setPendingCount(countData.count);
     } catch (error) {
       console.error("Failed to fetch dashboard data:", error);
